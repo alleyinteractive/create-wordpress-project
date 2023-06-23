@@ -1,28 +1,22 @@
-# Caches
-.npm
-.phpcs.cache.json
-.phpunit.result.cache
-
-# Dependencies
-node_modules
-vendor
-
-# IDE Config Directories
-*.code-workspace
-.idea
-.vscode
-
 # OS-Managed Files
-.DS_Store
-.DS_Store?
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-.thumbsdb
+# IDE Config Directories and Local Environment Files
+# Keep patterns in these categories on your local machine in user home
+#     git config --global core.excludesFile ~/.gitignore
 
-# WordPress-Managed Files
+# Packages
+/vendor/
+/node_modules/
+.npm
+npm-debug.log
+yarn-error.log
+
+# Application
+.env
 /db.php
 /object-cache.php
 /upgrade/
 /uploads/
+
+# Tests
+.phpcs.cache.json
+.phpunit.result.cache
