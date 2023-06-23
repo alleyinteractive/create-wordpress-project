@@ -1,0 +1,14 @@
+includes:
+  - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	# Level 9 is the highest level
+	level: max
+
+	paths:
+		- plugins/create-wordpress-plugin/
+		- themes/create-wordpress-theme/
+
+	excludePaths:
+		- plugins/create-wordpress-plugin/tests/
+		- themes/create-wordpress-theme/tests/
