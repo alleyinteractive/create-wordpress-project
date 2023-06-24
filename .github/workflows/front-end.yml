@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=https://json.schemastore.org/github-workflow
 
 name: "Front-end"
+
 # ECMAScript version: ES5 (2009), ES6 (2015), ECMAScript 2016, 2017, 2018, 2019 ...
 # Node.js version: 16.17
 # npm version: 9.2
@@ -20,6 +21,7 @@ name: "Front-end"
 # }
 
 # Yarn is a better package manager.
+
 on:
   pull_request: null
   push:
@@ -29,9 +31,11 @@ on:
 
 permissions:
   contents: "read"
+
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
   cancel-in-progress: true
+
 jobs:
   js_syntax_errors:
     name: "𝟏 JavaScript Syntax Errors"
@@ -54,6 +58,7 @@ jobs:
         run: |
           git ls-files --cached -z -- 'resources/js/*.js' \
               | xargs --null -- npx acorn --ecma2015 --module --silent
+
   js_coding_standards:
     name: "𝟐 JavaScript Coding Standards"
     permissions:
@@ -83,6 +88,7 @@ jobs:
           check-name: "𝕩 ESLint Annotations"
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           report-json: "${{ runner.temp }}/eslint-report.json"
+
   scss_coding_standards:
     name: "𝟑 Sassy CSS Coding Standards"
     runs-on: "ubuntu-22.04"
@@ -103,6 +109,7 @@ jobs:
         run: "npm install --no-save stylelint-formatter-github-annotate"
       - name: "Check coding style"
         run: "npm run scss:cs -- --custom-formatter=node_modules/stylelint-formatter-github-annotate"
+
   build:
     name: "𝟒 Build"
     needs:
@@ -127,6 +134,7 @@ jobs:
         run: "npm run prod:build"
       - name: "Check differences to repository"
         run: "git diff --exit-code"
+
   svg:
     name: "𝟓 SVG files"
     runs-on: "ubuntu-22.04"
