@@ -12,11 +12,12 @@
     "target": "es2022"
   },
   "exclude": [
-    "plugins/create-wordpress-plugin/build",
-    "themes/create-wordpress-theme/build"
+    "./plugins/create-wordpress-plugin/build",
+    "./themes/create-wordpress-theme/build"
   ],
   "include": [
-    "plugins/create-wordpress-plugin/**/*",
-    "themes/create-wordpress-theme/**/*"
+    "./jest.config.ts",
+    "./plugins/create-wordpress-plugin/**/*",
+    "./themes/create-wordpress-theme/**/*"
   ]
 }
