@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": ["*"]
+    },
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es2022"
+  },
+  "exclude": [
+    "plugins/create-wordpress-plugin/build",
+    "themes/create-wordpress-theme/build"
+  ],
+  "include": [
+    "plugins/create-wordpress-plugin/**/*",
+    "themes/create-wordpress-theme/**/*"
+  ]
+}

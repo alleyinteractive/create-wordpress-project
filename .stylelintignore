@@ -1,0 +1,24 @@
+# node_modules is ignored by default.
+# Ignore Composer's vendor folder.
+vendor
+
+# Ignore everything in plugins except our custom plugin.
+!plugins
+plugins/*
+!plugins/create-wordpress-plugin
+
+# Ignore everything in themes except our custom theme.
+!themes
+themes/*
+!themes/create-wordpress-theme
+
+# Ignore everything in mu-plugins, assuming this is 3rd party code.
+mu-plugins
+
+# Ignore everything in directories defined in vip-go-skeleton other than plugins and themes, handled above.
+client-mu-plugins
+docs
+images
+languages
+private
+vip-config
