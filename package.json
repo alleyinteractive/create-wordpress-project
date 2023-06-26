@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "@alleyinteractive/eslint-config": "^0.1.0",
+    "@alleyinteractive/stylelint-config": "^0.0.2",
+    "typescript": "^5.1.3"
+  },
+  "engines": {
+    "node": "18",
+    "npm": "9"
+  },
+  "license": "GPL-2.0-or-later",
+  "name": "create-wordpress-project",
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "eslint": "eslint --ext .ts --ext .tsx .",
+    "eslint:fix": "eslint --ext .ts --ext .tsx . --fix",
+    "lint": "npm run check-types && npm run eslint && npm run stylelint",
+    "stylelint": "stylelint \"**/*.scss\" --allow-empty-input",
+    "stylelint:fix": "stylelint \"**/*.scss\" --allow-empty-input --fix"
+  },
+  "version": "1.0.0"
+}
