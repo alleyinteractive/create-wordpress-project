@@ -1,0 +1,25 @@
+name: Deploy to Pantheon MultiDev
+
+on:
+  push:
+    branches:
+      - preprod
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Perform build steps
+      run: echo "Perform your build steps"
+
+  sync-to-pantheon:
+    needs: build
+    uses: alleyinteractive/.github/.github/workflows/deploy-to-remote-repository.yml@main
+    with:
+      remote_repo: 'ssh://codeserver.dev.PANTHEON-SITE-ID@codeserver.dev.PANTHEON-SITE-ID.drush.in:2222/~/repository.git'
+      destination_directory: 'wp-content/'
+      exclude_list: '.git, .gitmodules'
+
+    secrets:
+      REMOTE_REPO_SSH_KEY: ${{ secrets.ALLEY_CI_PANTHEON_SSH_KEY }}
