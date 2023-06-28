@@ -1,0 +1,17 @@
+name: Deploy to VIP repository
+
+on:
+  push:
+    branches:
+      - production
+      - preprod
+      - develop
+
+jobs:
+  sync-to-vip:
+    uses: alleyinteractive/.github/.github/workflows/deploy-to-remote-repository.yml@main
+    with:
+      remote_repo: 'git@github.com:wpcomvip/REMOTE-REPO-NAME.git'
+      exclude_list: '.git, .gitmodules, node_modules, no-vip'
+    secrets:
+      REMOTE_REPO_SSH_KEY: ${{ secrets.REMOTE_REPO_SSH_KEY }}
