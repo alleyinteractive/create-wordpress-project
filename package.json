@@ -21,7 +21,7 @@
     "build": "npm run build:plugin && npm run build:theme",
     "build:plugin": "cd plugins/create-wordpress-plugin && wp-scripts build --webpack-copy-php --webpack-src-dir=blocks",
     "build:theme": "cd themes/create-wordpress-theme && wp-scripts build",
-    "create-block": "npx @alleyinteractive/create-block -l typescript",
+    "create-block": "npx @alleyinteractive/create-block -n create-wordpress-plugin -b plugins/create-wordpress-plugin/blocks -l typescript",
     "check-types": "tsc --noEmit",
     "eslint": "eslint --ext .ts --ext .tsx .",
     "eslint:fix": "eslint --ext .ts --ext .tsx . --fix",
