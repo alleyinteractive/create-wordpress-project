@@ -18,10 +18,10 @@
   "extra": {
     "wordpress-autoloader": {
       "autoload": {
-        "Create_WordPress_Plugin\\": "src"
+        "Create_WordPress_Plugin\\": "plugins/create-wordpress-plugin/src"
       },
       "autoload-dev": {
-        "Create_WordPress_Plugin\\Tests\\": "tests"
+        "Create_WordPress_Plugin\\Tests\\": "plugins/create-wordpress-plugin/tests"
       }
     }
   },
