@@ -1,3 +1,7 @@
+# BEGIN DELETE AFTER INSTALL #
+composer.lock
+# END DELETE AFTER INSTALL #
+
 # Caches
 .npm
 .phpcs.cache.json
