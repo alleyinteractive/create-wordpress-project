@@ -56,3 +56,35 @@ jobs:
         exclude_list: '.git, .github, .gitmodules, node_modules'
         pantheon: 'true'
         ssh-key: ${{ secrets.ALLEY_OPS_SSH_KEY }}
+
+  # To autopromote dev -> test -> live
+  deploy-to-pantheon:
+    runs-on: ubuntu-latest
+    needs: build-and-sync
+    env:
+      SITE_ID: 7b8e3d35-051c-407d-9e3f-2dcc50eb15c9
+    steps:
+    - name: Install PHP
+      run: sudo apt-get install php
+
+    - name: Install Terminus
+      run: |
+        mkdir -p /tmp/terminus && cd /tmp/terminus
+        curl -L https://github.com/pantheon-systems/terminus/releases/download/3.2.1/terminus.phar --output terminus
+        chmod +x terminus
+        ./terminus self:update
+        sudo mv /tmp/terminus/terminus /usr/local/bin/terminus
+
+    - name: Authenticate with Terminus
+      run: terminus auth:login --machine-token=${{ secrets.PANTHEON_MACHINE_TOKEN }}
+
+    - name: Deploy to Test
+      run: |
+        terminus env:deploy $SITE_ID.test --note="${{ github.event.head_commit.message }}"
+        terminus env:clear-cache $SITE_ID.test
+
+    - name: Deploy to Live
+      run: |
+        terminus env:deploy $SITE_ID.live --note="${{ github.event.head_commit.message }}"
+        # Uncomment to automatically clear cache on live
+        #terminus env:clear-cache $SITE_ID.live
