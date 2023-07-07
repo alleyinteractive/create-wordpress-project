@@ -1,0 +1,38 @@
+# Caches
+.npm
+.phpcs.cache.json
+.phpunit.result.cache
+
+# Dependencies
+node_modules
+vendor
+
+# IDE Config Directories
+*.code-workspace
+.idea
+.vscode
+
+# OS-Managed Files
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.thumbsdb
+
+# WordPress-Managed Files
+/db.php
+/object-cache.php
+/upgrade/
+/uploads/
+
+# Ignore all plugins except our custom ones
+/plugins/*
+!/plugins/index.php
+!/plugins/create-wordpress-plugin
+
+# Ignore all themes except our custom ones
+/themes/*
+!/themes/index.php
+!/themes/create-wordpress-theme
