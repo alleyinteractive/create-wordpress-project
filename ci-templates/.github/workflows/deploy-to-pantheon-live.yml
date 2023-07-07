@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-sync
     env:
-      SITE_ID: 7b8e3d35-051c-407d-9e3f-2dcc50eb15c9
+      SITE_ID: pantheon-site-id # Fill in with your Pantheon Site ID
     steps:
     - name: Install PHP
       run: sudo apt-get install php
