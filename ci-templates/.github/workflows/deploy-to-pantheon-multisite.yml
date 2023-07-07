@@ -7,19 +7,53 @@ on:
       - develop
 
 jobs:
-  build:
+  build-and-sync:
     runs-on: ubuntu-latest
     steps:
-    - name: Perform build steps
-      run: echo "Perform your build steps"
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
 
-  sync-to-pantheon:
-    needs: build
-    uses: alleyinteractive/.github/.github/workflows/deploy-to-remote-repository.yml@main
-    with:
-      remote_repo: 'ssh://codeserver.dev.PANTHEON-SITE-ID@codeserver.dev.PANTHEON-SITE-ID.drush.in:2222/~/repository.git'
-      destination_directory: 'wp-content/'
-      exclude_list: '.git, .gitmodules'
+    # - name: Cache Theme Webpack Folder
+    #   id: cache-webpack-themes
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: themes/create-wordpress-theme/.cache
+    #     key: ${{ runner.os }}-webpack-themes
 
-    secrets:
-      REMOTE_REPO_SSH_KEY: ${{ secrets.ALLEY_CI_PANTHEON_SSH_KEY }}
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+        node-version: 16
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 8.1
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, gd
+        tools: composer:v2
+        coverage: none
+
+    - name: Install dependencies
+      uses: ramsey/composer-install@v2
+      with:
+        composer-options: "--no-progress --no-ansi --no-interaction --prefer-dist --no-dev"
+
+    - name: Install npm dependencies
+      run: npm ci
+
+    - name: Run npm build
+      run: npm run build
+
+    - name: Sync to Pantheon
+      uses: alleyinteractive/action-deploy-to-remote-repository@feature
+      with:
+        remote_repo: 'ssh://user@host:2222/~/repository.git'
+        remote_branch: 'staging'
+        destination_directory: 'wp-content/'
+        exclude_list: '.git, .github, .gitmodules, node_modules'
+        pantheon: 'true'
+        ssh-key: ${{ secrets.ALLEY_OPS_SSH_KEY }}

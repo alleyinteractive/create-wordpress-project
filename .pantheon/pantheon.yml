@@ -1,0 +1,28 @@
+# Put overrides to your pantheon.upstream.yml file here.
+# For more information, see: https://pantheon.io/docs/pantheon-yml/
+api_version: 1
+
+# See https://pantheon.io/docs/pantheon-yml#protected-web-paths for usage.
+protected_web_paths:
+  - /wp-content/.gitignore
+  - /wp-content/.gitmodules
+  - /wp-content/.phpcs.xml
+  - /wp-content/.pantheon
+  - /wp-content/vendor
+  - /wp-content/composer.json
+  - /wp-content/composer.lock
+  - /wp-content/README.md
+
+# See https://pantheon.io/docs/pantheon-yml/#enforce-https--hsts for valid values.
+enforce_https: full
+
+# See https://docs.pantheon.io/pantheon-yml#php-version
+php_version: 8.1
+
+# See https://docs.pantheon.io/guides/quicksilver for information about Quicksilver
+# workflows:
+#   deploy:
+#     after:
+#       - type: webphp
+#         description: Post deployment notification to Slack
+#         script: private/scripts/slack_deploy_notification.php
