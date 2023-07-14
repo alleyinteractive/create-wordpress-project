@@ -12,3 +12,5 @@ parameters:
 	excludePaths:
 		- plugins/create-wordpress-plugin/tests/
 		- themes/create-wordpress-theme/tests/
+		- plugins/create-wordpress-plugin/build/
+		- themes/create-wordpress-theme/build/
