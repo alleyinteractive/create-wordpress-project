@@ -71,5 +71,5 @@ jobs:
 
       - name: Deploy to Multidev
         run: |
-          terminus env:deploy $SITE_ID.${{ github.ref_name }} --note="Deploying from GitHub Actions"
+          terminus env:deploy $SITE_ID.${{ github.ref_name }} --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
           terminus env:clear-cache $SITE_ID.${{ github.ref_name }}
