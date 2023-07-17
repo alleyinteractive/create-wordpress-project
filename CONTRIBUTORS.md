@@ -5,6 +5,7 @@ A heartfelt thank you to everyone who made this project possible:
 - Renato Alves ([@renatonascalves](https://github.com/renatonascalves))
 - Kyle Benk ([@kjbenk](https://github.com/kjbenk))
 - Ben Bolton ([@benpbolton](https://github.com/benpbolton))
+- Matthew Ell ([@ellm](https://github.com/ellm))
 - Sean Fisher ([@srtfisher](https://github.com/srtfisher))
 - Kevin Fodness ([@kevinfodness](https://github.com/kevinfodness))
 - Eric Fuller ([@efuller](https://github.com/efuller))
