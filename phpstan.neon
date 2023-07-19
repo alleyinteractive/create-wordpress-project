@@ -6,6 +6,9 @@ parameters:
 	level: max
 
 	paths:
+		- mu-plugins/000-wp-environment.php
+		- mu-plugins/001-composer.php
+		- mu-plugins/plugin-loader.php
 		- plugins/create-wordpress-plugin/
 		- themes/create-wordpress-theme/
 

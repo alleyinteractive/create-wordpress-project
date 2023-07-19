@@ -10,27 +10,11 @@
  * @package create-wordpress-project
  */
 
-$create_wordpress_project_autoloader = dirname( __DIR__ ) . '/vendor/autoload.php';
-
-// Define environment type, used in wp_get_environment_type below.
-switch ( $_ENV['PANTHEON_ENVIRONMENT'] ?? 'local' ) {
-	case 'develop':
-		define( 'WP_ENVIRONMENT_TYPE', 'development' );
-		break;
-	case 'live':
-		define( 'WP_ENVIRONMENT_TYPE', 'production' );
-		break;
-	case 'local':
-		define( 'WP_ENVIRONMENT_TYPE', 'local' );
-		break;
-	default:
-		define( 'WP_ENVIRONMENT_TYPE', 'staging' );
-		break;
-}
+$composer_autoloader_path = dirname( __DIR__ ) . '/vendor/autoload.php';
 
 // Display a friendly error message if Composer is not installed locally.
 if ( 'local' === wp_get_environment_type() ) {
-	if ( ! file_exists( $create_wordpress_project_autoloader ) ) {
+	if ( ! file_exists( $composer_autoloader_path ) ) {
 		wp_die(
 			'Composer is not installed. Please run <code>composer install</code> locally in the <code>wp-content</code> folder for this project.'
 		);
@@ -64,8 +48,8 @@ if ( 'local' === wp_get_environment_type() ) {
 }
 
 // Load the Composer autoloader or add a notice if it doesn't exist.
-if ( file_exists( $create_wordpress_project_autoloader ) ) {
-	require_once $create_wordpress_project_autoloader;
+if ( file_exists( $composer_autoloader_path ) ) {
+	require_once $composer_autoloader_path;
 } else {
 	// Include an error notice.
 	add_action(
@@ -85,3 +69,6 @@ if ( file_exists( $create_wordpress_project_autoloader ) ) {
 		}
 	);
 }
+
+// Don't pollute global scope.
+unset( $composer_autoloader_path );

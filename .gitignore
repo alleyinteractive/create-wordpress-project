@@ -33,7 +33,8 @@ Thumbs.db
 
 # Ignore all mu-plugins except our custom ones
 /mu-plugins/*
-!/mu-plugins/000-composer.php
+!/mu-plugins/000-wp-environment.php
+!/mu-plugins/001-composer.php
 !/mu-plugins/index.php
 !/mu-plugins/plugin-loader.php
 
