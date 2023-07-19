@@ -1,0 +1,26 @@
+# Caches
+.npm
+.phpcs.cache.json
+.phpunit.result.cache
+
+# Dependencies
+node_modules
+
+# IDE Config Directories
+*.code-workspace
+.idea
+.vscode
+
+# OS-Managed Files
+.DS_Store
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.thumbsdb
+
+# WordPress-Managed Files
+/db.php
+/upgrade/
+/uploads/
