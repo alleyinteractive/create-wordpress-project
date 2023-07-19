@@ -31,6 +31,12 @@ Thumbs.db
 /upgrade/
 /uploads/
 
+# Ignore all mu-plugins except our custom ones
+/mu-plugins/*
+!/mu-plugins/000-composer.php
+!/mu-plugins/index.php
+!/mu-plugins/plugin-loader.php
+
 # Ignore all plugins except our custom ones
 /plugins/*
 !/plugins/index.php
