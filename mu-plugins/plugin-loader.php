@@ -5,11 +5,6 @@
  * @package create-wordpress-project
  */
 
-// Helper function for getting the current environment name.
-function create_wordpress_project_environment(): string {
-	return $_ENV['PANTHEON_ENVIRONMENT'] ?? 'local';
-}
-
 // Load Pantheon's mu-plugin.
 require_once __DIR__ . '/pantheon-mu-plugin/pantheon.php';
 
