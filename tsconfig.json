@@ -17,6 +17,7 @@
     "./themes/create-wordpress-theme/build"
   ],
   "include": [
+    "./custom.d.ts",
     "./jest.config.ts",
     "./plugins/create-wordpress-plugin/**/*",
     "./themes/create-wordpress-theme/**/*"
