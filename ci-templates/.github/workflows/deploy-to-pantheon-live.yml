@@ -53,19 +53,11 @@ jobs:
           pantheon: 'true'
           ssh-key: ${{ secrets.ALLEY_CI_PANTHEON_SSH_KEY }}
 
-  deploy-to-pantheon:
-    runs-on: ubuntu-latest
-    needs: build-and-sync
-    steps:
-      - name: Install PHP
-        run: sudo apt-get install php
-
       - name: Install Terminus
         run: |
           mkdir -p /tmp/terminus && cd /tmp/terminus
           curl -L https://github.com/pantheon-systems/terminus/releases/download/${{ env.TERMINUS_VERSION }}/terminus.phar --output terminus
           chmod +x terminus
-          ./terminus self:update
           sudo mv /tmp/terminus/terminus /usr/local/bin/terminus
 
       - name: Authenticate with Terminus
@@ -73,10 +65,10 @@ jobs:
 
       - name: Deploy to Test
         run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.test --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
+          terminus env:deploy ${{ env.PANTHEON_SITE }}.test --note="$(git log -1 --pretty=%B)"
           terminus env:clear-cache ${{ env.PANTHEON_SITE }}.test
 
       - name: Deploy to Live
         run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.live --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
+          terminus env:deploy ${{ env.PANTHEON_SITE }}.live --note="$(git log -1 --pretty=%B)"
           terminus env:clear-cache ${{ env.PANTHEON_SITE }}.live
