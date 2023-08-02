@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - production
+  # Uncomment and edit the following to run on a schedule.
+  # schedule:
+  #   - cron: '15 5 * * 0' # Run once per week at 5:15am UTC on Sundays.
 
 jobs:
   node-tests:
