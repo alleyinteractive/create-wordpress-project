@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - production
-  types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review]
   # Uncomment and edit the following to run on a schedule.
   # schedule:
   #   - cron: '30 5 * * 0' # Run once per week at 5:30am UTC on Sundays.
