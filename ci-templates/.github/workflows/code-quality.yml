@@ -4,10 +4,9 @@ on:
   pull_request:
     branches:
       - production
-  # Uncomment and edit the following to run on a schedule.
-  # schedule:
-  #   - cron: '45 5 * * 0' # Run once per week at 5:45am UTC on Sundays.
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   code-quality:
+    if: github.event.pull_request.draft == false
     uses: alleyinteractive/.github/.github/workflows/php-code-quality.yml@main

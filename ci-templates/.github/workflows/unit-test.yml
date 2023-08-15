@@ -4,12 +4,11 @@ on:
   pull_request:
     branches:
       - production
-  # Uncomment and edit the following to run on a schedule.
-  # schedule:
-  #   - cron: '30 5 * * 0' # Run once per week at 5:30am UTC on Sundays.
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   php-tests:
+    if: github.event.pull_request.draft == false
     strategy:
       matrix:
         php: [8.0, 8.1]
