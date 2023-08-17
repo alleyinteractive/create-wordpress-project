@@ -17,5 +17,4 @@ A heartfelt thank you to everyone who made this project possible:
 - Viktor Szépe ([@szepeviktor](https://github.com/szepeviktor))
 - Travis Weston ([@anubisthejackle](https://github.com/anubisthejackle))
 
-If you are interested in contributing, please read our
-[contributing guidelines](CONTRIBUTING.md).
+If you are interested in contributing, please read our [contributing guidelines](CONTRIBUTING.md).
