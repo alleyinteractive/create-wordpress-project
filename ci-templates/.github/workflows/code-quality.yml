@@ -1,13 +1,15 @@
 name: Code Quality
 
 on:
-  push:
+  pull_request:
     branches:
       - production
-  pull_request:
-  schedule:
-    - cron: '0 0 * * *'
+    types: [opened, synchronize, reopened, ready_for_review]
+  # Uncomment and edit the following to run on a schedule.
+  # schedule:
+  #   - cron: '45 5 * * 0' # Run once per week at 5:45am UTC on Sundays.
 
 jobs:
   code-quality:
+    if: github.event.pull_request.draft == false
     uses: alleyinteractive/.github/.github/workflows/php-code-quality.yml@main

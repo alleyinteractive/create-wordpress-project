@@ -1,15 +1,17 @@
 name: Node Tests
 
 on:
-  push:
+  pull_request:
     branches:
       - production
-  pull_request:
-  schedule:
-    - cron: '0 0 * * *'
+    types: [opened, synchronize, reopened, ready_for_review]
+  # Uncomment and edit the following to run on a schedule.
+  # schedule:
+  #   - cron: '15 5 * * 0' # Run once per week at 5:15am UTC on Sundays.
 
 jobs:
   node-tests:
+    if: github.event.pull_request.draft == false
     uses: alleyinteractive/.github/.github/workflows/node-tests.yml@main
     with:
       ci: true

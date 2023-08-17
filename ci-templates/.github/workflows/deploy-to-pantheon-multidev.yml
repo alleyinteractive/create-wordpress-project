@@ -1,9 +1,10 @@
-name: Deploy to Pantheon Live
+name: Deploy to Pantheon MultiDev
 
 on:
   push:
     branches:
-      - production
+      - preprod
+      - develop
 
 env:
   PANTHEON_SITE: my-cool-site
@@ -47,7 +48,7 @@ jobs:
         uses: alleyinteractive/action-deploy-to-remote-repository@v1
         with:
           remote_repo: 'ssh://codeserver.dev.${{ env.PANTHEON_SITE_ID }}@codeserver.dev.${{ env.PANTHEON_SITE_ID }}.drush.in:2222/~/repository.git'
-          remote_branch: 'master'
+          remote_branch: ${{ github.ref_name }}
           destination_directory: 'wp-content/'
           exclude_list: '.git, .github, .gitmodules, node_modules'
           pantheon: 'true'
@@ -71,12 +72,7 @@ jobs:
       - name: Authenticate with Terminus
         run: terminus auth:login --machine-token=${{ secrets.PANTHEON_MACHINE_TOKEN }}
 
-      - name: Deploy to Test
+      - name: Deploy to Multidev
         run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.test --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
-          terminus env:clear-cache ${{ env.PANTHEON_SITE }}.test
-
-      - name: Deploy to Live
-        run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.live --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
-          terminus env:clear-cache ${{ env.PANTHEON_SITE }}.live
+          terminus env:deploy ${{ env.PANTHEON_SITE }}.${{ github.ref_name }} --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
+          terminus env:clear-cache ${{ env.PANTHEON_SITE }}.${{ github.ref_name }}
