@@ -4,9 +4,12 @@ on:
   pull_request:
     branches:
       - production
-  schedule:
-    - cron: '0 0 * * *'
+    types: [opened, synchronize, reopened, ready_for_review]
+  # Uncomment and edit the following to run on a schedule.
+  # schedule:
+  #   - cron: '0 5 * * 0' # Run once per week at 5am UTC on Sundays.
 
 jobs:
   coding-standards:
+    if: github.event.pull_request.draft == false
     uses: alleyinteractive/.github/.github/workflows/php-coding-standards.yml@main
