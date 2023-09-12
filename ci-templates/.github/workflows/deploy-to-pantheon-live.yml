@@ -66,10 +66,10 @@ jobs:
 
       - name: Deploy to Test
         run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.test --note="Deploy from GitHub Actions: $(git log -1 --pretty=%B)"
+          terminus env:deploy ${{ env.PANTHEON_SITE }}.test --note="Deploy from GitHub Actions: $(git log -1 --pretty=%B | sed 's/"/\\"/g')"
           terminus env:clear-cache ${{ env.PANTHEON_SITE }}.test
 
       - name: Deploy to Live
         run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.live --note="Deploy from GitHub Actions: $(git log -1 --pretty=%B)"
+          terminus env:deploy ${{ env.PANTHEON_SITE }}.live --note="Deploy from GitHub Actions: $(git log -1 --pretty=%B | sed 's/"/\\"/g')"
           terminus env:clear-cache ${{ env.PANTHEON_SITE }}.live
