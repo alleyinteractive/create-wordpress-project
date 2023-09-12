@@ -9,11 +9,11 @@ on:
 env:
   PANTHEON_SITE: my-cool-site
   PANTHEON_SITE_ID: abc12345-6789-def0-abcd-ef1234567890
-  TERMINUS_VERSION: 3.2.1
 
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -53,26 +53,3 @@ jobs:
           exclude_list: '.git, .github, .gitmodules, node_modules'
           pantheon: 'true'
           ssh-key: ${{ secrets.ALLEY_CI_PANTHEON_SSH_KEY }}
-
-  deploy-to-pantheon:
-    runs-on: ubuntu-latest
-    needs: build-and-sync
-    steps:
-      - name: Install PHP
-        run: sudo apt-get install php
-
-      - name: Install Terminus
-        run: |
-          mkdir -p /tmp/terminus && cd /tmp/terminus
-          curl -L https://github.com/pantheon-systems/terminus/releases/download/${{ env.TERMINUS_VERSION }}/terminus.phar --output terminus
-          chmod +x terminus
-          ./terminus self:update
-          sudo mv /tmp/terminus/terminus /usr/local/bin/terminus
-
-      - name: Authenticate with Terminus
-        run: terminus auth:login --machine-token=${{ secrets.PANTHEON_MACHINE_TOKEN }}
-
-      - name: Deploy to Multidev
-        run: |
-          terminus env:deploy ${{ env.PANTHEON_SITE }}.${{ github.ref_name }} --note="Deploying ${{ github.event.head_commit.message }} from GitHub Actions"
-          terminus env:clear-cache ${{ env.PANTHEON_SITE }}.${{ github.ref_name }}
