@@ -21,7 +21,11 @@ function create_wordpress_project_core_plugins(): array {
 
 // Load as many standard plugins via code as possible.
 foreach ( create_wordpress_project_core_plugins() as $plugin ) {
-	require_once dirname( __DIR__ ) . '/plugins/' . $plugin;
+	$plugin_path = dirname( __DIR__ ) . '/plugins/' . $plugin;
+
+	if ( 0 === validate_file( $plugin_path ) && file_exists( $plugin_path ) ) {
+		require_once dirname( __DIR__ ) . '/plugins/' . $plugin;
+	}
 }
 
 /**
