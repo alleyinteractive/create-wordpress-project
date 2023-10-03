@@ -36,6 +36,7 @@
   "scripts": {
     "build": "turbo run build",
     "check-types": "tsc --noEmit",
+    "create-package": "turbo gen workspace --destination packages --type package",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "start:hot": "turbo run start:hot",
