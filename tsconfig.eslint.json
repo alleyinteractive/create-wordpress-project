@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+  },
+  "include": [
+    "./jest.config.ts",
+    "./packages/**/*",
+    "./.eslintrc.js",
+    "./plugins/create-wordpress-plugin/**/*",
+  ]
+}
