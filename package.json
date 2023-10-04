@@ -1,20 +1,31 @@
 {
+  "workspaces": [
+    "packages/*",
+    "plugins/create-wordpress-plugin",
+    "plugins/create-wordpress-theme"
+  ],
   "dependencies": {
-    "@alleyinteractive/block-editor-tools": "^0.3.2"
+    "@alleyinteractive/block-editor-tools": "^0.3.6"
   },
   "devDependencies": {
-    "@alleyinteractive/eslint-config": "^0.1.0",
+    "@alleyinteractive/build-tool": "^0.1.1",
+    "@alleyinteractive/create-entry": "^0.0.3",
+    "@alleyinteractive/eslint-config": "^0.1.4",
     "@alleyinteractive/stylelint-config": "^0.0.2",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@babel/preset-env": "^7.22.20",
+    "@testing-library/jest-dom": "^6.1.3",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.5.2",
-    "@wordpress/scripts": "^26.6.0",
-    "clean-webpack-plugin": "^4.0.0",
-    "copy-webpack-plugin": "^11.0.0",
-    "jest": "^29.5.0",
-    "mini-css-extract-plugin": "^2.7.6",
-    "ts-jest": "^29.1.0",
-    "typescript": "^5.1.3"
+    "@wordpress/babel-preset-default": "^7.19.1",
+    "@wordpress/scripts": "^26.6.4",
+    "babel-jest": "^29.7.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.28.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "turbo": "^1.10.14",
+    "typescript": "^5.2.2",
+    "webpack-cli": "^5.1.4"
   },
   "engines": {
     "node": "18",
@@ -23,22 +34,17 @@
   "license": "GPL-2.0-or-later",
   "name": "create-wordpress-project",
   "scripts": {
-    "build": "npm run build:plugin && npm run build:theme",
-    "build:plugin": "wp-scripts build --config plugins/create-wordpress-plugin/webpack.config.js --webpack-copy-php --webpack-src-dir=plugins/create-wordpress-plugin/blocks",
-    "build:theme": "wp-scripts build --config themes/create-wordpress-theme/webpack.config.js --webpack-copy-php --webpack-src-dir=themes/create-wordpress-theme/client",
-    "create-block": "npx @alleyinteractive/create-block@latest -n create-wordpress-plugin -b plugins/create-wordpress-plugin/blocks -l typescript",
+    "build": "turbo run build",
     "check-types": "tsc --noEmit",
-    "eslint": "eslint --ext .ts --ext .tsx .",
-    "eslint:fix": "eslint --ext .ts --ext .tsx . --fix",
-    "lint": "npm run check-types && npm run eslint && npm run stylelint",
-    "start:plugin": "cd plugins/create-wordpress-plugin && wp-scripts start --webpack-copy-php --webpack-src-dir=blocks",
-    "start:plugin:hot": "cd plugins/create-wordpress-plugin && wp-scripts start --webpack-copy-php --webpack-src-dir=blocks --hot",
-    "start:theme": "cd themes/create-wordpress-theme && wp-scripts start --webpack-copy-php",
-    "start:theme:hot": "cd themes/create-wordpress-theme && wp-scripts start --webpack-copy-php",
-    "stylelint": "stylelint \"**/*.scss\" --allow-empty-input",
-    "stylelint:fix": "stylelint \"**/*.scss\" --allow-empty-input --fix",
-    "test:watch": "jest --watch",
-    "test": "jest --passWithNoTests"
+    "create-package": "turbo gen workspace --destination packages --type package",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "start:hot": "turbo run start:hot",
+    "start": "turbo run start",
+    "stylelint": "turbo run stylelint",
+    "stylelint:fix": "turbo run stylelint:fix",
+    "test:watch": "turbo run test:watch",
+    "test": "turbo run test"
   },
   "version": "1.0.0"
 }
