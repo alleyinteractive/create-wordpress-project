@@ -259,7 +259,7 @@ $author_name = ask(
 
 $plugin_slug = slugify(
 	ask(
-		question: 'Project plugin name? (leave blank to skip scaffolding -- will be used for scaffolding create-wordpress-plugin)',
+		question: 'Project plugin name?',
 		default: $project_name_slug,
 		allow_empty: false,
 	),
@@ -270,7 +270,7 @@ $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
 // TODO: Prompt for theme name when create-wordpress-theme is ready.
 // $theme_slug = slugify(
 // 	ask(
-// 		question: 'Project theme name? (leave blank to skip scaffolding)',
+// 		question: 'Project theme name?',
 // 		default: $project_name_slug,
 // 		allow_empty: false,
 // 	),
@@ -407,8 +407,8 @@ write( 'Removing configuration script from theme/plugin...' );
 
 delete_files(
 	[
-		"themes/{$theme_slug}/configure.php",
-		"themes/{$theme_slug}/Makefile",
+		// "themes/{$theme_slug}/configure.php",
+		// "themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
 	]
