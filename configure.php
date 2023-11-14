@@ -34,7 +34,7 @@ if ( 0 === strpos( strtoupper( PHP_OS ), 'WIN' ) ) {
 }
 
 if ( version_compare( PHP_VERSION, '8.2.0', '<' ) ) {
-	die( 'PHP 8.0.0 or greater is required.' );
+	die( 'PHP 8.2.0 or greater is required.' );
 }
 
 // Parse the command line arguments from $argv.
