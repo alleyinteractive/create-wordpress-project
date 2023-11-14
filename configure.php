@@ -265,6 +265,11 @@ $plugin_slug = slugify(
 	),
 );
 
+if ( is_dir( "plugins/{$plugin_slug}" ) ) {
+	write( "Plugin already exists in plugins/{$plugin_slug}." );
+	exit( 1 );
+}
+
 $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
 
 // TODO: Prompt for theme name when create-wordpress-theme is ready.
@@ -276,18 +281,24 @@ $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
 // 	),
 // );
 
+// if ( is_dir( "themes/{$theme_slug}" ) ) {
+// 	write( "Theme already exists in themes/{$theme_slug}." );
+// 	exit( 1 );
+// }
+
 // $theme_namespace = title_case( $theme_slug ) . '_Theme';
 
 write( '------' );
 write( "Project          : {$project_name} <{$project_name_slug}>" );
+write( "Description      : {$description}" );
 write( "Author           : {$author_name} ({$author_email})" );
 write( "Vendor           : {$vendor_name} ({$vendor_slug})" );
-write( "Description      : {$description}" );
 
 if ( ! empty( $plugin_slug ) ) {
 	write( "Plugin           : plugins/{$plugin_slug}" );
 	write( "Plugin Namespace : {$plugin_namespace}" );
 }
+
 
 if ( ! empty( $theme_slug ) ) {
 	write( "Theme            : themes/{$theme_slug}" );
@@ -348,7 +359,7 @@ if ( ! empty( $plugin_slug ) ) {
 run(
 	'composer config extra.wordpress-autoloader.autoload --json \'' . json_encode( [
 		$plugin_namespace => "plugins/{$plugin_slug}/src",
-		$theme_namespace  => "themes/{$theme_slug}/src",
+		// $theme_namespace  => "themes/{$theme_slug}/src",
 	] ) . '\'',
 );
 
@@ -359,6 +370,8 @@ if ( ! empty( $plugin_slug ) ) {
 		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug}",
 		$current_dir,
 	);
+
+	echo "Done!\n\n";
 }
 
 // TODO: scaffold the theme from create-wordpress-theme.
@@ -388,14 +401,14 @@ write( 'Running composer update...' );
 run( 'composer update' );
 
 // Move the ci-templates to the root of the project.
-write( "Moving ci-templates to the root of the project and removing ci-templates..." );
+if ( is_dir( 'ci-templates' ) ) {
+	write( "Moving ci-templates files to the root of the project and removing ci-templates directory..." );
 
-run( 'mv ci-templates/* ./' );
-delete_files( 'ci-templates' );
+	run( 'rsync -a ci-templates/ ./ && rm -rf ci-templates' );
+}
 
 // Remove admins from the CODEOWNERS file (should only apply to the template).
 write( 'Removing alleyinteractive/admins from .github/CODEOWNERS...' );
-
 replace_in_file(
 	'.github/CODEOWNERS',
 	[
@@ -407,6 +420,7 @@ write( 'Removing configuration script from theme/plugin...' );
 
 delete_files(
 	[
+		// TODO: Uncomment when create-wordpress-theme is ready.
 		// "themes/{$theme_slug}/configure.php",
 		// "themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
