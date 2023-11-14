@@ -386,9 +386,10 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 
 	run( 'mv mu-plugins client-mu-plugins' );
 
-	write( 'Ignoring mu-plugins with .gitignore...' );
+	write( 'Ignoring mu-plugins with .gitignore/.deployignore...' );
 
 	file_put_contents( '.gitignore', "mu-plugins\n", FILE_APPEND );
+	file_put_contents( '.deployignore', "mu-plugins\n", FILE_APPEND );
 
 	write( 'Removing pantheon-systems/pantheon-mu-plugin from project\'s composer.json...' );
 
@@ -406,8 +407,6 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 	write( 'Running composer update...' );
 
 	run( 'composer update' );
-
-	// TODO: update the mu-plugins/plugin-loader.php file to NOT load the pantheon mu-plugin.
 
 	write( 'Cloning Automattic/vip-go-mu-plugins-built to mu-plugins...' );
 
