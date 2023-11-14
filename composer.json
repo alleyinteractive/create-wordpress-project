@@ -15,7 +15,7 @@
   ],
   "homepage": "https://github.com/alleyinteractive/create-wordpress-project",
   "require": {
-    "php": "^8.0",
+    "php": "^8.2",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
     "composer/installers": "^1.0",
     "pantheon-systems/pantheon-mu-plugin": "^1.0"
@@ -68,21 +68,21 @@
       "@phpcbf:plugin",
       "@phpcbf:theme"
     ],
-    "phpcbf:plugin": "cd plugins/create-wordpress-plugin && phpcbf .",
-    "phpcbf:theme": "cd themes/create-wordpress-theme && phpcbf .",
+    "phpcbf:plugin": "echo 'No phpcbf rules defined for plugins.'",
+    "phpcbf:theme": "echo 'No phpcbf rules defined for themes.'",
     "phpcs": [
       "@phpcs:plugin",
       "@phpcs:theme"
     ],
-    "phpcs:plugin": "cd plugins/create-wordpress-plugin && phpcs .",
-    "phpcs:theme": "cd themes/create-wordpress-theme && phpcs .",
+    "phpcs:plugin": "echo 'No phpcs rules defined for plugins.'",
+    "phpcs:theme": "echo 'No phpcs rules defined for themes.'",
     "phpstan": "phpstan --memory-limit=512M",
     "phpunit": [
       "@phpunit:plugin",
       "@phpunit:theme"
     ],
-    "phpunit:plugin": "cd plugins/create-wordpress-plugin && phpunit",
-    "phpunit:theme": "cd themes/create-wordpress-theme && phpunit",
+    "phpunit:plugin": "echo 'No phpunit rules defined for plugins.'",
+    "phpunit:theme": "echo 'No phpunit rules defined for themes.'",
     "setup": [
       "composer install --quiet --no-interaction"
     ],

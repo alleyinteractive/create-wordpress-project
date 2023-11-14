@@ -405,6 +405,8 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 }
 
 if ( confirm( 'Would you like to scaffold any "create-wordpress-plugin"-based plugins to the project? This will clone from create-wordpress-plugin, add it to the project\'s .gitignore file, and configure it in the project\'s composer.json.', true ) ) {
+	$composer_json = (array) json_decode( (string) file_get_contents( 'composer.json' ), true );
+
 	while ( true ) {
 		$plugin_slug = slugify(
 			ask(
@@ -428,7 +430,7 @@ if ( confirm( 'Would you like to scaffold any "create-wordpress-plugin"-based pl
 			$current_dir,
 		);
 
-		write( "Adding plugins/{$plugin_slug} to the .gitignore/.eslintignore/.stylelintignore files..." );
+		write( "Adding plugins/{$plugin_slug} to the project's .gitignore/.eslintignore/.stylelintignore files..." );
 
 		foreach ( [ '.gitignore', '.eslintignore', '.stylelintignore' ] as $file ) {
 			replace_in_file(
@@ -447,8 +449,36 @@ if ( confirm( 'Would you like to scaffold any "create-wordpress-plugin"-based pl
 				"\"packages/*\"," => "\"packages/*\",\n    \"plugins/{$plugin_slug}\",",
 			]
 		);
+
+		write( "Adding plugins/{$plugin_slug} to the project's composer.json scripts..." );
+
+		$commands = [
+			'phpcs' => 'phpcs .',
+			'phpcbf' => 'phpcbf .',
+			'phpunit' => 'phpunit',
+		];
+
+		foreach ( $commands as $name => $command ) {
+			$composer_json['scripts']["{$name}:plugin:{$plugin_slug}"] = "cd plugins/{$plugin_slug} && {$command}";
+		}
+
+		// Compile the commands into a single helper command.
+		if ( empty( $composer_json['scripts']["{$command}:plugin"] ) || ! is_array( $composer_json['scripts']["{$command}:plugin"] ) ) {
+			$composer_json['scripts']["{$command}:plugin"] = [];
+		}
+
+		$composer_json['scripts']["{$command}:plugin"][] = "@{$command}:plugin:{$plugin_slug}";
+
+		run(
+			'composer config scripts --json \'' . json_encode( $composer_json['scripts'] ) . '\'',
+		);
+
+		// TODO: Should we configure the plugin now?
+		echo "Done scaffolding plugin!\n\n";
 	}
 }
+
+// TODO: Add scaffolding for alleyinteractive/create-wordpress-theme themes.
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
 	delete_files(
