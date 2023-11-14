@@ -68,21 +68,21 @@
       "@phpcbf:plugin",
       "@phpcbf:theme"
     ],
-    "phpcbf:plugin": "echo 'No phpcbf rules defined for plugins.'",
-    "phpcbf:theme": "echo 'No phpcbf rules defined for themes.'",
+    "phpcbf:plugin": "cd plugins/create-wordpress-plugin && phpcbf .",
+    "phpcbf:theme": "cd themes/create-wordpress-theme && phpcbf .",
     "phpcs": [
       "@phpcs:plugin",
       "@phpcs:theme"
     ],
-    "phpcs:plugin": "echo 'No phpcs rules defined for plugins.'",
-    "phpcs:theme": "echo 'No phpcs rules defined for themes.'",
+    "phpcs:plugin": "cd plugins/create-wordpress-plugin && phpcs .",
+    "phpcs:theme": "cd themes/create-wordpress-theme && phpcs .",
     "phpstan": "phpstan --memory-limit=512M",
     "phpunit": [
       "@phpunit:plugin",
       "@phpunit:theme"
     ],
-    "phpunit:plugin": "echo 'No phpunit rules defined for plugins.'",
-    "phpunit:theme": "echo 'No phpunit rules defined for themes.'",
+    "phpunit:plugin": "cd plugins/create-wordpress-plugin && phpunit",
+    "phpunit:theme": "cd themes/create-wordpress-theme && phpunit",
     "setup": [
       "composer install --quiet --no-interaction"
     ],

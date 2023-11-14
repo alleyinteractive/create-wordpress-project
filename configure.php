@@ -7,7 +7,7 @@
  *
  *   1. Prompt the user to replace the default values in the project.
  *   2. Configure it for the project's hosting provider (VIP, Pantheon, etc.)
- *   3. Scaffold plugins for the project from alleyinteractive/create-wordpress-plugin.
+ *   3. Scaffold default plugin for the project from alleyinteractive/create-wordpress-plugin.
  *
  * Supports arguments to set the values directly.
  *
@@ -201,35 +201,6 @@ if ( ! $current_dir ) {
 // (this project is assumed to be at the wp-content level).
 $folder_name = ensure_capitalp( basename( dirname( $current_dir, 1) ) );
 
-$author_email = ask(
-	question: 'Author email?',
-	default: (string) ( $args['author_email'] ?? run( 'git config user.email' ) ),
-	allow_empty: false,
-);
-
-$username_guess  = explode( ':', run( 'git config remote.origin.url' ) )[1] ?? '';
-$username_guess  = dirname( $username_guess );
-$username_guess  = basename( $username_guess );
-$author_username = ask(
-	question: 'Author username?',
-	default: $username_guess,
-	allow_empty: false,
-);
-
-$author_name = ask(
-	question: 'Author name?',
-	default: (string) ( $args['author_name'] ?? run( 'git config user.name' ) ),
-	allow_empty: false,
-);
-
-$vendor_name = ask(
-	question: 'Vendor/organization name (usually the Github Organization)?',
-	default: $username_guess,
-	allow_empty: false,
-);
-
-$vendor_slug = slugify( $vendor_name );
-
 while ( true ) {
 	$project_name = ask(
 		question: 'Project name?',
@@ -256,11 +227,73 @@ $project_name_slug = slugify( ask(
 
 $description = ask( 'Project description?', "{$project_name} Website" );
 
+$username_guess  = explode( ':', run( 'git config remote.origin.url' ) )[1] ?? '';
+$username_guess  = dirname( $username_guess );
+$username_guess  = basename( $username_guess );
+
+$vendor_name = ask(
+	question: 'Vendor/organization name (usually the Github Organization)?',
+	default: $username_guess,
+	allow_empty: false,
+);
+
+$vendor_slug = slugify( $vendor_name );
+
+$author_email = ask(
+	question: 'Author email?',
+	default: (string) ( $args['author_email'] ?? run( 'git config user.email' ) ),
+	allow_empty: false,
+);
+
+$author_username = ask(
+	question: 'Author username?',
+	default: $username_guess,
+	allow_empty: false,
+);
+
+$author_name = ask(
+	question: 'Author name?',
+	default: (string) ( $args['author_name'] ?? run( 'git config user.name' ) ),
+	allow_empty: false,
+);
+
+$plugin_slug = slugify(
+	ask(
+		question: 'Project plugin name? (leave blank to skip scaffolding -- will be used for scaffolding create-wordpress-plugin)',
+		default: $project_name_slug,
+		allow_empty: false,
+	),
+);
+
+$plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
+
+// TODO: Prompt for theme name when create-wordpress-theme is ready.
+// $theme_slug = slugify(
+// 	ask(
+// 		question: 'Project theme name? (leave blank to skip scaffolding)',
+// 		default: $project_name_slug,
+// 		allow_empty: false,
+// 	),
+// );
+
+// $theme_namespace = title_case( $theme_slug ) . '_Theme';
+
 write( '------' );
-write( "Project     : {$project_name} <{$project_name_slug}>" );
-write( "Author      : {$author_name} ({$author_email})" );
-write( "Vendor      : {$vendor_name} ({$vendor_slug})" );
-write( "Description : {$description}" );
+write( "Project          : {$project_name} <{$project_name_slug}>" );
+write( "Author           : {$author_name} ({$author_email})" );
+write( "Vendor           : {$vendor_name} ({$vendor_slug})" );
+write( "Description      : {$description}" );
+
+if ( ! empty( $plugin_slug ) ) {
+	write( "Plugin           : plugins/{$plugin_slug}" );
+	write( "Plugin Namespace : {$plugin_namespace}" );
+}
+
+if ( ! empty( $theme_slug ) ) {
+	write( "Theme            : themes/{$theme_slug}" );
+	write( "Theme Namespace  : {$theme_namespace}" );
+}
+
 write( '------' );
 
 write( 'This script will replace the above values in all relevant files in the project directory.' );
@@ -278,15 +311,7 @@ $search_and_replace = [
 
 	'A skeleton WordPress project' => $description,
 
-	// Escape the namespace used in composer.json.
-	// '"Create_WordPress_Plugin\\"'        => (string) json_encode( $namespace ),
-	// '"Create_WordPress_Plugin\\Tests\\"' => (string) json_encode( $namespace . '\\Tests' ),
-
-	// 'Create_WordPress_Plugin'     => $namespace,
-	// 'Example_Plugin'              => $class_name,
-
 	'create-wordpress-project'     => $project_name_slug,
-	'create_wordpress_plugin'      => str_replace( '-', '_', $project_name_slug ),
 	'Create WordPress Project'     => $project_name,
 	'CREATE_WORDPRESS_PROJECT'     => strtoupper( str_replace( '-', '_', $project_name_slug ) ),
 
@@ -294,18 +319,57 @@ $search_and_replace = [
 	'alleyinteractive'             => $vendor_slug,
 ];
 
-// Patch the Composer.json namespace first before search and replace.
-// run(
-// 	'composer config extra.wordpress-autoloader.autoload --json \'' . json_encode( [
-// 		$namespace => 'src',
-// 	] ) . '\'',
-// );
+if ( ! empty( $theme_slug ) ) {
+	$search_and_replace = array_merge(
+		$search_and_replace,
+		[
+			'create-wordpress-theme'       => $theme_slug,
+			'Create WordPress Theme'       => str_replace( '_', ' ', title_case( $theme_slug ) ),
+			'CREATE_WORDPRESS_THEME'       => strtoupper( str_replace( '-', '_', $theme_slug ) ),
+			'create_wordpress_theme'       => str_replace( '-', '_', $theme_slug ),
+			'Create_WordPress_Theme'       => $theme_namespace,
+		],
+	);
+}
 
-// run(
-// 	'composer config extra.wordpress-autoloader.autoload-dev --json \'' . json_encode( [
-// 		$namespace . '\\Tests' => 'tests',
-// 	] ) . '\'',
-// );
+if ( ! empty( $plugin_slug ) ) {
+	$search_and_replace = array_merge(
+		$search_and_replace,
+		[
+			'create-wordpress-plugin'      => $plugin_slug,
+			'Create WordPress Plugin'      => str_replace( '_', ' ', title_case( $plugin_slug ) ),
+			'CREATE_WORDPRESS_PLUGIN'      => strtoupper( str_replace( '-', '_', $plugin_slug ) ),
+			'create_wordpress_plugin'      => str_replace( '-', '_', $plugin_slug ),
+			'Create_WordPress_Plugin'      => $plugin_namespace,
+		]
+	);
+}
+
+run(
+	'composer config extra.wordpress-autoloader.autoload --json \'' . json_encode( [
+		$plugin_namespace => "plugins/{$plugin_slug}/src",
+		$theme_namespace  => "themes/{$theme_slug}/src",
+	] ) . '\'',
+);
+
+if ( ! empty( $plugin_slug ) ) {
+	write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
+
+	run(
+		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug}",
+		$current_dir,
+	);
+}
+
+// TODO: scaffold the theme from create-wordpress-theme.
+// if ( ! empty( $theme_slug ) ) {
+// 	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
+
+// 	run(
+// 		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug}",
+// 		$current_dir,
+// 	);
+// }
 
 foreach ( list_all_files_for_replacement() as $path ) {
 	echo "Updating $path...\n";
@@ -324,7 +388,7 @@ write( 'Running composer update...' );
 run( 'composer update' );
 
 // Move the ci-templates to the root of the project.
-echo "Moving ci-templates to the root of the project and removing ci-templates...\n";
+write( "Moving ci-templates to the root of the project and removing ci-templates..." );
 
 run( 'mv ci-templates/* ./' );
 delete_files( 'ci-templates' );
@@ -336,6 +400,17 @@ replace_in_file(
 	'.github/CODEOWNERS',
 	[
 		'*	@alleyinteractive/admins' => '',
+	]
+);
+
+write( 'Removing configuration script from theme/plugin...' );
+
+delete_files(
+	[
+		"themes/{$theme_slug}/configure.php",
+		"themes/{$theme_slug}/Makefile",
+		"plugins/{$plugin_slug}/configure.php",
+		"plugins/{$plugin_slug}/Makefile",
 	]
 );
 
@@ -420,82 +495,6 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 		echo "Done!\n\n";
 	}
 }
-
-if ( confirm( 'Would you like to scaffold any "create-wordpress-plugin"-based plugins to the project? This will clone from create-wordpress-plugin, add it to the project\'s .gitignore file, and configure it in the project\'s composer.json.', true ) ) {
-	$composer_json = (array) json_decode( (string) file_get_contents( 'composer.json' ), true );
-
-	while ( true ) {
-		$plugin_slug = slugify(
-			ask(
-				question: 'Plugin slug? (leave blank to exit)',
-				default: '',
-				allow_empty: true,
-			),
-		);
-
-		if ( empty( $plugin_slug ) ) {
-			break;
-		}
-
-		if ( ! confirm( "Do you want to scaffold create-wordpress-plugin to plugins/{$plugin_slug}?", true ) ) {
-			continue;
-		}
-
-
-		run(
-			"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug}",
-			$current_dir,
-		);
-
-		write( "Adding plugins/{$plugin_slug} to the project's .gitignore/.eslintignore/.stylelintignore files..." );
-
-		foreach ( [ '.gitignore', '.eslintignore', '.stylelintignore' ] as $file ) {
-			replace_in_file(
-				$file,
-				[
-					'plugins/*' => "plugins/*\n!plugins/{$plugin_slug}",
-				]
-			);
-		}
-
-		write( "Adding plugins/{$plugin_slug} to the project's NPM workspaces..." );
-
-		replace_in_file(
-			'package.json',
-			[
-				"\"packages/*\"," => "\"packages/*\",\n    \"plugins/{$plugin_slug}\",",
-			]
-		);
-
-		write( "Adding plugins/{$plugin_slug} to the project's composer.json scripts..." );
-
-		$commands = [
-			'phpcs' => 'phpcs .',
-			'phpcbf' => 'phpcbf .',
-			'phpunit' => 'phpunit',
-		];
-
-		foreach ( $commands as $name => $command ) {
-			$composer_json['scripts']["{$name}:plugin:{$plugin_slug}"] = "cd plugins/{$plugin_slug} && {$command}";
-		}
-
-		// Compile the commands into a single helper command.
-		if ( empty( $composer_json['scripts']["{$command}:plugin"] ) || ! is_array( $composer_json['scripts']["{$command}:plugin"] ) ) {
-			$composer_json['scripts']["{$command}:plugin"] = [];
-		}
-
-		$composer_json['scripts']["{$command}:plugin"][] = "@{$command}:plugin:{$plugin_slug}";
-
-		run(
-			'composer config scripts --json \'' . json_encode( $composer_json['scripts'] ) . '\'',
-		);
-
-		// TODO: Should we configure the plugin now?pantheon-mu-plugin
-		echo "Done scaffolding plugin!\n\n";
-	}
-}
-
-// TODO: Add scaffolding for alleyinteractive/create-wordpress-theme themes.
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
 	delete_files(
