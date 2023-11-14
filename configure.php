@@ -319,6 +319,10 @@ foreach ( list_all_files_for_replacement() as $path ) {
 
 echo "Done!\n\n";
 
+write( 'Running composer update...' );
+
+run( 'composer update' );
+
 // Move the ci-templates to the root of the project.
 echo "Moving ci-templates to the root of the project and removing ci-templates...\n";
 
@@ -361,7 +365,7 @@ if ( confirm( 'Will this project be using Buddy CI?', true ) ) {
 $hosting_provider = null;
 
 // Determine the hosting provider we'll be using.
-if ( confirm( 'Will this project be hosted on WordPress VIP?', true ) ) {
+if ( confirm( 'Will this project be hosted on WordPress VIP?' ) ) {
 	$hosting_provider = 'vip';
 } elseif ( confirm( 'Will this project be hosted on Pantheon?', true ) ) {
 	$hosting_provider = 'pantheon';
@@ -369,25 +373,39 @@ if ( confirm( 'Will this project be hosted on WordPress VIP?', true ) ) {
 
 // Prompt the user to convert the folder structure to WordPress VIP.
 if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the project for WordPress VIP?', true ) ) {
-	write( 'Delete the Pantheon-specific workflows...' );
-
-	delete_files(
-		[
-			'.github/workflows/deploy-to-pantheon-live.yml',
-			'.github/workflows/deploy-to-pantheon-multidev.yml',
-		]
-	);
+	if ( confirm( 'Delete the Pantheon-specific GitHub Action workflows?', true ) ) {
+		delete_files(
+			[
+				'.github/workflows/deploy-to-pantheon-live.yml',
+				'.github/workflows/deploy-to-pantheon-multidev.yml',
+			]
+		);
+	}
 
 	write( 'Moving mu-plugins to client-mu-plugins...' );
 
 	run( 'mv mu-plugins client-mu-plugins' );
 
-	write( 'Adding mu-plugins to .gitignore...' );
+	write( 'Ignoring mu-plugins with .gitignore...' );
 
 	file_put_contents( '.gitignore', "mu-plugins\n", FILE_APPEND );
 
-	write( 'Removing pantheon-systems/pantheon-mu-plugin from composer.json...' );
+	write( 'Removing pantheon-systems/pantheon-mu-plugin from project\'s composer.json...' );
+
 	run( 'composer remove pantheon-systems/pantheon-mu-plugin' );
+	delete_files( 'client-mu-plugins/pantheon-mu-plugin' );
+
+	// Remove the pantheon mu-plugin from the plugin loader file.
+	replace_in_file(
+		'mu-plugins/plugin-loader.php',
+		[
+			"\n// Load Pantheon's mu-plugin.\nrequire_once __DIR__ . '/pantheon-mu-plugin/pantheon.php';\n" => '',
+		],
+	);
+
+	write( 'Running composer update...' );
+
+	run( 'composer update' );
 
 	// TODO: update the mu-plugins/plugin-loader.php file to NOT load the pantheon mu-plugin.
 
@@ -397,11 +415,11 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 
 	echo "Done!\n\n";
 } elseif ( 'pantheon' === $hosting_provider ) {
-	write( 'Delete the VIP-specific workflows...' );
+	if ( confirm( 'Delete the VIP-specific GitHub Action workflows?', true ) ) {
+		delete_files( '.github/workflows/deploy-to-vip.yml' );
 
-	delete_files( '.github/workflows/deploy-to-vip.yml' );
-
-	echo "Done!\n\n";
+		echo "Done!\n\n";
+	}
 }
 
 if ( confirm( 'Would you like to scaffold any "create-wordpress-plugin"-based plugins to the project? This will clone from create-wordpress-plugin, add it to the project\'s .gitignore file, and configure it in the project\'s composer.json.', true ) ) {
@@ -473,7 +491,7 @@ if ( confirm( 'Would you like to scaffold any "create-wordpress-plugin"-based pl
 			'composer config scripts --json \'' . json_encode( $composer_json['scripts'] ) . '\'',
 		);
 
-		// TODO: Should we configure the plugin now?
+		// TODO: Should we configure the plugin now?pantheon-mu-plugin
 		echo "Done scaffolding plugin!\n\n";
 	}
 }
