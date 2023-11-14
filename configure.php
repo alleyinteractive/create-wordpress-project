@@ -487,7 +487,7 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 
 	// Remove the pantheon mu-plugin from the plugin loader file.
 	replace_in_file(
-		'mu-plugins/plugin-loader.php',
+		'client-mu-plugins/plugin-loader.php',
 		[
 			"\n// Load Pantheon's mu-plugin.\nrequire_once __DIR__ . '/pantheon-mu-plugin/pantheon.php';\n" => '',
 		],
