@@ -371,6 +371,8 @@ if ( ! empty( $plugin_slug ) ) {
 		$current_dir,
 	);
 
+	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+
 	echo "Done!\n\n";
 }
 
