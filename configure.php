@@ -272,21 +272,20 @@ if ( is_dir( "plugins/{$plugin_slug}" ) ) {
 
 $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
 
-// TODO: Prompt for theme name when create-wordpress-theme is ready.
-// $theme_slug = slugify(
-// 	ask(
-// 		question: 'Project theme name?',
-// 		default: $project_name_slug,
-// 		allow_empty: false,
-// 	),
-// );
+$theme_slug = slugify(
+	ask(
+		question: 'Project theme name?',
+		default: $project_name_slug,
+		allow_empty: false,
+	),
+);
 
-// if ( is_dir( "themes/{$theme_slug}" ) ) {
-// 	write( "Theme already exists in themes/{$theme_slug}." );
-// 	exit( 1 );
-// }
+if ( is_dir( "themes/{$theme_slug}" ) ) {
+	write( "Theme already exists in themes/{$theme_slug}." );
+	exit( 1 );
+}
 
-// $theme_namespace = title_case( $theme_slug ) . '_Theme';
+$theme_namespace = title_case( $theme_slug ) . '_Theme';
 
 write( '------' );
 write( "Project          : {$project_name} <{$project_name_slug}>" );
@@ -376,7 +375,7 @@ if ( ! empty( $plugin_slug ) ) {
 	echo "Done!\n\n";
 }
 
-// TODO: scaffold the theme from create-wordpress-theme.
+// TODO: scaffold the theme from create-wordpress-theme when the project is ready.
 // if ( ! empty( $theme_slug ) ) {
 // 	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
 
@@ -422,9 +421,8 @@ write( 'Removing configuration script from theme/plugin...' );
 
 delete_files(
 	[
-		// TODO: Uncomment when create-wordpress-theme is ready.
-		// "themes/{$theme_slug}/configure.php",
-		// "themes/{$theme_slug}/Makefile",
+		"themes/{$theme_slug}/configure.php",
+		"themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
 	]
