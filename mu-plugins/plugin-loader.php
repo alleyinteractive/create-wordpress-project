@@ -15,7 +15,7 @@ require_once __DIR__ . '/pantheon-mu-plugin/pantheon.php';
  */
 function create_wordpress_project_core_plugins(): array {
 	return [
-		// 'create-wordpress-plugin/create-wordpress-plugin.php',
+		'create-wordpress-plugin/create-wordpress-plugin.php',
 	];
 }
 
