@@ -31,3 +31,16 @@ Follow these steps to get started:
 
 A skeleton for WordPress projects rooted at `wp-content` using Alley's best
 practices for WordPress development.
+
+## Credits
+
+This project is actively maintained by [Alley
+Interactive](https://github.com/alleyinteractive). Like what you see? [Come work
+with us](https://alley.com/careers/).
+
+- [author_name](https://github.com/author_name)
+- [All Contributors](../../contributors)
+
+## License
+
+The GNU General Public License (GPL) license. Please see [License File](LICENSE) for more information.
