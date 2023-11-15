@@ -503,6 +503,10 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 
 	run( 'git clone git@github.com:Automattic/vip-go-mu-plugins-built.git mu-plugins' );
 
+	write( 'Scaffolding out vip-config...' );
+
+	run( 'mkdir -p vip-config && touch vip-config/.gitkeep' );
+
 	echo "Done!\n\n";
 } elseif ( 'pantheon' === $hosting_provider ) {
 	if ( confirm( 'Delete the VIP-specific GitHub Action workflows?', true ) ) {
