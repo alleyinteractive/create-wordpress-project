@@ -20,7 +20,10 @@ if ( 'local' === wp_get_environment_type() ) {
 		);
 	}
 
-	/** @var array{
+	/**
+	 * Composer Configuration
+	 *
+	 * @var array{
 	 *   config?: array{
 	 *     platform?: array{
 	 *       php?: string,
@@ -49,7 +52,7 @@ if ( 'local' === wp_get_environment_type() ) {
 
 // Load the Composer autoloader or add a notice if it doesn't exist.
 if ( file_exists( $composer_autoloader_path ) ) {
-	require_once $composer_autoloader_path;
+	require_once $composer_autoloader_path; // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable
 } else {
 	// Include an error notice.
 	add_action(
