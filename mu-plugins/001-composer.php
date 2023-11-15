@@ -54,7 +54,7 @@ if ( file_exists( $composer_autoloader_path ) ) {
 	// Include an error notice.
 	add_action(
 		'admin_notices',
-		function() {
+		function () {
 			if ( 'local' === wp_get_environment_type() ) {
 				printf(
 					'<div class="notice notice-error"><p>%s</p></div>',
