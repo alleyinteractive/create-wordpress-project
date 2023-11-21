@@ -32,4 +32,14 @@
 
   <!-- The version set here matches the minimum version tested in CI. -->
   <config name="minimum_supported_wp_version" value="6.2" />
+
+  <!-- Define the prefixes that can be used by the plugin -->
+  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+    <properties>
+      <property name="prefixes" type="array">
+        <element value="vendor_name" />
+        <element value="create_wordpress_project" />
+      </property>
+    </properties>
+  </rule>
 </ruleset>
