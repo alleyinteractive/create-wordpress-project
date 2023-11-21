@@ -30,7 +30,7 @@ if ( ! defined( 'STDIN' ) ) {
 }
 
 if ( 0 === strpos( strtoupper( PHP_OS ), 'WIN' ) ) {
-	die( 'Not supported in Windows. 🪟' );
+	echo "This script may not work in Windows. 🪟\n";
 }
 
 if ( version_compare( PHP_VERSION, '8.2.0', '<' ) ) {
@@ -62,6 +62,10 @@ foreach ( $argv as $value ) {
 }
 
 $terminal_width = (int) exec( 'tput cols' );
+
+if ( ! $terminal_width ) {
+	$terminal_width = 80;
+}
 
 function write( string $text ): void {
 	global $terminal_width;
@@ -113,7 +117,7 @@ function str_after( string $subject, string $search ): string {
 }
 
 function slugify( string $subject ): string {
-	return strtolower( trim( (string) preg_replace( '/[^A-Za-z0-9-]+/', '-', $subject ), '-' ) );
+	return trim( (string) preg_replace( '/[^a-z0-9-]+/', '-', strtolower( $subject ) ), '-' );
 }
 
 function title_case( string $subject ): string {
@@ -158,7 +162,7 @@ function remove_readme_paragraphs( string $file ): void {
 	);
 }
 
-function determine_separator( string $path ): string {
+function normalize_path_separator( string $path ): string {
 	return str_replace( '/', DIRECTORY_SEPARATOR, $path );
 }
 
@@ -178,7 +182,7 @@ function delete_files( string|array $paths ): void {
 	}
 
 	foreach ( $paths as $path ) {
-		$path = determine_separator( $path );
+		$path = normalize_path_separator( $path );
 
 		if ( is_dir( $path ) ) {
 			run( "rm -rf {$path}" );
@@ -405,17 +409,8 @@ run( 'composer update' );
 if ( is_dir( 'ci-templates' ) ) {
 	write( "Moving ci-templates files to the root of the project and removing ci-templates directory..." );
 
-	run( 'rsync -a ci-templates/ ./ && rm -rf ci-templates' );
+	run( 'rm -rf .github && rsync -a ci-templates/ ./ && rm -rf ci-templates' );
 }
-
-// Remove admins from the CODEOWNERS file (should only apply to the template).
-write( 'Removing alleyinteractive/admins from .github/CODEOWNERS...' );
-replace_in_file(
-	'.github/CODEOWNERS',
-	[
-		'*	@alleyinteractive/admins' => '',
-	]
-);
 
 write( 'Removing configuration script from theme/plugin...' );
 
@@ -430,13 +425,7 @@ delete_files(
 
 echo "Done!\n\n";
 
-if ( confirm( 'Will this project be using Buddy CI?', true ) ) {
-	echo "Deleting GitHub Actions workflows...\n";
-
-	delete_files( '.github/workflows' );
-
-	echo "Done!\n\n";
-} elseif ( confirm( 'Will this project be using GitHub Actions?', true ) ) {
+if ( confirm( 'Will this project be using GitHub Actions?', true ) ) {
 	echo "Deleting Buddy CI files...\n";
 
 	delete_files(
@@ -445,6 +434,12 @@ if ( confirm( 'Will this project be using Buddy CI?', true ) ) {
 			'buddy.yml',
 		]
 	);
+
+	echo "Done!\n\n";
+} elseif ( confirm( 'Will this project be using Buddy CI?', true ) ) {
+	echo "Deleting GitHub Actions workflows...\n";
+
+	delete_files( '.github/workflows' );
 
 	echo "Done!\n\n";
 } else {
@@ -461,15 +456,15 @@ if ( confirm( 'Will this project be hosted on WordPress VIP?' ) ) {
 }
 
 // Prompt the user to convert the folder structure to WordPress VIP.
-if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the project for WordPress VIP?', true ) ) {
-	if ( confirm( 'Delete the Pantheon-specific GitHub Action workflows?', true ) ) {
-		delete_files(
-			[
-				'.github/workflows/deploy-to-pantheon-live.yml',
-				'.github/workflows/deploy-to-pantheon-multidev.yml',
-			]
-		);
-	}
+if ( 'vip' === $hosting_provider ) {
+	write( 'Deleting Pantheon-specific GitHub Action workflows...' );
+
+	delete_files(
+		[
+			'.github/workflows/deploy-to-pantheon-live.yml',
+			'.github/workflows/deploy-to-pantheon-multidev.yml',
+		]
+	);
 
 	write( 'Moving mu-plugins to client-mu-plugins...' );
 
@@ -501,17 +496,23 @@ if ( 'vip' === $hosting_provider && confirm( 'Would you like to setup the projec
 
 	run( 'git clone git@github.com:Automattic/vip-go-mu-plugins-built.git mu-plugins' );
 
+	if ( ! is_file( __DIR__ . '/object-cache.php' ) ) {
+		write( 'Symlinking object-cache.php from mu-plugins to wp-content/object-cache.php...' );
+
+		run( 'ln -s mu-plugins/drop-ins/object-cache.php object-cache.php' );
+	}
+
 	write( 'Scaffolding out vip-config...' );
 
 	run( 'mkdir -p vip-config && touch vip-config/.gitkeep' );
 
 	echo "Done!\n\n";
 } elseif ( 'pantheon' === $hosting_provider ) {
-	if ( confirm( 'Delete the VIP-specific GitHub Action workflows?', true ) ) {
-		delete_files( '.github/workflows/deploy-to-vip.yml' );
+	write( 'Deleting VIP-specific GitHub Action workflows...' );
 
-		echo "Done!\n\n";
-	}
+	delete_files( '.github/workflows/deploy-to-vip.yml' );
+
+	echo "Done!\n\n";
 }
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
