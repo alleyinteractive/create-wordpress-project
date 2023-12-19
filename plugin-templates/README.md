@@ -7,3 +7,11 @@ Currently the subfolders are
 * config
 * entries
 * features
+
+Use the following placeholders in your files, and they will automatically get updated to the correct values to match the destination plugin.
+
+* `create-wordpress-plugin`
+* `Create WordPress Plugin`
+* `CREATE_WORDPRESS_PLUGIN`
+* `create_wordpress_plugin`
+* `Create_WordPress_Plugin`
