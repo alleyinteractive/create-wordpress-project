@@ -407,6 +407,9 @@ if ( ! empty( $plugin_slug ) ) {
 
 	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
 
+	// Move onlly the folders in plugin-templates to the plugin folder.
+	run( "mv plugin-templates/*/ plugins/{$plugin_slug}/" );
+
 	echo "Done!\n\n";
 }
 
@@ -451,6 +454,7 @@ delete_files(
 		"themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
+		"plugin-templates",
 	]
 );
 
