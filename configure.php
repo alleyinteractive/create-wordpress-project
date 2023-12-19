@@ -205,6 +205,21 @@ function list_all_files_for_replacement(): array {
 }
 
 /**
+ * Gets the subfolders of a given path.
+ *
+ * @param string $path
+ * @return array<string>
+ */
+function list_subfolders( $path ): array {
+	return explode(
+		PHP_EOL,
+		run(
+			"find {$path} -type d -maxdepth 1 -mindepth 1",
+		),
+	);
+}
+
+/**
  * @param string|array<int, string> $paths
  */
 function delete_files( string|array $paths ): void {
@@ -407,8 +422,12 @@ if ( ! empty( $plugin_slug ) ) {
 
 	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
 
-	// Move onlly the folders in plugin-templates to the plugin folder.
-	run( "mv plugin-templates/*/ plugins/{$plugin_slug}/" );
+	// Move the contents of each subfolder in plugin-templates to the plugin folder.
+	$templates = list_subfolders( 'plugin-templates' ) ?: [];
+	foreach( $templates as $template ) {
+		$folder = preg_split( '/', $template )[1];
+		run( "mv {$template}/* plugins/{$plugin_slug}/{$folder}/" );
+	}
 
 	echo "Done!\n\n";
 }
