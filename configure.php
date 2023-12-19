@@ -205,6 +205,21 @@ function list_all_files_for_replacement(): array {
 }
 
 /**
+ * Gets the subfolders of a given path.
+ *
+ * @param string $path
+ * @return array<string>
+ */
+function list_subfolders( $path ): array {
+	return explode(
+		PHP_EOL,
+		run(
+			"find {$path} -type d -maxdepth 1 -mindepth 1",
+		),
+	);
+}
+
+/**
  * @param string|array<int, string> $paths
  */
 function delete_files( string|array $paths ): void {
@@ -407,6 +422,13 @@ if ( ! empty( $plugin_slug ) ) {
 
 	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
 
+	// Move the contents of each subfolder in plugin-templates to the plugin folder.
+	$templates = list_subfolders( 'plugin-templates' ) ?: [];
+	foreach( $templates as $template ) {
+		$folder = explode( '/', $template )[1];
+		run( "mv {$template}/* plugins/{$plugin_slug}/{$folder}/" );
+	}
+
 	echo "Done!\n\n";
 }
 
@@ -451,6 +473,7 @@ delete_files(
 		"themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
+		"plugin-templates",
 	]
 );
 
