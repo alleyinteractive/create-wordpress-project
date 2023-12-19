@@ -425,7 +425,7 @@ if ( ! empty( $plugin_slug ) ) {
 	// Move the contents of each subfolder in plugin-templates to the plugin folder.
 	$templates = list_subfolders( 'plugin-templates' ) ?: [];
 	foreach( $templates as $template ) {
-		$folder = preg_split( '/', $template )[1];
+		$folder = explode( '/', $template )[1];
 		run( "mv {$template}/* plugins/{$plugin_slug}/{$folder}/" );
 	}
 
