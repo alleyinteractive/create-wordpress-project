@@ -1,0 +1,6 @@
+{
+  "create_wordpress_plugin_featured_image_caption": {
+    "post_types": "all",
+    "type": "string"
+  }
+}
