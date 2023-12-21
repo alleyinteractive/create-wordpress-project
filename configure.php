@@ -430,6 +430,10 @@ if ( ! empty( $plugin_slug ) ) {
 		run( "mv {$template}/* plugins/{$plugin_slug}/{$folder}/" );
 	}
 
+	// Copy the initial features from features.txt into the plugin main file.
+	$features = file_get_contents( 'plugin-templates/features.txt' );
+	replace_in_file( "plugins/{$plugin_slug}/{$plugin_slug}.php", [ '/^.*// Add initial features here.$/' => $features ] );
+
 	echo "Done!\n\n";
 }
 
