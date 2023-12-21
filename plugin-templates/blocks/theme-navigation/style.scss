@@ -1,0 +1,12 @@
+/**
+ * Styles for the create-wordpress-plugin/theme-navigation block that get applied on both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-create-wordpress-plugin-theme-navigation {
+  .menu {
+    display: flex;
+    gap: 10px;
+    list-style-type: none;
+  }
+}
