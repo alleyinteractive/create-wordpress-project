@@ -15,6 +15,9 @@ final class Featured_Image_Caption implements Feature {
 	}
 
 	public function add_caption_to_featured_image( $block_content  ) {
+		if ( empty( get_the_ID() ) ) {
+			return $block_content;
+		}
 		$featured_image_caption = get_post_meta( get_the_ID(), 'create_wordpress_plugin_featured_image_caption', true );
 		if ( empty( $featured_image_caption ) ) {
 			$featured_image_id      = get_post_meta( get_the_ID(), '_thumbnail_id', true );
@@ -22,7 +25,7 @@ final class Featured_Image_Caption implements Feature {
 		}
 
 		if ( ! empty( $featured_image_caption ) ) {
-			$block_content = str_replace( '</figure>', '<figcaption class="wp-block-post-featured-image__caption">' . $featured_image_caption . '</figcaption></figure>', $block_content );
+			$block_content = str_replace( '</figure>', '<figcaption class="wp-block-post-featured-image__caption">' . esc_html( $featured_image_caption ) . '</figcaption></figure>', $block_content );
 		}
 
 		return $block_content;

@@ -7,7 +7,7 @@
  * @package create-wordpress-plugin
  */
 
-namespace Create_WordPress_Plugin;;
+namespace Create_WordPress_Plugin;
 
 add_action(
 	'enqueue_block_editor_assets',
