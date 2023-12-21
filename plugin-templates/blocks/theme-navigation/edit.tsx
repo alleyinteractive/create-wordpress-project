@@ -53,7 +53,7 @@ export default function Edit({
 }: EditProps) {
   const blockProps = useBlockProps();
 
-  // @ts-ignore - useSelect doesn't export proper types
+  // @ts-ignore - useSelect doesn't export proper types.
   const menuLocations = useSelect((select) => select('core').getMenuLocations('root', 'menu'), []);
 
   // Loading menu locations.
