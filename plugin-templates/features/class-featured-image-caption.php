@@ -10,7 +10,7 @@ namespace Create_WordPress_Plugin;
 use Alley\WP\Types\Feature;
 
 final class Featured_Image_Caption implements Feature {
-	public function __construct() {
+	public function boot(): void {
 		add_filter( 'render_block_core/post-featured-image', [ $this, 'add_caption_to_featured_image' ], 10, 1 );
 	}
 
@@ -28,4 +28,3 @@ final class Featured_Image_Caption implements Feature {
 		return $block_content;
 	}
 }
-new Featured_Image_Caption();
