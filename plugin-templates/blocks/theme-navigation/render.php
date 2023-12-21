@@ -11,7 +11,9 @@
  * @package create-wordpress-plugin
  */
 
-$create_wordpress_plugin_menu_location = isset( $attributes['menuLocation'] ) && is_string( $attributes['menuLocation'] ) ? $attributes['menuLocation'] : '';
+$create_wordpress_plugin_menu_location = isset( $attributes['menuLocation'] ) && is_string( $attributes['menuLocation'] )
+	? $attributes['menuLocation']
+	: '';
 
 if ( empty( $create_wordpress_plugin_menu_location ) ) {
 	return;
