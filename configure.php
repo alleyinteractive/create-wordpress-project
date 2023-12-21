@@ -211,10 +211,11 @@ function list_all_files_for_replacement(): array {
  * @return array<string>
  */
 function list_subfolders( $path ): array {
+	$path = escapeshellarg($path);
 	return explode(
 		PHP_EOL,
 		run(
-			"find {$path} -type d -maxdepth 1 -mindepth 1",
+			"find " . $path . " -type d -maxdepth 1 -mindepth 1",
 		),
 	);
 }
