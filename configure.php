@@ -427,6 +427,7 @@ if ( ! empty( $plugin_slug ) ) {
 	$templates = list_subfolders( 'plugin-templates' ) ?: [];
 	foreach( $templates as $template ) {
 		$folder = explode( '/', $template )[1];
+		run( "mkdir -p plugins/{$plugin_slug}/{$folder}/" );
 		run( "mv {$template}/* plugins/{$plugin_slug}/{$folder}/" );
 	}
 
