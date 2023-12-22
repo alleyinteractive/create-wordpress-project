@@ -52,7 +52,7 @@ final class Featured_Image_Caption implements Feature {
 		register_meta_helper(
 			'post',
 			get_post_types_by_support( 'thumbnail' ),
-			'create_wordpress_project_featured_image_caption',
+			'create_wordpress_plugin_featured_image_caption',
 			[
 				'sanitize_callback' => 'sanitize_text_field',
 				'single'            => true,
