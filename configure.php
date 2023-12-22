@@ -433,7 +433,7 @@ if ( ! empty( $plugin_slug ) ) {
 
 	// Copy the initial features from features.txt into the plugin main file.
 	$features = file_get_contents( 'plugin-templates/features.txt' );
-	replace_in_file( "plugins/{$plugin_slug}/{$plugin_slug}.php", [ '/.*\/\/ Add initial features here./' => $features ] );
+	replace_in_file( "plugins/{$plugin_slug}/{$plugin_slug}.php", [ '		// Add initial features here.' => $features ] );
 
 	echo "Done!\n\n";
 }
