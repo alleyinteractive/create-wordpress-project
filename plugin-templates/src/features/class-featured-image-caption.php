@@ -6,6 +6,7 @@
  */
 
 namespace Create_WordPress_Plugin\Features;
+use function Create_WordPress_Plugin\register_meta_helper;
 
 use Alley\WP\Types\Feature;
 
@@ -15,17 +16,7 @@ final class Featured_Image_Caption implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'render_block_core/post-featured-image', [ $this, 'add_caption_to_featured_image' ], 10, 3 );
-		register_meta_helper(
-			'post',
-			get_post_types_by_support( 'thumbnail' ),
-			'create_wordpress_plugin_featured_image_caption',
-			[
-				'sanitize_callback' => 'sanitize_text_field',
-				'single'            => true,
-				'type'              => 'string',
-				'show_in_rest'      => true,
-			]
-		);
+		add_action( 'init', [ $this, 'add_meta_field' ] );
 	}
 
 	/**
@@ -52,5 +43,22 @@ final class Featured_Image_Caption implements Feature {
 		}
 
 		return $block_content;
+	}
+
+	/**
+	 * Registers the meta field only for post types that support featured images.
+	 */
+	public function add_meta_field() {
+		register_meta_helper(
+			'post',
+			get_post_types_by_support( 'thumbnail' ),
+			'create_wordpress_project_featured_image_caption',
+			[
+				'sanitize_callback' => 'sanitize_text_field',
+				'single'            => true,
+				'type'              => 'string',
+				'show_in_rest'      => true,
+			]
+		);
 	}
 }
