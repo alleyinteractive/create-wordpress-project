@@ -26,6 +26,7 @@ if ( empty( $create_wordpress_plugin_menu_location ) ) {
 		[
 			'theme_location'  => $create_wordpress_plugin_menu_location,
 			'container_class' => 'menu-container',
+			'fallback_cb'     => false,
 		]
 	);
 	?>
