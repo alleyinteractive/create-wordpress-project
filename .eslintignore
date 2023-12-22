@@ -12,6 +12,9 @@ plugins/*
 themes/*
 !themes/create-wordpress-theme
 
+# Ignore the plugin template files
+plugin-templates
+
 # Ignore everything in mu-plugins, assuming this is 3rd party code.
 mu-plugins
 
