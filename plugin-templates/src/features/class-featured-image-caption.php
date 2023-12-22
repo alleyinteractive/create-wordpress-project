@@ -15,13 +15,24 @@ final class Featured_Image_Caption implements Feature {
 	 */
 	public function boot(): void {
 		add_filter( 'render_block_core/post-featured-image', [ $this, 'add_caption_to_featured_image' ], 10, 3 );
+		register_meta_helper(
+			'post',
+			get_post_types_by_support( 'thumbnail' ),
+			'create_wordpress_plugin_featured_image_caption',
+			[
+				'sanitize_callback' => 'sanitize_text_field',
+				'single'            => true,
+				'type'              => 'string',
+				'show_in_rest'      => true,
+			]
+		);
 	}
 
 	/**
 	 * Adds the featured image caption to the featured image block.
 	 *
-	 * @param string   $block_content The existing block content.
-	 * @param array    $block         The full block, including name and attributes.
+	 * @param string    $block_content The existing block content.
+	 * @param array     $block         The full block, including name and attributes.
 	 * @param \WP_Block $instance      The block instance.
 	 * @return void
 	 */

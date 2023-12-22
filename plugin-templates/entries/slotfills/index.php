@@ -13,6 +13,7 @@ add_action(
 	'enqueue_block_editor_assets',
 	__NAMESPACE__ . '\action_enqueue_slotfills_assets'
 );
+add_action( 'init', __NAMESPACE__ . '\register_slotfills_scripts' );
 
 /**
  * Registers all slotfill assets so that they can be enqueued through Gutenberg in
@@ -47,7 +48,6 @@ function register_slotfills_scripts(): void {
 	);
 	wp_set_script_translations( 'create-wordpress-plugin_slotfills', 'create-wordpress-plugin' );
 }
-add_action( 'init', __NAMESPACE__ . '\register_slotfills_scripts' );
 
 /**
  * Enqueue block editor assets for this slotfill.
