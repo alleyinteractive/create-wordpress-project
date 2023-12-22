@@ -7,7 +7,7 @@
 	"category": "theme",
 	"icon": "menu",
 	"description": "Display theme navigation menus.",
-	"textdomain": "theme-navigation",
+	"textdomain": "create-wordpress-plugin",
 	"editorScript": "file:index.ts",
 	"editorStyle": "file:index.css",
 	"style": [
