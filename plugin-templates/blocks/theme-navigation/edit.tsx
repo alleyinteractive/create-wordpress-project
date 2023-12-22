@@ -2,6 +2,12 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * A global type should be declared for this package. This is a temporary workaround until we
+ * decide on where global types should be declared.
+ */
+// @ts-ignore
 import ServerSideRender from '@wordpress/server-side-render';
 
 import './index.scss';
