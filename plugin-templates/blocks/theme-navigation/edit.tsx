@@ -78,8 +78,8 @@ export default function Edit({
       <div {...blockProps}>
         <Placeholder
           icon={ menu }
-          label={ __('Theme Navigation', 'create-wordpress-project') }
-          instructions={ __('Please register menu locations.', 'create-wordpress-project') }
+          label={ __('Theme Navigation', 'create-wordpress-plugin') }
+          instructions={ __('Please register menu locations.', 'create-wordpress-plugin') }
         />
       </div>
     );
@@ -93,8 +93,8 @@ export default function Edit({
         ) : (
           <Placeholder
             icon={ menu }
-            label={ __('Theme Navigation', 'create-wordpress-project') }
-            instructions={ __('Please select a menu location.', 'create-wordpress-project') }
+            label={ __('Theme Navigation', 'create-wordpress-plugin') }
+            instructions={ __('Please select a menu location.', 'create-wordpress-plugin') }
           />
         )
       }
