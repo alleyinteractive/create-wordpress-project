@@ -1,6 +1,7 @@
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, Spinner } from '@wordpress/components';
+import { PanelBody, Placeholder, SelectControl, Spinner } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { menu } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -64,14 +65,22 @@ export default function Edit({
 
   // Loading menu locations.
   if (!Array.isArray(menuLocations)) {
-    return <Spinner />;
+    return (
+      <div {...blockProps}>
+        <Spinner />
+      </div>
+    );
   }
 
   // No menu locations have been registered.
   if (menuLocations.length === 0) {
     return (
       <div {...blockProps}>
-        <h3>{ __('Please register menu locations.', 'create-wordpress-plugin') }</h3>
+        <Placeholder
+          icon={ menu }
+          label={ __('Theme Navigation', 'create-wordpress-project') }
+          instructions={ __('Please register menu locations.', 'create-wordpress-project') }
+        />
       </div>
     );
   }
@@ -82,9 +91,11 @@ export default function Edit({
         menuLocation ? (
           <ServerSideRender block="create-wordpress-plugin/theme-navigation" attributes={{ menuLocation }} />
         ) : (
-          <h3>
-            {__('Please select a menu location.', 'create-wordpress-plugin')}
-          </h3>
+          <Placeholder
+            icon={ menu }
+            label={ __('Theme Navigation', 'create-wordpress-project') }
+            instructions={ __('Please select a menu location.', 'create-wordpress-project') }
+          />
         )
       }
 

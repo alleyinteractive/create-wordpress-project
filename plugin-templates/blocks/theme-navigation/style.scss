@@ -4,9 +4,20 @@
  */
 
 .wp-block-create-wordpress-plugin-theme-navigation {
-  .menu {
-    display: flex;
-    gap: 10px;
-    list-style-type: none;
+
+  // Normalize list styles.
+  ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  ul,
+  ul li {
+    list-style: none;
+
+    // Overrides generic ".entry-content li" styles on the front end.
+    padding: 0;
   }
 }
