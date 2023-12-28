@@ -20,14 +20,14 @@ if ( empty( $create_wordpress_plugin_menu_location ) ) {
 }
 
 ?>
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?> data-location="<?php echo esc_attr( $create_wordpress_plugin_menu_location ); ?>">
+<nav <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?> data-location="<?php echo esc_attr( $create_wordpress_plugin_menu_location ); ?>">
 	<?php
 	wp_nav_menu(
 		[
-			'theme_location'  => $create_wordpress_plugin_menu_location,
-			'container_class' => 'menu-container',
-			'fallback_cb'     => false,
+			'theme_location' => $create_wordpress_plugin_menu_location,
+			'container'      => false,
+			'fallback_cb'    => false,
 		]
 	);
 	?>
-</div>
+</nav>
