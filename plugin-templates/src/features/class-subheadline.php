@@ -33,7 +33,7 @@ final class Subheadline implements Feature {
 			get_post_types_by_support( 'subheadline' ),
 			'create_wordpress_plugin_subheadline',
 			[
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => 'wp_kses_post',
 				'single'            => true,
 				'type'              => 'string',
 				'show_in_rest'      => true,

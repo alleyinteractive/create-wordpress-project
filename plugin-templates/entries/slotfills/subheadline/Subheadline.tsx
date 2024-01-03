@@ -1,12 +1,17 @@
+/* global tinyMCEPreInit */
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 import { __ } from '@wordpress/i18n';
 import { Editor } from '@tinymce/tinymce-react';
 import { usePostMetaValue } from '@alleyinteractive/block-editor-tools';
 
-const { tinyMCEPreInit } = window as any;
+declare global {
+  const tinyMCEPreInit: {
+    baseURL: string,
+  };
+}
 
 function Subheadline() {
-  const [subheadline, setSubheadline] = usePostMetaValue('subheadline');
+  const [subheadline, setSubheadline] = usePostMetaValue('create_wordpress_plugin_subheadline');
   return (
     <PluginDocumentSettingPanel
       // @ts-ignore
