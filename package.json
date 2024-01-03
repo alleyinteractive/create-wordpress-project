@@ -5,7 +5,8 @@
     "plugins/create-wordpress-theme"
   ],
   "dependencies": {
-    "@alleyinteractive/block-editor-tools": "^0.3.6"
+    "@alleyinteractive/block-editor-tools": "^0.5",
+    "@tinymce/tinymce-react": "4.1"
   },
   "devDependencies": {
     "@alleyinteractive/build-tool": "^0.1.1",

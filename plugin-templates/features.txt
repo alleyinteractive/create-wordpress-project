@@ -1,2 +1,3 @@
 		// Add initial features here.
 		'Create_WordPress_Plugin\Features\Featured_Image_Caption' => [],
+		'Create_WordPress_Plugin\Features\Subheadline' => [],

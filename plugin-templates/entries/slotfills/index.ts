@@ -6,3 +6,4 @@
  */
 
 import './featured-image-caption';
+import './subheadline';
