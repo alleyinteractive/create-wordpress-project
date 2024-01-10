@@ -12,11 +12,11 @@
  *
  * @package create-wordpress-plugin
  */
-$post_id = $block->context['postId'];
-if ( empty( $post_id ) ) {
+$create_wordpress_plugin_post_id = $block?->context['postId'];
+if ( empty( $create_wordpress_plugin_post_id ) ) {
 	return;
 }
-$subheadline = get_post_meta( $post_id, 'create_wordpress_plugin_subheadline', true );
+$subheadline = get_post_meta( $create_wordpress_plugin_post_id, 'create_wordpress_plugin_subheadline', true );
 
 if ( empty( $subheadline ) ) {
 	return;
