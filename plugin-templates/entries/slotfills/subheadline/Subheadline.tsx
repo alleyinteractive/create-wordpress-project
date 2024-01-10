@@ -11,10 +11,12 @@ declare global {
 }
 
 function Subheadline() {
+  if (!tinyMCEPreInit.baseURL) {
+    return null;
+  }
   const [subheadline, setSubheadline] = usePostMetaValue('create_wordpress_plugin_subheadline');
   return (
     <PluginDocumentSettingPanel
-      // @ts-ignore
       name="subheadline"
       title={__('Subheadline', 'create-wordpress-project')}
     >
