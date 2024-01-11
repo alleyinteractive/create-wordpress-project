@@ -20,6 +20,7 @@ function Subheadline() {
       name="subheadline"
       title={__('Subheadline', 'create-wordpress-project')}
     >
+      {/* @ts-ignore - types are not available for Editor */}
       <Editor
         value={subheadline}
         tinymceScriptSrc={`${tinyMCEPreInit.baseURL}/tinymce.min.js`}
