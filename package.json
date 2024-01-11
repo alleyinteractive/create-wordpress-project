@@ -5,7 +5,9 @@
     "plugins/create-wordpress-theme"
   ],
   "dependencies": {
-    "@alleyinteractive/block-editor-tools": "^0.3.6"
+    "@alleyinteractive/block-editor-tools": "^0.5",
+    "@tinymce/tinymce-react": "4.1",
+    "@wordpress/block-editor": "^12.16.0"
   },
   "devDependencies": {
     "@alleyinteractive/build-tool": "^0.1.1",
@@ -16,6 +18,7 @@
     "@testing-library/jest-dom": "^6.1.3",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.5.2",
+    "@types/wordpress__edit-post": "^7.5.6",
     "@wordpress/babel-preset-default": "^7.19.1",
     "@wordpress/scripts": "^26.6.4",
     "babel-jest": "^29.7.0",

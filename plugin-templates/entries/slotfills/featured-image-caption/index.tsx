@@ -5,6 +5,7 @@ import { addFilter } from '@wordpress/hooks';
 import JSXElement from 'react';
 import FeaturedImageCaption from './FeaturedImageCaption';
 
+/* @ts-ignore - JSXElement not recognized */
 function featuredImageCaption(OriginalComponent: JSXElement) {
   return function (props: object) { /* eslint-disable-line func-names */
     return (
