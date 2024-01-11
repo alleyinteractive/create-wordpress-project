@@ -6,7 +6,8 @@
   ],
   "dependencies": {
     "@alleyinteractive/block-editor-tools": "^0.5",
-    "@tinymce/tinymce-react": "4.1"
+    "@tinymce/tinymce-react": "4.1",
+    "@wordpress/block-editor": "^12.16.0"
   },
   "devDependencies": {
     "@alleyinteractive/build-tool": "^0.1.1",

@@ -11,10 +11,10 @@ declare global {
 }
 
 function Subheadline() {
+  const [subheadline, setSubheadline] = usePostMetaValue('create_wordpress_plugin_subheadline');
   if (!tinyMCEPreInit.baseURL) {
     return null;
   }
-  const [subheadline, setSubheadline] = usePostMetaValue('create_wordpress_plugin_subheadline');
   return (
     <PluginDocumentSettingPanel
       name="subheadline"
