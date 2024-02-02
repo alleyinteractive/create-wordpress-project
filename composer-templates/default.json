@@ -23,7 +23,7 @@
     },
     {
         "name": "Safe Redirect Manager",
-        "path": "10up/safe-redirect-manager"
+        "path": "wpackagist-plugin/safe-redirect-manager"
     },
     {
         "name": "WP Asset Manager",

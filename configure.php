@@ -263,7 +263,7 @@ function install_plugin( $plugin_data, $prompt = false ) {
 		run( "composer config repositories.{$plugin_short_name} github {$plugin_repo}" );
 	}
 	if ( ! empty( $install_path ) ) {
-		run( "composer config --json extra.installer-paths.{$intall_path} '[{$plugin_path}]'" );
+		run( "composer config --json extra.installer-paths.{$intall_path} '[\"{$plugin_path}\"]'" );
 	}
 
 	run( "composer require -W --no-interaction {$plugin_path}" );
