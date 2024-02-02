@@ -13,14 +13,17 @@
     },
     {
         "name": "Rewrite Rules Inspector",
+        "repo": "https://github.com/Automattic/rewrite-rules-inspector",
         "path": "Automattic/rewrite-rules-inspector"
     },
     {
         "name": "SearchPress",
+        "repo": "https://github.com/alleyinteractive/searchpress",
         "path": "alleyinteractive/searchpress"
     },
     {
         "name": "SearchPress Debug Bar",
+        "repo": "https://github.com/alleyinteractive/debug-bar-searchpress",
         "path": "alleyinteractive/debug-bar-searchpress"
     },
     {
@@ -29,10 +32,12 @@
     },
     {
         "name": "WP Mail SMTP",
+        "repo": "https://github.com/wp-plugins/wp-mail-smtp",
         "path": "wp-plugins/wp-mail-smtp"
     },
     {
         "name": "WP Native PHP Sessions",
+        "repo": "https://github.com/wp-plugins/wp-native-php-sessions",
         "path": "wp-plugins/wp-native-php-sessions"
     }
 ]
