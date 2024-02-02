@@ -250,6 +250,7 @@ function install_plugin( $plugin_data, $prompt = false ) {
 	$plugin_name = $plugin_data['name'];
 	$plugin_path = $plugin_data['path'];
 	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
+	$repo_type   = isset( $plugin_data['repo_type'] ) ? $plugin_data['repo_type'] : 'github';
 
 	if ( $prompt && ! confirm( "Install {$plugin_name}?", true ) ) {
 		return;
@@ -259,7 +260,7 @@ function install_plugin( $plugin_data, $prompt = false ) {
 
 	if ( ! empty( $plugin_repo ) ) {
 		$plugin_short_name = str_after( $plugin_path, '/' );
-		run( "composer config repositories.{$plugin_short_name} github {$plugin_repo}" );
+		run( "composer config repositories.{$plugin_short_name} {$repo_type} {$plugin_repo}" );
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path}" );
@@ -617,10 +618,29 @@ foreach( $suggested_plugins as $plugin ) {
 
 if ( 'pantheon' === $hosting_provider ) {
 	write( 'Installing Pantheon Plugins...' );
+	$license_key = ask(
+		question: 'Object Cache Pro License Key? Run \'terminus remote:wp "<site>.<env>" -- eval "echo getenv(\'OCP_LICENSE\');"\' to get the license key. (Leave blank to skip)',
+		allow_empty: true,
+	);
+
 	$pantheon_file_contents = file_get_contents( 'composer-templates/pantheon.json' );
 	$pantheon_plugins       = json_decode( $pantheon_file_contents, true );
 	foreach( $pantheon_plugins as $plugin ) {
 		install_plugin( $plugin, false );
+	}
+	if ( ! empty( $license_key ) ) {
+		run( "mv composer-templates/auth.json ./auth.json" );
+		replace_in_file( 'auth.json', [ 'object_cache_pro_token' => $license_key ] );
+
+		install_plugin(
+			[
+				'name'      => 'Object Cache Pro',
+				'repo'      => 'https://objectcache.pro/repo/',
+				'repo_type' => 'composer',
+				'path'      => 'rhubarbgroup/object-cache-pro'
+			],
+			false
+		);
 	}
 }
 // Delete the composer-templates directory.
