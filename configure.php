@@ -247,10 +247,9 @@ function delete_files( string|array $paths ): void {
  * @return void
  */
 function install_plugin( $plugin_data, $prompt = false ) {
-	$plugin_name  = $plugin_data['name'];
-	$plugin_path  = $plugin_data['path'];
-	$plugin_repo  = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
-	$install_path = isset( $plugin_data['install_path'] ) ? $plugin_data['install_path'] : null;
+	$plugin_name = $plugin_data['name'];
+	$plugin_path = $plugin_data['path'];
+	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
 
 	if ( $prompt && ! confirm( "Install {$plugin_name}?", true ) ) {
 		return;
@@ -261,9 +260,6 @@ function install_plugin( $plugin_data, $prompt = false ) {
 	if ( ! empty( $plugin_repo ) ) {
 		$plugin_short_name = str_after( $plugin_path, '/' );
 		run( "composer config repositories.{$plugin_short_name} github {$plugin_repo}" );
-	}
-	if ( ! empty( $install_path ) ) {
-		run( "composer config --json extra.installer-paths.{$install_path} '[\"{$plugin_path}\"]'" );
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path}" );
