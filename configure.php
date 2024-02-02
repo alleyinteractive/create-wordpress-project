@@ -263,7 +263,7 @@ function install_plugin( $plugin_data, $prompt = false ) {
 		run( "composer config repositories.{$plugin_short_name} {$repo_type} {$plugin_repo}" );
 	}
 
-	run( "composer require -W --no-interaction --quiet {$plugin_path}" );
+	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
