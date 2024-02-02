@@ -239,6 +239,32 @@ function delete_files( string|array $paths ): void {
 	}
 }
 
+/**
+ * Install a plugin with composer
+ *
+ * @param array $plugin_data The plugin information.
+ * @param bool $prompt Whether or not to prompt to install.
+ * @return void
+ */
+function install_plugin( $plugin_data, $prompt = false ) {
+	$plugin_name = $plugin_data['name'];
+	$plugin_path = $plugin_data['path'];
+	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
+
+	if ( $prompt && ! confirm( "Install {$plugin_name}?" ) ) {
+		return;
+	}
+
+	write( "Installing {$plugin_name}..." );
+
+	if ( ! empty( $plugin_repo ) ) {
+		$plugin_short_name = str_after( $plugin_path, '/' );
+		run( "composer config repositories.{$plugin_short_name} github {$plugin_repo}" );
+	}
+
+	run( "composer require -W --no-interaction {$plugin_path}" );
+}
+
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
 
 $current_dir = getcwd();
@@ -573,6 +599,13 @@ if ( 'vip' === $hosting_provider ) {
 	delete_files( '.github/workflows/deploy-to-vip.yml' );
 
 	echo "Done!\n\n";
+}
+
+write( 'Installing Required Plugins...' );
+$req_file_contents = file_get_contents( 'composer-templates/default.json' );
+$req_plugins       = json_decode( $req_file_contents, true );
+foreach( $req_plugins as $plugin ) {
+	install_plugin( $plugin, false );
 }
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
