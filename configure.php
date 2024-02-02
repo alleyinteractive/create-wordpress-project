@@ -244,9 +244,8 @@ function delete_files( string|array $paths ): void {
  *
  * @param array $plugin_data The plugin information.
  * @param bool $prompt Whether or not to prompt to install.
- * @return void
  */
-function install_plugin( $plugin_data, $prompt = false ) {
+function install_plugin( array $plugin_data, bool $prompt = false ): void {
 	$plugin_name = $plugin_data['name'];
 	$plugin_path = $plugin_data['path'];
 	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
@@ -606,7 +605,7 @@ write( 'Installing Required Plugins...' );
 $required_file_contents = file_get_contents( 'composer-templates/default.json' );
 $required_plugins       = json_decode( $required_file_contents, true );
 foreach( $required_plugins as $plugin ) {
-	install_plugin( $plugin, false );
+	install_plugin( $plugin );
 }
 
 write( 'Installing Suggested Plugins...' );
@@ -626,7 +625,7 @@ if ( 'pantheon' === $hosting_provider ) {
 	$pantheon_file_contents = file_get_contents( 'composer-templates/pantheon.json' );
 	$pantheon_plugins       = json_decode( $pantheon_file_contents, true );
 	foreach( $pantheon_plugins as $plugin ) {
-		install_plugin( $plugin, false );
+		install_plugin( $plugin );
 	}
 	if ( ! empty( $license_key ) ) {
 		run( "mv composer-templates/auth.json ./auth.json" );
@@ -638,8 +637,7 @@ if ( 'pantheon' === $hosting_provider ) {
 				'repo'      => 'https://objectcache.pro/repo/',
 				'repo_type' => 'composer',
 				'path'      => 'rhubarbgroup/object-cache-pro'
-			],
-			false
+			]
 		);
 	}
 }
