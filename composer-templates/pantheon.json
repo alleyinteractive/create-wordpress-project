@@ -33,12 +33,10 @@
     },
     {
         "name": "WP Mail SMTP",
-        "repo": "https://github.com/wp-plugins/wp-mail-smtp",
-        "path": "wp-plugins/wp-mail-smtp"
+        "path": "wpackagist-plugin/wp-mail-smtp"
     },
     {
         "name": "WP Native PHP Sessions",
-        "repo": "https://github.com/wp-plugins/wp-native-php-sessions",
-        "path": "wp-plugins/wp-native-php-sessions"
+        "path": "wpackagist-plugin/wp-native-php-sessions"
     }
 ]
