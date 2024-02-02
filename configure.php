@@ -602,10 +602,26 @@ if ( 'vip' === $hosting_provider ) {
 }
 
 write( 'Installing Required Plugins...' );
-$req_file_contents = file_get_contents( 'composer-templates/default.json' );
-$req_plugins       = json_decode( $req_file_contents, true );
-foreach( $req_plugins as $plugin ) {
+$required_file_contents = file_get_contents( 'composer-templates/default.json' );
+$required_plugins       = json_decode( $required_file_contents, true );
+foreach( $required_plugins as $plugin ) {
 	install_plugin( $plugin, false );
+}
+
+write( 'Installing Suggested Plugins...' );
+$suggested_file_contents = file_get_contents( 'composer-templates/suggested.json' );
+$suggested_plugins       = json_decode( $suggested_file_contents, true );
+foreach( $suggested_plugins as $plugin ) {
+	install_plugin( $plugin, true );
+}
+
+if ( 'pantheon' === $hosting_provider ) {
+	write( 'Installing Pantheon Plugins...' );
+	$pantheon_file_contents = file_get_contents( 'composer-templates/pantheon.json' );
+	$pantheon_plugins       = json_decode( $pantheon_file_contents, true );
+	foreach( $pantheon_plugins as $plugin ) {
+		install_plugin( $plugin, false );
+	}
 }
 
 if ( confirm( 'Let this script delete itself?', true ) ) {

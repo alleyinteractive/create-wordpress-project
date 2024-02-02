@@ -1,0 +1,47 @@
+[
+- [Pantheon Advanced Page Cache](https://github.com/pantheon-systems/pantheon-advanced-page-cache)
+- [Pantheon MU Plugin](https://github.com/pantheon-systems/pantheon-mu-plugin)
+- [Query Monitor](https://wordpress.org/plugins/query-monitor/)
+- [Rewrite Rules Inspector](https://wordpress.org/plugins/rewrite-rules-inspector/)
+- [SearchPress](https://github.com/alleyinteractive/searchpress)
+- [SearchPress Debug Bar](https://github.com/alleyinteractive/debug-bar-searchpress)
+- [Two Factor](https://wordpress.org/plugins/two-factor/)
+- [WP Mail SMTP](https://wordpress.org/plugins/wp-mail-smtp/)
+- [WP Native PHP Sessions](https://wordpress.org/plugins/wp-native-php-sessions/)
+    {
+        "name": "Pantheon Advanced Page Cache",
+        "path": "pantheon-systems/pantheon-advanced-page-cache"
+    },
+    {
+        "name": "Pantheon MU Plugin",
+        "path": "pantheon-systems/pantheon-mu-plugin"
+    },
+    {
+        "name": "Query Monitor",
+        "path": "johnbillion/query-monitor"
+    },
+    {
+        "name": "Rewrite Rules Inspector",
+        "path": "Automattic/rewrite-rules-inspector"
+    },
+    {
+        "name": "SearchPress",
+        "path": "alleyinteractive/searchpress"
+    },
+    {
+        "name": "SearchPress Debug Bar",
+        "path": "alleyinteractive/debug-bar-searchpress"
+    },
+    {
+        "name": "Two Factor",
+        "path": "georgestephanis/two-factor"
+    },
+    {
+        "name": "WP Mail SMTP",
+        "path": "wp-plugins/wp-mail-smtp"
+    },
+    {
+        "name": "WP Native PHP Sessions",
+        "path": "wp-plugins/wp-native-php-sessions"
+    }
+]
