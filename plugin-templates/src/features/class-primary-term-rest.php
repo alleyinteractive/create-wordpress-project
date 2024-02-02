@@ -83,14 +83,15 @@ final class Primary_Term_Rest implements Feature {
 			}
 		}
 		if ( empty( $primary_term_id ) ) {
-			return [];
+			$term = [];
+		} else {
+			$primary_term = get_term( $primary_term_id, $taxonomy );
+			$term         = [
+				'term_name' => $primary_term->name,
+				'term_id'   => $primary_term->term_id,
+				'term_link' => get_term_link( $primary_term ),
+			];
 		}
-		$primary_term = get_term( $primary_term_id, $taxonomy );
-		$term         = [
-			'term_name' => $primary_term->name,
-			'term_id'   => $primary_term->term_id,
-			'term_link' => get_term_link( $primary_term ),
-		];
 		/**
 		 * Filters the primary term for the post.
 		 *
