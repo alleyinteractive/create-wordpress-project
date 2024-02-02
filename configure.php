@@ -263,7 +263,7 @@ function install_plugin( $plugin_data, $prompt = false ) {
 		run( "composer config repositories.{$plugin_short_name} github {$plugin_repo}" );
 	}
 	if ( ! empty( $install_path ) ) {
-		run( "composer config --json extra.installer-paths.{$intall_path} '[\"{$plugin_path}\"]'" );
+		run( "composer config --json extra.installer-paths.{$install_path} '[\"{$plugin_path}\"]'" );
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path}" );
@@ -510,6 +510,7 @@ delete_files(
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
 		"plugin-templates",
+		"composer-templates",
 	]
 );
 
