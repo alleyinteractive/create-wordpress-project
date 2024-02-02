@@ -4,10 +4,6 @@
         "path": "pantheon-systems/pantheon-advanced-page-cache"
     },
     {
-        "name": "Pantheon MU Plugin",
-        "path": "pantheon-systems/pantheon-mu-plugin"
-    },
-    {
         "name": "Query Monitor",
         "path": "johnbillion/query-monitor"
     },
@@ -40,3 +36,4 @@
         "path": "wpackagist-plugin/wp-native-php-sessions"
     }
 ]
+
