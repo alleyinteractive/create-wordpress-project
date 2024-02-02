@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "create-wordpress-plugin/primary-term",
+	"version": "0.1.0",
+	"title": "Primary Term",
+	"category": "theme",
+	"icon": "category",
+	"description": "Displays the primary term as set by Yoast or the first term",
+	"textdomain": "create-wordpress-plugin",
+	"editorScript": "file:index.ts",
+	"editorStyle": "file:index.css",
+	"style": [
+		"file:style-index.css"
+	],
+	"render": "file:render.php",
+	"usesContext": [
+		"postId"
+	],
+	"attributes": {
+		"isLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"taxonomy": {
+			"type": "string",
+			"default": "category"
+		}
+	},
+	"variations": [
+		{
+			"name": "default",
+			"title": "Primary Category",
+			"isDefault": true,
+			"attributes": {
+				"taxonomy": "category"
+			}
+		},
+		{
+			"name": "post_tag",
+			"title": "Primary Tag",
+			"attributes": {
+				"taxonomy": "post_tag"
+			}
+		}
+	]
+}
