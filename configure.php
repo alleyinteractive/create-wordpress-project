@@ -510,7 +510,6 @@ delete_files(
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
 		"plugin-templates",
-		"composer-templates",
 	]
 );
 
@@ -628,6 +627,12 @@ if ( 'pantheon' === $hosting_provider ) {
 		install_plugin( $plugin, false );
 	}
 }
+// Delete the composer-templates directory.
+delete_files(
+	[
+		"composer-templates",
+	]
+);
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
 	delete_files(
