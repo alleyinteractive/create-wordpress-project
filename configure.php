@@ -266,7 +266,7 @@ function install_plugin( $plugin_data, $prompt = false ) {
 		run( "composer config --json extra.installer-paths.{$intall_path} '[\"{$plugin_path}\"]'" );
 	}
 
-	run( "composer require -W --no-interaction {$plugin_path}" );
+	run( "composer require -W --no-interaction --quiet {$plugin_path}" );
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
