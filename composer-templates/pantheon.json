@@ -19,7 +19,8 @@
     {
         "name": "SearchPress",
         "repo": "https://github.com/alleyinteractive/searchpress",
-        "path": "alleyinteractive/searchpress"
+        "path": "alleyinteractive/searchpress",
+        "install_path": "plugins/searchpress"
     },
     {
         "name": "SearchPress Debug Bar",
