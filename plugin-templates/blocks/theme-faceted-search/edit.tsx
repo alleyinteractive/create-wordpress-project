@@ -24,7 +24,7 @@ export default function Edit() {
         ['create-wordpress-project/theme-faceted-search-facets', {}],
       ]],
       ['core/column', { width: '66.66%' }, [
-        ['create-wordpress-project/theme-faceted-search-meta', {}],
+        ['create-wordpress-project/theme-search-meta', {}],
         ['core/query', {
           query: {
             pages: 0,

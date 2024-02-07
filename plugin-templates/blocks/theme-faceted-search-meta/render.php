@@ -1,6 +1,6 @@
 <?php
 /**
- * The render callback for the create-wordpress-project/theme-faceted-search-meta block.
+ * The render callback for the create-wordpress-project/theme-search-meta block.
  *
  * All of the parameters passed to the function where this file is being required are accessible in this scope:
  *
@@ -22,7 +22,7 @@ $found_posts_formatted = 10000 === $found_posts ? '10,000+' : number_format( $fo
 ?>
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
 	<?php if ( ! empty( $search_query ) && empty( $found_posts ) ) : ?>
-		<span class="wp-block-create-wordpress-project-theme-faceted-search-meta__no-results">
+		<span class="wp-block-create-wordpress-project-theme-search-meta__no-results">
 			<?php
 			// translators: %s is the search query.
 			echo esc_html(
@@ -34,7 +34,7 @@ $found_posts_formatted = 10000 === $found_posts ? '10,000+' : number_format( $fo
 			?>
 		</span>
 	<?php else : ?>
-		<span class="wp-block-create-wordpress-project-theme-faceted-search-meta__results-count">
+		<span class="wp-block-create-wordpress-project-theme-search-meta__results-count">
 			<?php
 			if ( ! empty( $search_query ) ) :
 				echo esc_html(

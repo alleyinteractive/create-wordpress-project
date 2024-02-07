@@ -7,7 +7,7 @@
   "category": "theme",
   "icon": "search",
   "description": "Search results wrapper for use with search facets.",
-  "textdomain": "theme-faceted-search",
+  "textdomain": "create-wordpress-project",
   "editorScript": "file:index.tsx",
   "editorStyle": "file:index.css",
   "style": [

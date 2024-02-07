@@ -7,7 +7,7 @@
   "category": "theme",
   "icon": "filter",
   "description": "Displays search facets. Elasticsearch Extensions must be activated.",
-  "textdomain": "theme-faceted-search-facets",
+  "textdomain": "create-wordpress-project",
   "editorScript": "file:index.ts",
   "editorStyle": "file:index.css",
   "viewScript": [
