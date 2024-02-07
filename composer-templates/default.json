@@ -41,6 +41,6 @@
     },
     {
         "name": "Yoast SEO",
-        "path": "yoast/wordpress-seo"
+        "path": "wpackagist-plugin/wordpress-seo"
     }
 ]

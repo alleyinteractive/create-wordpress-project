@@ -15,6 +15,6 @@
     },
     {
         "name": "Yoast Duplicate Post",
-        "path": "yoast/duplicate-post"
+        "path": "wpackagist-plugin/duplicate-post"
     }
 ]

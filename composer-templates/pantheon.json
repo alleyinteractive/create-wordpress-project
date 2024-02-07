@@ -1,16 +1,15 @@
 [
     {
         "name": "Pantheon Advanced Page Cache",
-        "path": "pantheon-systems/pantheon-advanced-page-cache"
+        "path": "wpackagist-plugin/pantheon-advanced-page-cache"
     },
     {
         "name": "Query Monitor",
-        "path": "johnbillion/query-monitor"
+        "path": "wpackagist-plugin/query-monitor"
     },
     {
         "name": "Rewrite Rules Inspector",
-        "repo": "https://github.com/Automattic/rewrite-rules-inspector",
-        "path": "Automattic/rewrite-rules-inspector"
+        "path": "wpackagist-plugin/rewrite-rules-inspector"
     },
     {
         "name": "SearchPress",
@@ -24,7 +23,7 @@
     },
     {
         "name": "Two Factor",
-        "path": "georgestephanis/two-factor"
+        "path": "wpackagist-plugin/two-factor"
     },
     {
         "name": "WP Mail SMTP",
