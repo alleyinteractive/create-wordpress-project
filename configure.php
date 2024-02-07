@@ -239,6 +239,32 @@ function delete_files( string|array $paths ): void {
 	}
 }
 
+/**
+ * Install a plugin with composer
+ *
+ * @param array $plugin_data The plugin information.
+ * @param bool $prompt Whether or not to prompt to install.
+ */
+function install_plugin( array $plugin_data, bool $prompt = false ): void {
+	$plugin_name = $plugin_data['name'];
+	$plugin_path = $plugin_data['path'];
+	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
+	$repo_type   = isset( $plugin_data['repo_type'] ) ? $plugin_data['repo_type'] : 'github';
+
+	if ( $prompt && ! confirm( "Install {$plugin_name}?", true ) ) {
+		return;
+	}
+
+	write( "Installing {$plugin_name}..." );
+
+	if ( ! empty( $plugin_repo ) ) {
+		$plugin_short_name = str_after( $plugin_path, '/' );
+		run( "composer config repositories.{$plugin_short_name} {$repo_type} {$plugin_repo}" );
+	}
+
+	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
+}
+
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
 
 $current_dir = getcwd();
@@ -574,6 +600,53 @@ if ( 'vip' === $hosting_provider ) {
 
 	echo "Done!\n\n";
 }
+
+write( 'Installing Required Plugins...' );
+$required_file_contents = file_get_contents( 'composer-templates/default.json' );
+$required_plugins       = json_decode( $required_file_contents, true );
+foreach( $required_plugins as $plugin ) {
+	install_plugin( $plugin );
+}
+
+write( 'Installing Suggested Plugins...' );
+$suggested_file_contents = file_get_contents( 'composer-templates/suggested.json' );
+$suggested_plugins       = json_decode( $suggested_file_contents, true );
+foreach( $suggested_plugins as $plugin ) {
+	install_plugin( $plugin, true );
+}
+
+if ( 'pantheon' === $hosting_provider ) {
+	write( 'Installing Pantheon Plugins...' );
+	$license_key = ask(
+		question: 'Object Cache Pro License Key? Run \'terminus remote:wp "<site>.<env>" -- eval "echo getenv(\'OCP_LICENSE\');"\' to get the license key. (Leave blank to skip)',
+		allow_empty: true,
+	);
+
+	$pantheon_file_contents = file_get_contents( 'composer-templates/pantheon.json' );
+	$pantheon_plugins       = json_decode( $pantheon_file_contents, true );
+	foreach( $pantheon_plugins as $plugin ) {
+		install_plugin( $plugin );
+	}
+	if ( ! empty( $license_key ) ) {
+		run( "mv composer-templates/auth.json ./auth.json" );
+		replace_in_file( 'auth.json', [ 'object_cache_pro_token' => $license_key ] );
+
+		install_plugin(
+			[
+				'name'      => 'Object Cache Pro',
+				'repo'      => 'https://objectcache.pro/repo/',
+				'repo_type' => 'composer',
+				'path'      => 'rhubarbgroup/object-cache-pro'
+			]
+		);
+	}
+}
+// Delete the composer-templates directory.
+delete_files(
+	[
+		"composer-templates",
+	]
+);
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
 	delete_files(
