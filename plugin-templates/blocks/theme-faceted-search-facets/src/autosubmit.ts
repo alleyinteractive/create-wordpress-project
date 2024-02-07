@@ -1,5 +1,5 @@
 export default function autosubmit() {
-  const facetContainer = document.querySelector('.wp-block-create-wordpress-project-theme-faceted-search-facets');
+  const facetContainer = document.querySelector('.wp-block-create-wordpress-plugin-theme-faceted-search-facets');
   if (!facetContainer) {
     return;
   }

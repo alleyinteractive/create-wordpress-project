@@ -1,6 +1,6 @@
 <?php
 /**
- * The render callback for the create-wordpress-project/theme-faceted-search block.
+ * The render callback for the create-wordpress-plugin/theme-faceted-search block.
  *
  * All of the parameters passed to the function where this file is being required are accessible in this scope:
  *
@@ -10,7 +10,7 @@
  * @var string   $content    Rendered block output. ie. <InnerBlocks.Content />.
  * @var WP_Block $block      The instance of the WP_Block class that represents the block being rendered.
  *
- * @package create-wordpress-project
+ * @package create-wordpress-plugin
  */
 
 ?>

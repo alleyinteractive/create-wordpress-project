@@ -1,6 +1,6 @@
 <?php
 /**
- * The render callback for the create-wordpress-project/theme-faceted-search-facets block.
+ * The render callback for the create-wordpress-plugin/theme-faceted-search-facets block.
  *
  * All of the parameters passed to the function where this file is being required are accessible in this scope:
  *
@@ -10,7 +10,7 @@
  * @var string   $content    Rendered block output. ie. <InnerBlocks.Content />.
  * @var WP_Block $block      The instance of the WP_Block class that represents the block being rendered.
  *
- * @package create-wordpress-project
+ * @package create-wordpress-plugin
  */
 
 // Get the aggregations that we need to work with manually.
@@ -28,8 +28,8 @@ $is_facet_set = ! empty( $post_type_aggregation->get_query_values() )
 
 ?>
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
-	<h2 class="wp-block-create-wordpress-project-theme-faceted-search-facets__heading">
-		<?php esc_html_e( 'Filter By', 'create-wordpress-project' ); ?>
+	<h2 class="wp-block-create-wordpress-plugin-theme-faceted-search-facets__heading">
+		<?php esc_html_e( 'Filter By', 'create-wordpress-plugin' ); ?>
 	</h2>
 
 	<?php $post_type_aggregation->checkboxes(); ?>
@@ -37,6 +37,6 @@ $is_facet_set = ! empty( $post_type_aggregation->get_query_values() )
 	<?php $category_aggregation->checkboxes(); ?>
 
 	<?php if ( ! empty( $is_facet_set ) ) : ?>
-		<a class="wp-block-create-wordpress-project-theme-faceted-search-facets__reset" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>"><?php esc_html_e( 'Reset', 'create-wordpress-project' ); ?></a>
+		<a class="wp-block-create-wordpress-plugin-theme-faceted-search-facets__reset" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>"><?php esc_html_e( 'Reset', 'create-wordpress-plugin' ); ?></a>
 	<?php endif; ?>
 </div>

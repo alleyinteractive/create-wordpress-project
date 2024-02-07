@@ -4,27 +4,27 @@ import { __ } from '@wordpress/i18n';
 import './index.scss';
 
 /**
- * The create-wordpress-project/theme-faceted-search block edit function.
+ * The create-wordpress-plugin/theme-faceted-search block edit function.
  *
  * @return {WPElement} Element to render.
  */
 export default function Edit() {
   const blockProps = useBlockProps();
   const SEARCH_RESULTS_TEMPLATE = [
-    ['core/heading', { level: 1, textAlign: 'center', content: __('Search', 'create-wordpress-project') }],
+    ['core/heading', { level: 1, textAlign: 'center', content: __('Search', 'create-wordpress-plugin') }],
     ['core/search', {
-      label: __('Search', 'create-wordpress-project'),
+      label: __('Search', 'create-wordpress-plugin'),
       showLabel: false,
-      placeholder: __('Search', 'create-wordpress-project'),
-      buttonText: __('Search', 'create-wordpress-project'),
+      placeholder: __('Search', 'create-wordpress-plugin'),
+      buttonText: __('Search', 'create-wordpress-plugin'),
     }],
     ['core/separator', { align: 'wide' }],
     ['core/columns', { align: 'wide' }, [
       ['core/column', { width: '33.33%' }, [
-        ['create-wordpress-project/theme-faceted-search-facets', {}],
+        ['create-wordpress-plugin/theme-faceted-search-facets', {}],
       ]],
       ['core/column', { width: '66.66%' }, [
-        ['create-wordpress-project/theme-search-meta', {}],
+        ['create-wordpress-plugin/theme-search-meta', {}],
         ['core/query', {
           query: {
             pages: 0,
