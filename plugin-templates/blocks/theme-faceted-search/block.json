@@ -17,13 +17,5 @@
   "supports": {
     "layout": true,
     "multiple": false
-  },
-  "attributes": {
-    "layout": {
-      "type": "object",
-      "default": {
-        "type": "constrained"
-      }
-    }
   }
 }
