@@ -239,16 +239,14 @@ function delete_files( string|array $paths ): void {
 	}
 }
 
-// Track the installed plugins, so we can activate them.
-$installed_plugins = [];
-
 /**
  * Install a plugin with composer
  *
  * @param array $plugin_data The plugin information.
  * @param bool $prompt Whether or not to prompt to install.
+ * @param array $installed_plugins The list of installed plugins.
  */
-function install_plugin( array $plugin_data, bool $prompt = false ): void {
+function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins ): void {
 	$plugin_name = $plugin_data['name'];
 	$plugin_path = $plugin_data['path'];
 	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
@@ -266,7 +264,8 @@ function install_plugin( array $plugin_data, bool $prompt = false ): void {
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
-	$installed_plugins[] = $plugin_short_name;
+	array_push( $installed_plugins, $plugin_short_name );
+	var_dump( "installed_plugins: ", $installed_plugins );
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
@@ -608,18 +607,21 @@ if ( 'vip' === $hosting_provider ) {
 	echo "Done!\n\n";
 }
 
+// Track the installed plugins, so we can activate them.
+$installed_plugins = [];
+
 write( 'Installing Required Plugins...' );
 $required_file_contents = file_get_contents( 'composer-templates/default.json' );
 $required_plugins       = json_decode( $required_file_contents, true );
 foreach( $required_plugins as $plugin ) {
-	install_plugin( $plugin );
+	install_plugin( $plugin, false, $installed_plugins );
 }
 
 write( 'Installing Suggested Plugins...' );
 $suggested_file_contents = file_get_contents( 'composer-templates/suggested.json' );
 $suggested_plugins       = json_decode( $suggested_file_contents, true );
 foreach( $suggested_plugins as $plugin ) {
-	install_plugin( $plugin, true );
+	install_plugin( $plugin, true, $installed_plugins );
 }
 
 if ( 'pantheon' === $hosting_provider ) {
@@ -632,7 +634,7 @@ if ( 'pantheon' === $hosting_provider ) {
 	$pantheon_file_contents = file_get_contents( 'composer-templates/pantheon.json' );
 	$pantheon_plugins       = json_decode( $pantheon_file_contents, true );
 	foreach( $pantheon_plugins as $plugin ) {
-		install_plugin( $plugin );
+		install_plugin( $plugin, false, $installed_plugins );
 	}
 	if ( ! empty( $license_key ) ) {
 		run( "mv composer-templates/auth.json ./auth.json" );
@@ -644,7 +646,9 @@ if ( 'pantheon' === $hosting_provider ) {
 				'repo'      => 'https://objectcache.pro/repo/',
 				'repo_type' => 'composer',
 				'path'      => 'rhubarbgroup/object-cache-pro'
-			]
+			],
+			false,
+			$installed_plugins
 		);
 	}
 }
