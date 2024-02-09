@@ -668,7 +668,7 @@ $plugin_files = array_filter(
 			);
 		}
 
-		foreach ( $files as $file ) {
+		foreach ( $file_names as $file ) {
 			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) ) {
 				return "plugins/{$plugin_dir}/{$file}";
 			}
