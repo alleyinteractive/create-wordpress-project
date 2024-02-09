@@ -265,7 +265,6 @@ function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins )
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
 	array_push( $installed_plugins, $plugin_short_name );
-	var_dump( "installed_plugins: ", $installed_plugins );
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
@@ -656,7 +655,6 @@ if ( 'pantheon' === $hosting_provider ) {
 // Automatically activate the installed plugins.
 $plugin_files = array_filter(
 	array_map( function( $plugin_dir ) {
-		var_dump( $plugin_dir );
 		$file_names = [
 			$plugin_dir.'php',
 			strtolower($plugin_dir).'.php',
@@ -673,9 +671,7 @@ $plugin_files = array_filter(
 		}
 
 		foreach ( $file_names as $file ) {
-			var_dump( "plugins/{$plugin_dir}/{$file}" );
 			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) ) {
-				var_dump( "returning plugins/{$plugin_dir}/{$file}");
 				return "plugins/{$plugin_dir}/{$file}";
 			}
 		}
@@ -683,12 +679,11 @@ $plugin_files = array_filter(
 	},
 	$installed_plugins )
 );
-var_dump( $plugin_files );
 
 replace_in_file(
 	'vip' === $hosting_provider ? 'client-mu-plugins/plugin-loader.php' : 'mu-plugins/plugin-loader.php',
 	[
-		'// INSTALLED_PLUGINS_PLACEHOLDER.' => implode( "',\n\t\t'", $plugin_files ),
+		'// INSTALLED_PLUGINS_PLACEHOLDER.' => '\'' . implode( "',\n\t\t'", $plugin_files ) . '\',' ,
 	]
 );
 
