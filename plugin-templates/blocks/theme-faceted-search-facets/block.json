@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-wordpress-plugin/theme-faceted-search-facets",
+  "version": "0.1.0",
+  "title": "Search Facets",
+  "category": "theme",
+  "icon": "filter",
+  "description": "Displays search facets. Elasticsearch Extensions must be activated.",
+  "textdomain": "create-wordpress-plugin",
+  "editorScript": "file:index.ts",
+  "editorStyle": "file:index.css",
+  "viewScript": [
+    "file:./src/index.ts"
+  ],
+  "style": [
+    "file:style-index.css"
+  ],
+  "ancestor": [
+    "create-wordpress-plugin/theme-faceted-search"
+  ],
+  "render": "file:render.php"
+}
