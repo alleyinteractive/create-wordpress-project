@@ -239,6 +239,9 @@ function delete_files( string|array $paths ): void {
 	}
 }
 
+// Track the installed plugins, so we can activate them.
+$installed_plugins = [];
+
 /**
  * Install a plugin with composer
  *
@@ -256,13 +259,14 @@ function install_plugin( array $plugin_data, bool $prompt = false ): void {
 	}
 
 	write( "Installing {$plugin_name}..." );
+	$plugin_short_name = str_after( $plugin_path, '/' );
 
 	if ( ! empty( $plugin_repo ) ) {
-		$plugin_short_name = str_after( $plugin_path, '/' );
 		run( "composer config repositories.{$plugin_short_name} {$repo_type} {$plugin_repo}" );
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
+	$installed_plugins[] = $plugin_short_name;
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
@@ -641,6 +645,46 @@ if ( 'pantheon' === $hosting_provider ) {
 		);
 	}
 }
+
+// Automatically activate the installed plugins.
+$plugin_files = array_filter(
+	array_map( function( $plugin_dir ) {
+		$file_names = [
+			$plugin_dir.'php',
+			strtolower($plugin_dir).'.php',
+			'plugin.php',
+			'index.php',
+		];
+		// Include some one-off exceptions.
+		if ( strpos( $plugin_dir, 'wp-' ) === 0) {
+			$file_names->push(
+				substr( $plugin_dir, 3 ).'.php',
+				'wordpress-'.substr( $plugin_dir, 3 ).'.php',
+			);
+		} elseif ( strpos( $plugin_dir, 'wordpress-' ) === 0) {
+			$file_names->push(
+				substr( $plugin_dir, 10 ).'.php',
+				'wp-'.substr( $plugin_dir, 10 ).'.php',
+			);
+		}
+
+		foreach ( $files as $file ) {
+			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) ) {
+				return "plugins/{$plugin_dir}/{$file}";
+			}
+		}
+		return null;
+	},
+	$installed_plugins )
+);
+
+replace_in_file(
+	'pantheon' === $hosting_provider ? 'mu-plugins/plugin-loader.php' : 'client-mu-plugins/plugin-loader.php',
+	[
+		'// INSTALLED_PLUGINS_PLACEHOLDER.' => implode( "',\n\t\t'", $installed_plugins ),
+	]
+);
+
 // Delete the composer-templates directory.
 delete_files(
 	[
