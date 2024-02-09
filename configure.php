@@ -471,6 +471,10 @@ if ( ! empty( $theme_slug ) ) {
 		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug}",
 		$current_dir,
 	);
+	run(
+		"wp theme activate {$theme_slug}",
+		$current_dir,
+	);
 }
 
 foreach ( list_all_files_for_replacement() as $path ) {
