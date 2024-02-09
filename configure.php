@@ -672,7 +672,7 @@ $plugin_files = array_filter(
 
 		foreach ( $file_names as $file ) {
 			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) ) {
-				return "plugins/{$plugin_dir}/{$file}";
+				return "'plugins/{$plugin_dir}/{$file}',";
 			}
 		}
 		return null;
@@ -683,7 +683,7 @@ $plugin_files = array_filter(
 replace_in_file(
 	'vip' === $hosting_provider ? 'client-mu-plugins/plugin-loader.php' : 'mu-plugins/plugin-loader.php',
 	[
-		'// INSTALLED_PLUGINS_PLACEHOLDER.' => '\'' . implode( "',\n\t\t'", $plugin_files ) . '\',' ,
+		'// INSTALLED_PLUGINS_PLACEHOLDER.' => implode( "\n\t\t", $plugin_files ),
 	]
 );
 
