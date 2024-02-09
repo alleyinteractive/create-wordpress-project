@@ -464,15 +464,14 @@ if ( ! empty( $plugin_slug ) ) {
 	echo "Done!\n\n";
 }
 
-// TODO: scaffold the theme from create-wordpress-theme when the project is ready.
-// if ( ! empty( $theme_slug ) ) {
-// 	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
+if ( ! empty( $theme_slug ) ) {
+	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
 
-// 	run(
-// 		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug}",
-// 		$current_dir,
-// 	);
-// }
+	run(
+		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug}",
+		$current_dir,
+	);
+}
 
 foreach ( list_all_files_for_replacement() as $path ) {
 	echo "Updating $path...\n";
