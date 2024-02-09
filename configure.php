@@ -683,6 +683,7 @@ $plugin_files = array_filter(
 	},
 	$installed_plugins )
 );
+sort( $plugin_files );
 
 replace_in_file(
 	'vip' === $hosting_provider ? 'client-mu-plugins/plugin-loader.php' : 'mu-plugins/plugin-loader.php',
