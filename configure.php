@@ -674,7 +674,8 @@ $plugin_files = array_filter(
 		}
 
 		foreach ( $file_names as $file ) {
-			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) ) {
+			// Check if the file exists and is not (virtually) empty.
+			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) && 50 < filesize( "plugins/{$plugin_dir}/{$file}" ) {
 				return "'{$plugin_dir}/{$file}',";
 			}
 		}
