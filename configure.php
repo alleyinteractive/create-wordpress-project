@@ -665,15 +665,11 @@ $plugin_files = array_filter(
 		];
 		// Include some one-off exceptions.
 		if ( strpos( $plugin_dir, 'wp-' ) === 0) {
-			$file_names->push(
-				substr( $plugin_dir, 3 ).'.php',
-				'wordpress-'.substr( $plugin_dir, 3 ).'.php',
-			);
+			$file_names[] = substr( $plugin_dir, 3 ).'.php';
+			$file_names[] = 'wordpress-'.substr( $plugin_dir, 3 ).'.php';
 		} elseif ( strpos( $plugin_dir, 'wordpress-' ) === 0) {
-			$file_names->push(
-				substr( $plugin_dir, 10 ).'.php',
-				'wp-'.substr( $plugin_dir, 10 ).'.php',
-			);
+			$file_names[] = substr( $plugin_dir, 10 ).'.php';
+			$file_names[] = 'wp-'.substr( $plugin_dir, 10 ).'.php';
 		}
 
 		foreach ( $file_names as $file ) {
