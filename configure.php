@@ -247,10 +247,11 @@ function delete_files( string|array $paths ): void {
  * @param array $installed_plugins The list of installed plugins.
  */
 function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins ): void {
-	$plugin_name = $plugin_data['name'];
-	$plugin_path = $plugin_data['path'];
-	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
-	$repo_type   = isset( $plugin_data['repo_type'] ) ? $plugin_data['repo_type'] : 'github';
+	$plugin_name   = $plugin_data['name'];
+	$plugin_path   = $plugin_data['path'];
+	$plugin_repo   = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
+	$repo_type     = isset( $plugin_data['repo_type'] ) ? $plugin_data['repo_type'] : 'github';
+	$auto_activate = isset( $plugin_data['activate'] ) ? $plugin_data['activate'] : true;
 
 	if ( $prompt && ! confirm( "Install {$plugin_name}?", true ) ) {
 		return;
@@ -264,7 +265,9 @@ function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins )
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
-	array_push( $installed_plugins, $plugin_short_name );
+	if ( $auto_activate ) {
+		array_push( $installed_plugins, $plugin_short_name );
+	}
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
@@ -672,7 +675,7 @@ $plugin_files = array_filter(
 
 		foreach ( $file_names as $file ) {
 			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) ) {
-				return "'plugins/{$plugin_dir}/{$file}',";
+				return "'{$plugin_dir}/{$file}',";
 			}
 		}
 		return null;
