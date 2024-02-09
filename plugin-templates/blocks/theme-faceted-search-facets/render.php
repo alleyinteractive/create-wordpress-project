@@ -13,12 +13,16 @@
  * @package create-wordpress-plugin
  */
 
+if ( ! function_exists( 'elasticsearch_extensions' ) ) {
+	return;
+}
+
 // Get the aggregations that we need to work with manually.
 $post_type_aggregation = elasticsearch_extensions()->get_aggregation_by_query_var( 'post_type' );
 $category_aggregation  = elasticsearch_extensions()->get_aggregation_by_query_var( 'taxonomy_category' );
 
 // If we failed to get aggregations, don't render anything.
-if ( is_null( $post_type_aggregation ) || is_null( $category_aggregation ) ) {
+if ( is_null( $post_type_aggregation ) && is_null( $category_aggregation ) ) {
 	return;
 }
 
