@@ -5,6 +5,8 @@
  * @package create-wordpress-project
  */
 
+use Alley\WP\WP_Plugin_Loader;
+
 // Load Pantheon's mu-plugin.
 require_once __DIR__ . '/pantheon-mu-plugin/pantheon.php';
 
@@ -20,14 +22,7 @@ function create_wordpress_project_core_plugins(): array {
 	];
 }
 
-// Load as many standard plugins via code as possible.
-foreach ( create_wordpress_project_core_plugins() as $plugin ) {
-	$plugin_path = dirname( __DIR__ ) . '/plugins/' . $plugin;
-
-	if ( 0 === validate_file( $plugin_path ) && file_exists( $plugin_path ) ) {
-		require_once dirname( __DIR__ ) . '/plugins/' . $plugin;
-	}
-}
+new WP_Plugin_Loader( create_wordpress_project_core_plugins() );
 
 /**
  * Ensure code activated plugins are shown as such on core plugins screens.
