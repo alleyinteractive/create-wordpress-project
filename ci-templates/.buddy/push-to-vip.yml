@@ -46,4 +46,4 @@
       blocks: "[]"
       channel: "slack_channel_id"
       channel_name: "slack_channel_name"
-      integration_hash: "slack_integration_hash"
+      integration_hash: $SLACK_INTEGRATION_HASH # Workspace Environment Variable

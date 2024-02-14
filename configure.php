@@ -374,11 +374,6 @@ $slack_channel_name = ask(
 	allow_empty: true,
 );
 
-$slack_integration_hash = ask(
-	question: 'Slack Integration Hash? (for deploy notifications)',
-	allow_empty: true,
-);
-
 write( '------' );
 write( "Project          : {$project_name} <{$project_name_slug}>" );
 write( "Description      : {$description}" );
@@ -401,9 +396,6 @@ if ( ! empty( $slack_channel_id ) ) {
 }
 if ( ! empty( $slack_channel_name ) ) {
 	write( "Slack Channel Name : {$slack_channel_name}" );
-}
-if ( ! empty( $slack_integration_hash ) ) {
-	write( "Slack Integration Hash : {$slack_integration_hash}" );
 }
 write( '------' );
 
@@ -470,15 +462,6 @@ if ( ! empty( $slack_channel_name ) ) {
 		$search_and_replace,
 		[
 			'slack_channel_name' => $slack_channel_name,
-		]
-	);
-}
-
-if ( ! empty( $slack_integration_hash ) ) {
-	$search_and_replace = array_merge(
-		$search_and_replace,
-		[
-			'slack_integration_hash' => $slack_integration_hash,
 		]
 	);
 }
