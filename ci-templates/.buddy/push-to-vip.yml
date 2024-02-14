@@ -1,0 +1,49 @@
+- pipeline: "Push to VIP"
+  on: "EVENT"
+  events:
+    - type: "PUSH"
+      refs:
+        - "refs/heads/develop"
+        - "refs/heads/preprod"
+        - "refs/heads/production"
+  priority: "HIGH"
+  fail_on_prepare_env_warning: true
+  actions:
+    - action: "Check for git conflicts"
+      type: "BUILD"
+      working_directory: "/buddy/create-wordpress-project"
+      docker_image_name: "alleyops/ci-resources"
+      docker_image_tag: "8.2-fpm-wp"
+      execute_commands:
+        - "! git grep -E '<<<<<<< |>>>>>>> ' -- './*' ':(exclude)*/buddy.yml' ':(exclude).buddy/*'"
+      volume_mappings:
+        - "/:/buddy/create-wordpress-project"
+      trigger_condition: "ALWAYS"
+      shell: "BASH"
+    - action: "Sync Branches"
+      type: "BUILD"
+      disabled: true
+      working_directory: "/buddy/create-wordpress-project"
+      docker_image_name: "alleyops/ci-resources"
+      docker_image_tag: "8.2-fpm-wp"
+      execute_commands:
+        - "bash -ex <(curl -s \"https://raw.githubusercontent.com/alleyinteractive/deploy/main/deploy-vip.sh\")"
+      volume_mappings:
+        - "/:/buddy/create-wordpress-project"
+      cache_base_image: true
+      shell: "BASH"
+      variables:
+        - key: "VIP_BRANCH_NAME"
+          value: $BUDDY_EXECUTION_BRANCH
+          type: "VAR"
+        - key: "VIP_GIT_REPO"
+          value: "vip-repo-name"
+          type: "VAR"
+    - action: "Send Failure Notification to Slack"
+      type: "SLACK"
+      trigger_time: "ON_FAILURE"
+      content: ":siren: Failed to deploy create-wordpress-project to VIP `$BUDDY_EXECUTION_BRANCH` :siren:"
+      blocks: "[]"
+      channel: "slack_channel_id"
+      channel_name: "slack_channel_name"
+      integration_hash: $SLACK_INTEGRATION_HASH # Workspace Environment Variable
