@@ -369,6 +369,16 @@ if ( is_dir( "themes/{$theme_slug}" ) ) {
 
 $theme_namespace = title_case( $theme_slug ) . '_Theme';
 
+$slack_channel_id = ask(
+	question: 'Slack Channel ID? (for deploy notifications)',
+	allow_empty: true,
+);
+
+$slack_channel_name = ask(
+	question: 'Slack Channel Name? (for deploy notifications)',
+	allow_empty: true,
+);
+
 write( '------' );
 write( "Project          : {$project_name} <{$project_name_slug}>" );
 write( "Description      : {$description}" );
@@ -386,6 +396,12 @@ if ( ! empty( $theme_slug ) ) {
 	write( "Theme Namespace  : {$theme_namespace}" );
 }
 
+if ( ! empty( $slack_channel_id ) ) {
+	write( "Slack Channel ID : {$slack_channel_id}" );
+}
+if ( ! empty( $slack_channel_name ) ) {
+	write( "Slack Channel Name : {$slack_channel_name}" );
+}
 write( '------' );
 
 write( 'This script will replace the above values in all relevant files in the project directory.' );
@@ -433,6 +449,24 @@ if ( ! empty( $plugin_slug ) ) {
 			'CREATE_WORDPRESS_PLUGIN'      => strtoupper( str_replace( '-', '_', $plugin_slug ) ),
 			'create_wordpress_plugin'      => str_replace( '-', '_', $plugin_slug ),
 			'Create_WordPress_Plugin'      => $plugin_namespace,
+		]
+	);
+}
+
+if ( ! empty( $slack_channel_id ) ) {
+	$search_and_replace = array_merge(
+		$search_and_replace,
+		[
+			'slack_channel_id' => $slack_channel_id,
+		]
+	);
+}
+
+if ( ! empty( $slack_channel_name ) ) {
+	$search_and_replace = array_merge(
+		$search_and_replace,
+		[
+			'slack_channel_name' => $slack_channel_name,
 		]
 	);
 }
@@ -551,6 +585,19 @@ if ( confirm( 'Will this project be hosted on WordPress VIP?' ) ) {
 
 // Prompt the user to convert the folder structure to WordPress VIP.
 if ( 'vip' === $hosting_provider ) {
+	$vip_repo_name = ask(
+		question: 'VIP Repository Name?',
+		default: $project_name_slug,
+		allow_empty: false,
+	);
+
+	replace_in_file(
+		'.buddy/push-to-vip.yml',
+		[
+			'vip-repo-name' => $vip_repo_name,
+		],
+	);
+
 	write( 'Deleting Pantheon-specific GitHub Action workflows...' );
 
 	delete_files(
