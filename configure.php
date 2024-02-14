@@ -597,6 +597,19 @@ if ( confirm( 'Will this project be hosted on WordPress VIP?' ) ) {
 
 // Prompt the user to convert the folder structure to WordPress VIP.
 if ( 'vip' === $hosting_provider ) {
+	$vip_repo_name = ask(
+		question: 'VIP Repository Name?',
+		default: $project_name_slug,
+		allow_empty: false,
+	);
+
+	replace_in_file(
+		'.buddy/push-to-vip.yml',
+		[
+			'vip-repo-name' => $vip_repo_name,
+		],
+	);
+
 	write( 'Deleting Pantheon-specific GitHub Action workflows...' );
 
 	delete_files(

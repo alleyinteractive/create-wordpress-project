@@ -37,7 +37,7 @@
           value: $BUDDY_EXECUTION_BRANCH
           type: "VAR"
         - key: "VIP_GIT_REPO"
-          value: "create-wordpress-project"
+          value: "vip-repo-name"
           type: "VAR"
     - action: "Send Failure Notification to Slack"
       type: "SLACK"
