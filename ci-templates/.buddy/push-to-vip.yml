@@ -6,7 +6,7 @@
         - "refs/heads/develop"
         - "refs/heads/preprod"
         - "refs/heads/production"
-  priority: "NORMAL"
+  priority: "HIGH"
   fail_on_prepare_env_warning: true
   actions:
     - action: "Check for git conflicts"
