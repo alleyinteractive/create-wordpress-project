@@ -27,7 +27,8 @@
     },
     {
         "name": "WP Mail SMTP",
-        "path": "wpackagist-plugin/wp-mail-smtp"
+        "path": "wpackagist-plugin/wp-mail-smtp",
+        "activate": false
     },
     {
         "name": "WP Native PHP Sessions",

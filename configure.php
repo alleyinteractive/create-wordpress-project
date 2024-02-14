@@ -244,25 +244,30 @@ function delete_files( string|array $paths ): void {
  *
  * @param array $plugin_data The plugin information.
  * @param bool $prompt Whether or not to prompt to install.
+ * @param array $installed_plugins The list of installed plugins.
  */
-function install_plugin( array $plugin_data, bool $prompt = false ): void {
-	$plugin_name = $plugin_data['name'];
-	$plugin_path = $plugin_data['path'];
-	$plugin_repo = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
-	$repo_type   = isset( $plugin_data['repo_type'] ) ? $plugin_data['repo_type'] : 'github';
+function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins ): void {
+	$plugin_name   = $plugin_data['name'];
+	$plugin_path   = $plugin_data['path'];
+	$plugin_repo   = isset( $plugin_data['repo'] ) ? $plugin_data['repo'] : null;
+	$repo_type     = isset( $plugin_data['repo_type'] ) ? $plugin_data['repo_type'] : 'github';
+	$auto_activate = isset( $plugin_data['activate'] ) ? $plugin_data['activate'] : true;
 
 	if ( $prompt && ! confirm( "Install {$plugin_name}?", true ) ) {
 		return;
 	}
 
 	write( "Installing {$plugin_name}..." );
+	$plugin_short_name = str_after( $plugin_path, '/' );
 
 	if ( ! empty( $plugin_repo ) ) {
-		$plugin_short_name = str_after( $plugin_path, '/' );
 		run( "composer config repositories.{$plugin_short_name} {$repo_type} {$plugin_repo}" );
 	}
 
 	run( "composer require -W --no-interaction --quiet {$plugin_path} --ignore-platform-req=ext-redis" );
+	if ( $auto_activate ) {
+		array_push( $installed_plugins, $plugin_short_name );
+	}
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
@@ -651,18 +656,21 @@ if ( 'vip' === $hosting_provider ) {
 	echo "Done!\n\n";
 }
 
+// Track the installed plugins, so we can activate them.
+$installed_plugins = [];
+
 write( 'Installing Required Plugins...' );
 $required_file_contents = file_get_contents( 'composer-templates/default.json' );
 $required_plugins       = json_decode( $required_file_contents, true );
 foreach( $required_plugins as $plugin ) {
-	install_plugin( $plugin );
+	install_plugin( $plugin, false, $installed_plugins );
 }
 
 write( 'Installing Suggested Plugins...' );
 $suggested_file_contents = file_get_contents( 'composer-templates/suggested.json' );
 $suggested_plugins       = json_decode( $suggested_file_contents, true );
 foreach( $suggested_plugins as $plugin ) {
-	install_plugin( $plugin, true );
+	install_plugin( $plugin, true, $installed_plugins );
 }
 
 if ( 'pantheon' === $hosting_provider ) {
@@ -675,7 +683,7 @@ if ( 'pantheon' === $hosting_provider ) {
 	$pantheon_file_contents = file_get_contents( 'composer-templates/pantheon.json' );
 	$pantheon_plugins       = json_decode( $pantheon_file_contents, true );
 	foreach( $pantheon_plugins as $plugin ) {
-		install_plugin( $plugin );
+		install_plugin( $plugin, false, $installed_plugins );
 	}
 	if ( ! empty( $license_key ) ) {
 		run( "mv composer-templates/auth.json ./auth.json" );
@@ -687,10 +695,51 @@ if ( 'pantheon' === $hosting_provider ) {
 				'repo'      => 'https://objectcache.pro/repo/',
 				'repo_type' => 'composer',
 				'path'      => 'rhubarbgroup/object-cache-pro'
-			]
+			],
+			false,
+			$installed_plugins
 		);
 	}
 }
+
+// Automatically activate the installed plugins.
+$plugin_files = array_filter(
+	array_map( function( $plugin_dir ) {
+		$file_names = [
+			$plugin_dir.'php',
+			strtolower($plugin_dir).'.php',
+			'plugin.php',
+			'index.php',
+		];
+		// Include some one-off exceptions.
+		if ( strpos( $plugin_dir, 'wp-' ) === 0) {
+			$file_names[] = substr( $plugin_dir, 3 ).'.php';
+			$file_names[] = 'wordpress-'.substr( $plugin_dir, 3 ).'.php';
+		} elseif ( strpos( $plugin_dir, 'wordpress-' ) === 0) {
+			$file_names[] = substr( $plugin_dir, 10 ).'.php';
+			$file_names[] = 'wp-'.substr( $plugin_dir, 10 ).'.php';
+		}
+
+		foreach ( $file_names as $file ) {
+			// Check if the file exists and is not (virtually) empty.
+			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) && 50 < filesize( "plugins/{$plugin_dir}/{$file}" ) ) {
+				return "'{$plugin_dir}/{$file}',";
+			}
+		}
+		return null;
+	},
+	$installed_plugins )
+);
+sort( $plugin_files );
+$plugin_files[] = "'{$plugin_slug}/{$plugin_slug}.php',";
+
+replace_in_file(
+	'vip' === $hosting_provider ? 'client-mu-plugins/plugin-loader.php' : 'mu-plugins/plugin-loader.php',
+	[
+		"'{$plugin_slug}/{$plugin_slug}.php'," => implode( "\n\t\t", $plugin_files ),
+	]
+);
+
 // Delete the composer-templates directory.
 delete_files(
 	[
