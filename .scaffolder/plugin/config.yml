@@ -1,0 +1,18 @@
+name: create-wordpress-project@plugin
+description: Create a new plugin and scaffold features for the plugin.
+type: composite
+config:
+  destination-resolver: plugin
+inputs:
+  - name: pluginName
+    type: string
+    description: "Plugin Name"
+features:
+  - repository:
+    github: alleyinteractive/create-wordpress-plugin
+    destination: "{{ dasherize inputs.pluginName }}"
+    postCloneCommand: "php configure.php"
+  - type: file
+    files:
+    - source: "**/*"
+      base: "../../plugin-templates"
