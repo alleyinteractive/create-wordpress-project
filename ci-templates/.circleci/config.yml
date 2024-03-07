@@ -44,7 +44,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             # User key set up with AlleyCI GitHub user for deploys.
-            - "SHA256:a6QVY3CtL6JnO8eWUxyc+4ZAz+GOMXM67Pc3FTOkMKw"
+            - "SHA256:your+ssh+key+finger+print"
       - run:
           name: Deploy -built branch to GitHub
           command: bash <(curl -s "https://raw.githubusercontent.com/alleyinteractive/vip-go-build/HEAD/deploy.sh")
