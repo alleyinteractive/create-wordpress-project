@@ -4,6 +4,11 @@ includes:
 parameters:
 	# Level 9 is the highest level
 	level: max
+	checkGenericClassInNonGenericObjectType: false
+
+	scanDirectories:
+		- plugins/elasticsearch-extensions
+		- plugins/wp-asset-manager
 
 	paths:
 		- mu-plugins/000-wp-environment.php
@@ -13,7 +18,8 @@ parameters:
 		- themes/create-wordpress-theme/
 
 	excludePaths:
-		- plugins/create-wordpress-plugin/tests/
-		- themes/create-wordpress-theme/tests/
 		- plugins/create-wordpress-plugin/build/
+		- plugins/create-wordpress-plugin/src/post-types/
+		- plugins/create-wordpress-plugin/tests/
 		- themes/create-wordpress-theme/build/
+		- themes/create-wordpress-theme/tests/

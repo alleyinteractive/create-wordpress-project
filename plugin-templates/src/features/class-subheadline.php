@@ -1,15 +1,21 @@
 <?php
 /**
- * Subheadline class file
+ * Create WordPress Plugin Features: Subheadline class
  *
  * @package create-wordpress-plugin
  */
 
 namespace Create_WordPress_Plugin\Features;
-use function Create_WordPress_Plugin\register_meta_helper;
 
 use Alley\WP\Types\Feature;
 
+use function Create_WordPress_Plugin\register_meta_helper;
+
+/**
+ * Feature: Adds support for subheadlines.
+ *
+ * @package create-wordpress-plugin
+ */
 final class Subheadline implements Feature {
 	/**
 	 * Boot the feature.
@@ -19,10 +25,9 @@ final class Subheadline implements Feature {
 	}
 
 	/**
-	 * Adds support for subheadline to the `post` post type.
-	 * Registers the meta field only for post types that support subheadline.
+	 * Adds support for subheadlines to any posts that support them (default post, but filterable).
 	 */
-	public function add_meta_field() {
+	public function add_meta_field(): void {
 		/**
 		 * Filter the post types that support subheadline.
 		 * Defaults to `post`.

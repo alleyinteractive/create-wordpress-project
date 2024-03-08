@@ -11,7 +11,7 @@ type EditProps = {
 };
 
 /**
- * The create-wordpress-project/theme-post-subheadline block edit function.
+ * The create-wordpress-plugin/theme-post-subheadline block edit function.
  *
  * @return {WPElement} Element to render.
  */

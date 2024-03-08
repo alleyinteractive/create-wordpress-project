@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Create WordPress Plugin Configuration" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+  <description>PHP_CodeSniffer standard for Create WordPress Plugin</description>
+
+  <!-- DO NOT ADD ADDITIONAL RULES TO THIS FILE. Modifications belong in the root-level configuration. -->
+
+  <!-- Include Root Rules -->
+  <rule ref="../../.phpcs.xml" />
+
+  <rule ref="WordPress.WP.I18n">
+    <properties>
+      <!--
+      Verify that the text_domain is set to the desired text-domain.
+      Multiple valid text domains can be provided as a comma-delimited list.
+       -->
+      <property name="text_domain" type="array" value="create-wordpress-plugin" />
+    </properties>
+  </rule>
+
+  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+    <properties>
+      <property name="prefixes" type="array" value="create_wordpress_plugin" />
+    </properties>
+  </rule>
+</ruleset>

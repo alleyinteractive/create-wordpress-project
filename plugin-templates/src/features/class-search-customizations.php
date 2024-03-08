@@ -1,20 +1,26 @@
 <?php
 /**
- * Search_Customizations class file
+ * Create WordPress Plugin Features: Search_Customizations class
  *
  * @package create-wordpress-plugin
  */
 
 namespace Create_WordPress_Plugin\Features;
-use function Create_WordPress_Plugin\register_meta_helper;
 
 use Alley\WP\Types\Feature;
+use Elasticsearch_Extensions\Controller;
 
+/**
+ * Feature: Customizes the search experience for the site.
+ *
+ * @package create-wordpress-plugin
+ */
 final class Search_Customizations implements Feature {
 	/**
 	 * Set up.
 	 *
-	 * @param array $taxonomies The taxonomies to support primary term for.
+	 * @param string[] $post_types A list of post types to restrict the search to.
+	 * @param string[] $taxonomies A list of the taxonomies to enable aggregation for.
 	 */
 	public function __construct(
 		private readonly array $post_types = [ 'post', 'page' ],
@@ -30,8 +36,10 @@ final class Search_Customizations implements Feature {
 
 	/**
 	 * Configure Elasticsearch Extensions.
+	 *
+	 * @param Controller $es_config The Elasticsearch Extensions configuration object.
 	 */
-	public function elasticsearch_extensions_config( $es_config ) {
+	public function elasticsearch_extensions_config( Controller $es_config ): void {
 		$es_config->enable_empty_search()
 			->enable_post_type_aggregation()
 			->restrict_post_types( $this->post_types );
