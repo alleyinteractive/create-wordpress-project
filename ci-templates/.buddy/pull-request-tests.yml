@@ -1,0 +1,74 @@
+- pipeline: "Pull Request Tests"
+  events:
+    - type: "PUSH"
+      refs:
+        - "refs/pull/*"
+  trigger_conditions:
+    - trigger_condition: "VAR_IS"
+      trigger_variable_value: "false"
+      trigger_variable_key: "BUDDY_EXECUTION_PULL_REQUEST_DRAFT"
+  actions:
+    - action: "Git Tests"
+      type: "BUILD"
+      working_directory: "/buddy/create-wordpress-project"
+      docker_image_name: "alleyops/ci-resources"
+      docker_image_tag: "8.2-fpm-wp"
+      execute_commands:
+        - "if [[ ! -z $(git ls-files -i --exclude-standard) ]]; then exit 1; fi"
+        - "! git grep -E '<<<<<<< |>>>>>>> ' -- './*' ':(exclude)*/buddy.yml' ':(exclude).buddy/*'"
+      volume_mappings:
+        - "/:/buddy/create-wordpress-project"
+      trigger_condition: "ALWAYS"
+      shell: "BASH"
+    - action: "PHP Tests"
+      type: "BUILD"
+      working_directory: "/buddy/create-wordpress-project"
+      docker_image_name: "alleyops/ci-resources"
+      docker_image_tag: "8.2-fpm-wp"
+      execute_commands:
+        - "composer install -q"
+        - "curl -s https://raw.githubusercontent.com/alleyinteractive/mantle-ci/HEAD/install-wp-tests.sh | bash -s \"wordpress_unit_tests\" root root mysql"
+        - "composer test"
+      setup_commands:
+        - "echo \"extension=memcache.so\" >> /usr/local/etc/php/conf.d/buddy.ini"
+      services:
+        - type: "MYSQL"
+          version: "latest"
+          connection:
+            host: "mysql"
+            port: 3306
+            user: "root"
+            password: "root"
+            db: "wordpress_unit_tests"
+        - type: "MEMCACHED"
+          version: "latest"
+          connection:
+            host: "memcached"
+            port: 11211
+      volume_mappings:
+        - "/:/buddy/create-wordpress-project"
+      trigger_condition: "ALWAYS"
+      shell: "BASH"
+      variables:
+        - key: "COMPOSER_HOME"
+          value: "/buddy/create-wordpress-project/.composer"
+        - key: "WP_CORE_DIR"
+          value: "/buddy/create-wordpress-project/.buddy-tests/wordpress"
+        - key: "WP_MULTISITE"
+          value: "1"
+        - key: "WP_TESTS_DIR"
+          value: "/buddy/create-wordpress-project/.buddy-tests/wordpress-tests-lib"
+      run_next_parallel: true
+    - action: "Node Tests"
+      type: "BUILD"
+      working_directory: "/buddy/create-wordpress-project"
+      docker_image_name: "library/node"
+      docker_image_tag: "20"
+      execute_commands:
+        - "npm audit --audit-level=high --production --cache /buddy/create-wordpress-project/.npm"
+        - "npm ci --cache /buddy/create-wordpress-project/.npm"
+        - "npm run lint && npm run stylelint && npm run build && npm run test"
+      volume_mappings:
+        - "/:/buddy/create-wordpress-project"
+      trigger_condition: "ALWAYS"
+      shell: "BASH"
