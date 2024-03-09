@@ -651,7 +651,12 @@ if ( 'vip' === $hosting_provider ) {
 } elseif ( 'pantheon' === $hosting_provider ) {
 	write( 'Deleting VIP-specific GitHub Action workflows...' );
 
-	delete_files( '.github/workflows/deploy-to-vip.yml' );
+	delete_files(
+		[
+			'.github/workflows/deploy-to-vip.yml',
+			'.circleci',
+		]
+	);
 
 	echo "Done!\n\n";
 }
