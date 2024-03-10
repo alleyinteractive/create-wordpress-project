@@ -647,6 +647,12 @@ if ( 'vip' === $hosting_provider ) {
 
 	run( 'mkdir -p vip-config && touch vip-config/.gitkeep' );
 
+	write( 'Scaffolding out VIP directories...' );
+
+	run( 'mkdir -p images && touch images/.gitkeep' );
+	run( 'mkdir -p languages && touch languages/.gitkeep' );
+	run( 'mkdir -p private && touch private/.gitkeep' );
+
 	echo "Done!\n\n";
 } elseif ( 'pantheon' === $hosting_provider ) {
 	write( 'Deleting VIP-specific GitHub Action workflows...' );
