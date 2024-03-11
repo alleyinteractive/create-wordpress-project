@@ -1,0 +1,63 @@
+# Use the latest version of the CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
+jobs:
+  build:
+    docker:
+      - image: cimg/php:8.2
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-composer-deps-{{ checksum "composer.lock" }}
+      - restore_cache:
+          keys:
+            - v2-npm-deps-{{ checksum "package-lock.json" }}
+      - run:
+          name: composer install
+          command: |
+            composer install --no-interaction
+      - run:
+          name: Install NVM
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/HEAD/install.sh | bash
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --install' >> $BASH_ENV
+      - run:
+          name: Build Turbo
+          command: |
+            nvm use || nvm install
+            npm ci --cache .npm
+            npm run build
+      - save_cache:
+          key: v1-composer-deps-{{ checksum "composer.lock" }}
+          paths:
+            - "/home/circleci/.cache/composer"
+      - save_cache:
+          key: v2-npm-deps-{{ checksum "package-lock.json" }}
+          paths:
+            - ".npm"
+      - add_ssh_keys:
+          fingerprints:
+            # User key set up with AlleyCI GitHub user for deploys.
+            - "SHA256:your+ssh+key+finger+print"
+      - run:
+          name: Deploy -built branch to GitHub
+          command: bash <(curl -s "https://raw.githubusercontent.com/alleyinteractive/vip-go-build/HEAD/deploy.sh")
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  build-workflow:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - develop
+                - preprod
+                - master
