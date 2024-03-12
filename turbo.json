@@ -5,12 +5,20 @@
       "dependsOn": ["^build"],
       "outputs": ["build/**"]
     },
-    "stylelint": {},
     "lint": {},
-    "test": {},
+    "lint:fix": {},
+    "packages-update": {},
     "start": {
       "cache": false,
       "persistent": true
-    }
+    },
+    "start:hot": {
+      "cache": false,
+      "persistent": true
+    },
+    "stylelint": {},
+    "stylelint:fix": {},
+    "test": {},
+    "test:watch": {}
   }
 }

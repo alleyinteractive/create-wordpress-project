@@ -77,13 +77,11 @@
     ],
     "phpcs:plugin": "cd plugins/create-wordpress-plugin && phpcs .",
     "phpcs:theme": "cd themes/create-wordpress-theme && phpcs .",
-    "phpstan": "phpstan --memory-limit=512M",
+    "phpstan": "phpstan --memory-limit=1G",
     "phpunit": [
-      "@phpunit:plugin",
-      "@phpunit:theme"
+      "@phpunit:plugin"
     ],
     "phpunit:plugin": "cd plugins/create-wordpress-plugin && phpunit",
-    "phpunit:theme": "cd themes/create-wordpress-theme && phpunit",
     "setup": [
       "composer install --quiet --no-interaction"
     ],

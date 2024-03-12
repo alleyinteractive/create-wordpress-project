@@ -18,7 +18,7 @@ function Subheadline() {
   return (
     <PluginDocumentSettingPanel
       name="subheadline"
-      title={__('Subheadline', 'create-wordpress-project')}
+      title={__('Subheadline', 'create-wordpress-plugin')}
     >
       {/* @ts-ignore - types are not available for Editor */}
       <Editor
