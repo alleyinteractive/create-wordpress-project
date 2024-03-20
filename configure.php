@@ -184,6 +184,7 @@ function list_all_files_for_replacement(): array {
 		'vendor',
 		'node_modules',
 		'.phpcs',
+		'.scaffolder',
 	];
 
 	$exclude = array_map(

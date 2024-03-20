@@ -24,3 +24,6 @@ Thumbs.db
 /db.php
 /upgrade/
 /uploads/
+
+# Scaffolder Files
+.scaffolder

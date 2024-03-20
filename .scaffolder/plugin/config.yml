@@ -1,0 +1,5 @@
+name: create-wordpress-project@plugin-template
+description: Copy the plugin-templates files from the wp-content folder to a plugin.
+files:
+  - source: "**/*"
+    base: "../../plugin-templates"
