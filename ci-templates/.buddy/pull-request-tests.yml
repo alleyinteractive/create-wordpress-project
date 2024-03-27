@@ -14,7 +14,7 @@
       docker_image_name: "alleyops/ci-resources"
       docker_image_tag: "8.2-fpm-wp"
       execute_commands:
-        - "if [[ ! -z $(git ls-files -i --exclude-standard) ]]; then exit 1; fi"
+        - "if [[ ! -z $(git ls-files -i -c --exclude-standard) ]]; then exit 1; fi"
         - "! git grep -E '<<<<<<< |>>>>>>> ' -- './*' ':(exclude)*/buddy.yml' ':(exclude).buddy/*'"
       volume_mappings:
         - "/:/buddy/create-wordpress-project"
