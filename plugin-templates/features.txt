@@ -5,6 +5,9 @@
 			post_types: [ 'post', 'page' ],
 			taxonomies: [ 'category' ],
 		),
+		new Features\MSM_Sitemap_Integration(
+			post_types: [ 'post' ],
+		),
 		new Features\Primary_Term_Rest(
 			taxonomies: [ 'category', 'post_tag' ],
 		),
