@@ -1,0 +1,9 @@
+<?php
+
+class WP_HTML_Tag_Processor {
+	/**
+	 * @param array<string, string|int|null>|string|null $query
+	 * @return bool Whether a tag was matched.
+	 */
+	public function next_tag( $query = null ) {	}
+}

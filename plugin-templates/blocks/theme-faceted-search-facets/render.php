@@ -6,6 +6,8 @@
  *
  * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- File doesn't load in global scope, just appears to to PHPCS.
  *
+ * @phpstan-var array<string, mixed> $attributes
+ *
  * @var array    $attributes The array of attributes for this block.
  * @var string   $content    Rendered block output. ie. <InnerBlocks.Content />.
  * @var WP_Block $block      The instance of the WP_Block class that represents the block being rendered.
@@ -27,8 +29,10 @@ if ( is_null( $post_type_aggregation ) && is_null( $category_aggregation ) ) {
 }
 
 // Negotiate whether any of the facet fields have been set.
-$is_facet_set = ! empty( $post_type_aggregation->get_query_values() )
-	|| ! empty( $category_aggregation->get_query_values() );
+$is_facet_set = (
+	( $post_type_aggregation && $post_type_aggregation->get_query_values() )
+	|| ( $category_aggregation && $category_aggregation->get_query_values() )
+);
 
 ?>
 <div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
@@ -36,11 +40,19 @@ $is_facet_set = ! empty( $post_type_aggregation->get_query_values() )
 		<?php esc_html_e( 'Filter By', 'create-wordpress-plugin' ); ?>
 	</h2>
 
-	<?php $post_type_aggregation->checkboxes(); ?>
+	<?php
+	if ( $post_type_aggregation ) :
+		$post_type_aggregation->checkboxes();
+	endif;
+	?>
 
-	<?php $category_aggregation->checkboxes(); ?>
+	<?php
+	if ( $category_aggregation ) :
+		$category_aggregation->checkboxes();
+	endif;
+	?>
 
-	<?php if ( ! empty( $is_facet_set ) ) : ?>
+	<?php if ( $is_facet_set ) : ?>
 		<a class="wp-block-create-wordpress-plugin-theme-faceted-search-facets__reset" href="<?php echo esc_url( home_url( '/?s=' ) ); ?>"><?php esc_html_e( 'Reset', 'create-wordpress-plugin' ); ?></a>
 	<?php endif; ?>
 </div>

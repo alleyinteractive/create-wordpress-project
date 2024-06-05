@@ -6,16 +6,22 @@
  *
  * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- File doesn't load in global scope, just appears to to PHPCS.
  *
+ * @phpstan-var array<string, mixed> $attributes
+ *
  * @var array    $attributes The array of attributes for this block.
  * @var string   $content    Rendered block output. ie. <InnerBlocks.Content />.
  * @var WP_Block $block      The instance of the WP_Block class that represents the block being rendered.
  *
  * @package create-wordpress-plugin
  */
-$post_id = isset( $block->context['postId'] ) ? $block->context['postId'] : get_the_ID();
+$post_id           = isset( $block->context['postId'] ) ? $block->context['postId'] : get_the_ID();
+$primary_term_rest = new \Create_WordPress_Plugin\Features\Primary_Term_Rest();
 
-$primary_term_rest = new \Create_WordPress_Plugin\Features\Primary_Term_Rest;
-$primary_term      = $primary_term_rest->get_primary_term( $post_id, $attributes['taxonomy'] );
+if ( ! isset( $attributes['taxonomy'] ) || ! is_string( $attributes['taxonomy'] ) ) {
+	return;
+}
+
+$primary_term = $primary_term_rest->get_primary_term( $post_id, $attributes['taxonomy'] );
 if ( ! $primary_term ) {
 	return;
 }

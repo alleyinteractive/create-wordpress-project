@@ -6,6 +6,8 @@
  *
  * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- File doesn't load in global scope, just appears to to PHPCS.
  *
+ * @phpstan-var array<string, mixed> $attributes
+ *
  * @var array    $attributes The array of attributes for this block.
  * @var string   $content    Rendered block output. ie. <InnerBlocks.Content />.
  * @var WP_Block $block      The instance of the WP_Block class that represents the block being rendered.
@@ -13,7 +15,7 @@
  * @package create-wordpress-plugin
  */
 
-global $wp_query;
+global $wp_query; // @phpstan-ignore-line
 
 $search_query          = get_search_query( false );
 $found_posts           = $wp_query->found_posts;
