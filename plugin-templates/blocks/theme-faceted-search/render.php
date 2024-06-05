@@ -17,5 +17,5 @@
 
 ?>
 <form role="search" method="get" action="<?php echo esc_url( home_url() ); ?>" id="search-form">
-    <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Rendered by Gutenberg. ?>
+	<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Rendered by Gutenberg. ?>
 </form>

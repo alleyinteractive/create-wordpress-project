@@ -5,6 +5,7 @@
  * All of the parameters passed to the function where this file is being required are accessible in this scope:
  *
  * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- File doesn't load in global scope, just appears to to PHPCS.
+ * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- File doesn't load in global scope, just appears to to PHPCS.
  *
  * @phpstan-var array<string, mixed> $attributes
  *
@@ -14,6 +15,7 @@
  *
  * @package create-wordpress-plugin
  */
+
 $post_id           = isset( $block->context['postId'] ) ? $block->context['postId'] : get_the_ID();
 $primary_term_rest = new \Create_WordPress_Plugin\Features\Primary_Term_Rest();
 

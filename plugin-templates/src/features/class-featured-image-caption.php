@@ -29,15 +29,14 @@ final class Featured_Image_Caption implements Feature {
 	/**
 	 * Adds the featured image caption to the featured image block.
 	 *
+	 * @phpstan-param array<string, mixed> $block
+	 *
 	 * @param string $block_content The existing block content.
 	 * @param array $block The full block, including name and attributes.
 	 * @param WP_Block $instance The block instance.
-	 *
-	 * @phpstan-param array<string, mixed> $block
-	 *
 	 * @return string Modified block content.
 	 */
-	public function add_caption_to_featured_image( string $block_content, array $block, WP_Block $instance  ): string {
+	public function add_caption_to_featured_image( string $block_content, array $block, WP_Block $instance ): string {
 		$post_id = $instance->context['postId'] ?? null;
 		if ( empty( $post_id ) ) {
 			return $block_content;
