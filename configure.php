@@ -653,15 +653,12 @@ if ( 'vip' === $hosting_provider ) {
 		run( 'ln -s mu-plugins/drop-ins/object-cache.php object-cache.php' );
 	}
 
-	write( 'Scaffolding out vip-config...' );
-
-	run( 'mkdir -p vip-config && touch vip-config/.gitkeep' );
-
 	write( 'Scaffolding out VIP directories...' );
 
 	run( 'mkdir -p images && touch images/.gitkeep' );
 	run( 'mkdir -p languages && touch languages/.gitkeep' );
 	run( 'mkdir -p private && touch private/.gitkeep' );
+	run( 'touch vip-config/.gitkeep' );
 
 	echo "Done!\n\n";
 } elseif ( 'pantheon' === $hosting_provider ) {
@@ -669,6 +666,7 @@ if ( 'vip' === $hosting_provider ) {
 
 	delete_files(
 		[
+			'vip-config',
 			'.github/workflows/deploy-to-vip.yml',
 			'.circleci',
 		]
