@@ -21,5 +21,7 @@ parameters:
 		- plugins/create-wordpress-plugin/build/
 		- plugins/create-wordpress-plugin/src/post-types/
 		- plugins/create-wordpress-plugin/tests/
+		- plugins/create-wordpress-plugin/vendor/
 		- themes/create-wordpress-theme/build/
 		- themes/create-wordpress-theme/tests/
+		- themes/create-wordpress-theme/vendor/
