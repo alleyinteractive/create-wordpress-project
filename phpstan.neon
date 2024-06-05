@@ -24,3 +24,6 @@ parameters:
 		- themes/create-wordpress-theme/build/
 		- themes/create-wordpress-theme/tests/
 		- themes/create-wordpress-theme/vendor/
+
+	stubFiles:
+		- stubs/WpHtmlTagProcessor.stub
