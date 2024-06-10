@@ -2,6 +2,8 @@
 
 class WP_HTML_Tag_Processor {
 	/**
+	 * Workaround stub for https://github.com/php-stubs/wordpress-stubs/issues/182.
+	 *
 	 * @param array<string, string|int|null>|string|null $query
 	 * @return bool Whether a tag was matched.
 	 */
