@@ -5,6 +5,9 @@
  * All of the parameters passed to the function where this file is being required are accessible in this scope:
  *
  * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- File doesn't load in global scope, just appears to to PHPCS.
+ * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- File doesn't load in global scope, just appears to to PHPCS.
+ *
+ * @phpstan-var array<string, mixed> $attributes
  *
  * @var array    $attributes The array of attributes for this block.
  * @var string   $content    Rendered block output. ie. <InnerBlocks.Content />.
@@ -12,10 +15,15 @@
  *
  * @package create-wordpress-plugin
  */
-$post_id = isset( $block->context['postId'] ) ? $block->context['postId'] : get_the_ID();
 
-$primary_term_rest = new \Create_WordPress_Plugin\Features\Primary_Term_Rest;
-$primary_term      = $primary_term_rest->get_primary_term( $post_id, $attributes['taxonomy'] );
+$post_id           = isset( $block->context['postId'] ) ? $block->context['postId'] : get_the_ID();
+$primary_term_rest = new \Create_WordPress_Plugin\Features\Primary_Term_Rest();
+
+if ( ! isset( $attributes['taxonomy'] ) || ! is_string( $attributes['taxonomy'] ) ) {
+	return;
+}
+
+$primary_term = $primary_term_rest->get_primary_term( $post_id, $attributes['taxonomy'] );
 if ( ! $primary_term ) {
 	return;
 }

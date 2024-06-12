@@ -26,7 +26,7 @@ type PostWithPrimaryTerm = WP_REST_API_Post & { // eslint-disable-line camelcase
 };
 
 /**
- * The create-wordpress-plugin/primary-term block edit function.
+ * The create-wordpress-plugin/theme-primary-term block edit function.
  *
  * @return {WPElement} Element to render.
  */

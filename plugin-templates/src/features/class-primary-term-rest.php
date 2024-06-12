@@ -91,7 +91,7 @@ final class Primary_Term_Rest implements Feature {
 		}
 		if ( empty( $primary_term_id ) ) {
 			$terms = get_the_terms( $post_id, $taxonomy );
-			if ( ! empty( $terms[0]->term_id ) ) {
+			if ( is_array( $terms ) && ! empty( $terms[0]->term_id ) ) {
 				$primary_term_id = $terms[0]->term_id;
 			}
 		}

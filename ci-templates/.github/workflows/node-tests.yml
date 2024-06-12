@@ -15,5 +15,6 @@ jobs:
     uses: alleyinteractive/.github/.github/workflows/node-tests.yml@main
     with:
       ci: true
-      node: 18
+      node: 20
+      npm: 10
       run-audit: true

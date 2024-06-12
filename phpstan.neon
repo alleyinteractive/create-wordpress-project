@@ -4,7 +4,6 @@ includes:
 parameters:
 	# Level 9 is the highest level
 	level: max
-	checkGenericClassInNonGenericObjectType: false
 
 	scanDirectories:
 		- plugins/elasticsearch-extensions
@@ -21,5 +20,7 @@ parameters:
 		- plugins/create-wordpress-plugin/build/
 		- plugins/create-wordpress-plugin/src/post-types/
 		- plugins/create-wordpress-plugin/tests/
+		- plugins/create-wordpress-plugin/vendor/
 		- themes/create-wordpress-theme/build/
 		- themes/create-wordpress-theme/tests/
+		- themes/create-wordpress-theme/vendor/
