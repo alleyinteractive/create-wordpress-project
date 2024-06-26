@@ -1,4 +1,4 @@
-name: Deploy to VIP Repository
+name: Deploy to Pantheon
 
 on:
   push:
@@ -29,16 +29,18 @@ jobs:
     #     test-skip: true
     #     github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN }}
 
-    - name: Sync to wpcomvip repo
-      uses: alleyinteractive/action-deploy-to-remote-repository@develop
+    - name: Deploy to Pantheon
+      uses: alleyinteractive/action-deploy-to-pantheon@develop
       with:
-        remote_repo: 'git@github.com:wpcomvip/your-repo-url.git'
-        exclude_list: '.git, .gitmodules, node_modules, no-vip'
+        base_directory: './'
+        destination_directory: 'wp-content/'
+        exclude_list: '.git, .github, .gitmodules, .pantheon, node_modules'
+        pantheon_env_name: ${{ github.ref_name }}
+        pantheon_machine_token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+        pantheon_site_id: ${{ secrets.PANTHEON_SITE_ID }}
+        pantheon_site: ${{ secrets.PANTHEON_SITE }}
         ssh-key: ${{ secrets.REMOTE_REPO_SSH_KEY }}
-        remote_branch:
-          # example: if the branch name is production, set it to master
-          # otherwise, use the branch name
-          ${{ github.ref_name == 'production' && 'master' || github.ref_name }}
+        autopromote: 'true'
 
     - name: Notify Slack
       if: always()
