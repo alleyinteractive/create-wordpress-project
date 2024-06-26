@@ -15,8 +15,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        submodules: 'recursive'
 
     # Perform any build steps here. You can leverage the actions provided by Alley.
     # eg.  just installing dependencies here, not running tests.
