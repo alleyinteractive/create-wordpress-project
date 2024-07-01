@@ -10,14 +10,14 @@ on:
 jobs:
   build-and-sync:
     runs-on: ubuntu-latest
-    name: "Build and Deploy to Pantheon"
+    name: "Deploy to WordPress VIP"
     timeout-minutes: 10
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     # Perform any build steps here. You can leverage the actions provided by Alley.
-    # eg.  just installing dependencies here, not running tests.
+    # e.g.,  just installing dependencies here, not running tests.
     # - name: Install composer dependencies
     #   uses: alleyinteractive/action-test-php@develop
     #   with:
@@ -38,9 +38,10 @@ jobs:
           # otherwise, use the branch name
           ${{ github.ref_name == 'production' && 'master' || github.ref_name }}
 
-    - name: Notify Slack
-      if: always()
-      uses: alleyinteractive/action-notify-slack@develop
-      with:
-        status: ${{ job.status }}
-        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    # e.g. Notify slack on success or failure
+    # - name: Notify Slack
+    #   if: always()
+    #   uses: alleyinteractive/action-notify-slack@develop
+    #   with:
+    #     status: ${{ job.status }}
+    #     webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
