@@ -60,4 +60,4 @@ workflows:
               only:
                 - develop
                 - preprod
-                - master
+                - production
