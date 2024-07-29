@@ -412,10 +412,8 @@ if ( ! confirm( 'Modify files?', true ) ) {
 
 $search_and_replace = [
 	'author_name'                  => $author_name,
-	'Alley'                        => $author_name,
 	'author_username'              => $author_username,
 	'email@domain.com'             => $author_email,
-	'info@alley.com'               => $author_email,
 
 	'A skeleton WordPress project' => $description,
 
@@ -424,7 +422,7 @@ $search_and_replace = [
 	'CREATE_WORDPRESS_PROJECT'     => strtoupper( str_replace( '-', '_', $project_name_slug ) ),
 
 	'vendor_name'                  => $vendor_name,
-	'alleyinteractive'             => $vendor_slug,
+	'vendor_slug'                  => $vendor_slug,
 ];
 
 if ( ! empty( $theme_slug ) ) {

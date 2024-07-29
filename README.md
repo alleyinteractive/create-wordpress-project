@@ -39,6 +39,7 @@ Interactive](https://github.com/alleyinteractive). Like what you see? [Come work
 with us](https://alley.com/careers/).
 
 - [author_name](https://github.com/author_name)
+- [Alley Interactive](https://github.com/alleyinteractive)
 - [All Contributors](../../contributors)
 
 ## License
