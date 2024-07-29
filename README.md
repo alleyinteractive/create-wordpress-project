@@ -38,7 +38,7 @@ This project is actively maintained by [Alley
 Interactive](https://github.com/alleyinteractive). Like what you see? [Come work
 with us](https://alley.com/careers/).
 
-- [author_name](https://github.com/author_name)
+- [author_name](https://github.com/author_username)
 - [Alley Interactive](https://github.com/alleyinteractive)
 - [All Contributors](../../contributors)
 
