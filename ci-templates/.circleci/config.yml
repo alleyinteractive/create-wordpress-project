@@ -19,7 +19,7 @@ jobs:
       - run:
           name: composer install
           command: |
-            composer install --no-interaction
+            composer install --no-interaction --no-dev
       - run:
           name: Install NVM
           command: |
