@@ -5,8 +5,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["*"]
-    },
-    "target": "es2022"
+    }
   },
   "exclude": [
     "./plugins/create-wordpress-plugin/build",
