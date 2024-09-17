@@ -412,10 +412,8 @@ if ( ! confirm( 'Modify files?', true ) ) {
 
 $search_and_replace = [
 	'author_name'                  => $author_name,
-	'Alley'                        => $author_name,
 	'author_username'              => $author_username,
 	'email@domain.com'             => $author_email,
-	'info@alley.com'               => $author_email,
 
 	'A skeleton WordPress project' => $description,
 
@@ -424,18 +422,32 @@ $search_and_replace = [
 	'CREATE_WORDPRESS_PROJECT'     => strtoupper( str_replace( '-', '_', $project_name_slug ) ),
 
 	'vendor_name'                  => $vendor_name,
-	'alleyinteractive'             => $vendor_slug,
+	'vendor_slug'                  => $vendor_slug,
 ];
+
+/*
+ * Hardcoded strings we need to replace.
+ * These are very specific and should be used sparingly.
+ */
+$hardcoded_strings = [
+	// Replace the composer project name.
+	'alleyinteractive/create-wordpress-project' => $vendor_slug . '/' . $project_name_slug,
+];
+
+$search_and_replace = array_merge(
+	$search_and_replace,
+	$hardcoded_strings,
+);
 
 if ( ! empty( $theme_slug ) ) {
 	$search_and_replace = array_merge(
 		$search_and_replace,
 		[
-			'create-wordpress-theme'       => $theme_slug,
-			'Create WordPress Theme'       => str_replace( '_', ' ', title_case( $theme_slug ) ),
-			'CREATE_WORDPRESS_THEME'       => strtoupper( str_replace( '-', '_', $theme_slug ) ),
-			'create_wordpress_theme'       => str_replace( '-', '_', $theme_slug ),
-			'Create_WordPress_Theme'       => $theme_namespace,
+			'create-wordpress-theme' => $theme_slug,
+			'Create WordPress Theme' => str_replace( '_', ' ', title_case( $theme_slug ) ),
+			'CREATE_WORDPRESS_THEME' => strtoupper( str_replace( '-', '_', $theme_slug ) ),
+			'create_wordpress_theme' => str_replace( '-', '_', $theme_slug ),
+			'Create_WordPress_Theme' => $theme_namespace,
 		],
 	);
 }
