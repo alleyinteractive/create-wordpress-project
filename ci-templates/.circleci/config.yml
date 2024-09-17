@@ -43,7 +43,14 @@ jobs:
             - ".npm"
       - add_ssh_keys:
           fingerprints:
-            # User key set up with AlleyCI GitHub user for deploys.
+            # If your build requires access to a private repository, you will need to configure
+            # a 'User key' with read access to any private repositories and write access to the
+            # destination build repository (e.g. via an AlleyCI user).
+            # See https://circleci.com/docs/github-integration/#enable-your-project-to-check-out-additional-private-repositories
+            # If you only require write access (to deploy) to the destination repository, you
+            # should manually 'Add SSH Key' with a read/write deploy key to the github.com
+            # hostname.
+            # See https://circleci.com/docs/github-integration/#create-a-github-deploy-key
             - "SHA256:your+ssh+key+finger+print"
       - run:
           name: Deploy -built branch to GitHub
