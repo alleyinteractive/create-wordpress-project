@@ -43,7 +43,7 @@
     "create-package": "turbo gen workspace --destination packages --type package",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "packages-update": "turbo run packages-update -- --dist-tag=wp-6.4",
+    "packages-update": "turbo run packages-update -- --dist-tag=wp-6.7",
     "start:hot": "turbo run start:hot",
     "start": "turbo run start",
     "stylelint": "turbo run stylelint",
