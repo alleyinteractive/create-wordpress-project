@@ -1,0 +1,29 @@
+name: General Tests
+
+on:
+  # Check on PR to develop branch.
+  pull_request:
+    branches:
+      - develop
+    types: [opened, synchronize, reopened, ready_for_review]
+  # Also check on weekly schedule to catch regressions early.
+  schedule:
+    - cron: '0 0 * * 0'
+
+jobs:
+  general-tests:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run PHP Tests in src directory
+        uses: alleyinteractive/action-test-php@develop
+        with:
+          php-version: '8.2'
+          test-command: |
+            echo "Testing the default project configuration..."
+            yes '' | php ./configure.php --project_name=cwp --author_name=cwp
+            composer test
