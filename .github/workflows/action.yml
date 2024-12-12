@@ -30,6 +30,6 @@ jobs:
           github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
           install-command: |
             composer install
-            (yes '') | php ./configure.php --project_name=cwp --author_name=cwp --author_email=cwp@alley.com
+            (yes '' || true) | php ./configure.php --project_name=cwp --cwp=cwp --author_email=cwp@alley.com
           test-command: |
             composer test
