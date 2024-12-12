@@ -10,11 +10,15 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   general-tests:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 3
 
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +27,8 @@ jobs:
         uses: alleyinteractive/action-test-php@develop
         with:
           php-version: '8.2'
+          install-command: |
+            composer install
+            yes '' | php ./configure.php --project_name=cwp --author_name=cwp --author_email=cwp@alley.com
           test-command: |
-            echo "Testing the default project configuration..."
-            yes '' | php ./configure.php --project_name=cwp --author_name=cwp
             composer test
