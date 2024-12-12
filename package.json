@@ -33,7 +33,7 @@
     "wp-types": "^3.64.0"
   },
   "engines": {
-    "node": "20",
+    "node": "22",
     "npm": "10"
   },
   "license": "GPL-2.0-or-later",
