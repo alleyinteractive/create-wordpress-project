@@ -5,14 +5,14 @@
     "plugins/create-wordpress-theme"
   ],
   "dependencies": {
-    "@alleyinteractive/block-editor-tools": "^0.6.3",
+    "@alleyinteractive/block-editor-tools": "^0.11.0",
     "@tinymce/tinymce-react": "^4.3.2",
     "@wordpress/block-editor": "^14.3.15"
   },
   "devDependencies": {
-    "@alleyinteractive/build-tool": "^0.1.1",
-    "@alleyinteractive/create-entry": "^0.0.3",
-    "@alleyinteractive/eslint-config": "^0.1.4",
+    "@alleyinteractive/build-tool": "^0.1.5",
+    "@alleyinteractive/create-entry": "^0.0.4",
+    "@alleyinteractive/eslint-config": "^0.1.6",
     "@alleyinteractive/stylelint-config": "^0.0.2",
     "@alleyinteractive/tsconfig": "^0.1.1",
     "@babel/preset-env": "^7.22.20",
