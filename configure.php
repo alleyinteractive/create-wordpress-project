@@ -643,6 +643,13 @@ if ( 'vip' === $hosting_provider ) {
 		],
 	);
 
+	replace_in_file(
+		'phpstan.neon',
+		[
+			'mu-plugins/' => 'client-mu-plugins/',
+		],
+	);
+
 	// Remove the pantheon mu-plugin from the plugin loader file.
 	replace_in_file(
 		'client-mu-plugins/plugin-loader.php',
