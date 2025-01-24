@@ -353,11 +353,12 @@ if ( is_dir( "plugins/{$plugin_slug}" ) ) {
 }
 
 $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
+$year			  = date( 'Y' );
 
 $theme_slug = slugify(
 	ask(
 		question: 'Project theme name?',
-		default: $project_name_slug,
+		default: "$project_name_slug-$year",
 		allow_empty: false,
 	),
 );
