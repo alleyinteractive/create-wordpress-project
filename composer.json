@@ -23,8 +23,8 @@
   },
   "require-dev": {
     "alleyinteractive/alley-coding-standards": "^2.0",
-    "mantle-framework/testkit": "^0.12",
-    "szepeviktor/phpstan-wordpress": "^1.1"
+    "mantle-framework/testkit": "^1.4",
+    "szepeviktor/phpstan-wordpress": "^2.0"
   },
   "repositories": [
     {
