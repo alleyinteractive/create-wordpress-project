@@ -353,7 +353,7 @@ if ( is_dir( "plugins/{$plugin_slug}" ) ) {
 }
 
 $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
-$year			 = date( 'Y' );
+$year			  = date( 'Y' );
 
 $theme_slug = slugify(
 	ask(
