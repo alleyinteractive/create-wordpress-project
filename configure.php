@@ -617,6 +617,7 @@ if ( 'vip' === $hosting_provider ) {
 		[
 			'.github/workflows/deploy-to-pantheon-live.yml',
 			'.github/workflows/deploy-to-pantheon-multidev.yml',
+			"plugins/$plugin_slug/$vendor_slug",
 		]
 	);
 
