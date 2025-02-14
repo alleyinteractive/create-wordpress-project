@@ -16,5 +16,11 @@
   {
     "name": "Yoast Duplicate Post",
     "path": "wpackagist-plugin/duplicate-post"
+  },
+  {
+    "name": "Create Block Theme",
+    "repo": "https://github.com/WordPress/create-block-theme",
+    "path": "wpackagist-plugin/create-block-theme",
+    "activate": false
   }
 ]
