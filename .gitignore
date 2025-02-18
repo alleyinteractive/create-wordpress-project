@@ -38,7 +38,6 @@ Thumbs.db
 !/mu-plugins/001-composer.php
 !/mu-plugins/index.php
 !/mu-plugins/plugin-loader.php
-!/mu-plugins/local-plugins.php
 
 # Ignore all plugins except our custom ones
 /plugins/*
