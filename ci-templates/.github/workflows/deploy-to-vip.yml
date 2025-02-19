@@ -1,4 +1,4 @@
-name: Deploy to VIP repository
+name: Deploy to VIP Repository
 
 on:
   push:
@@ -8,10 +8,40 @@ on:
       - develop
 
 jobs:
-  sync-to-vip:
-    uses: alleyinteractive/.github/.github/workflows/deploy-to-remote-repository.yml@main
-    with:
-      remote_repo: 'git@github.com:wpcomvip/REMOTE-REPO-NAME.git'
-      exclude_list: '.git, .gitmodules, node_modules, no-vip'
-    secrets:
-      REMOTE_REPO_SSH_KEY: ${{ secrets.REMOTE_REPO_SSH_KEY }}
+  build-and-sync:
+    runs-on: ubuntu-latest
+    name: "Deploy to WordPress VIP"
+    timeout-minutes: 10
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Perform any build steps here. You can leverage the actions provided by Alley.
+    # e.g.,  just installing dependencies here, not running tests.
+    # - name: Install composer dependencies
+    #   uses: alleyinteractive/action-test-php@develop
+    #   with:
+    #     php-version: '8.2'
+    #     audit-skip: true
+    #     install-command: composer update --no-interaction --no-progress && composer dump-autoload
+    #     test-skip: true
+    #     github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN }}
+
+    - name: Sync to wpcomvip repo
+      uses: alleyinteractive/action-deploy-to-remote-repository@develop
+      with:
+        remote_repo: 'git@github.com:wpcomvip/your-repo-url.git'
+        exclude_list: '.git, .gitmodules, node_modules, no-vip'
+        ssh-key: ${{ secrets.REMOTE_REPO_SSH_KEY }}
+        remote_branch:
+          # example: if the branch name is production, set it to master
+          # otherwise, use the branch name
+          ${{ github.ref_name == 'production' && 'master' || github.ref_name }}
+
+    # e.g. Notify slack on success or failure
+    # - name: Notify Slack
+    #   if: always()
+    #   uses: alleyinteractive/action-notify-slack@develop
+    #   with:
+    #     status: ${{ job.status }}
+    #     webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

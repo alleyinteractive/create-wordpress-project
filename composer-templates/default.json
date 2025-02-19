@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Alleyvate",
+    "path": "alleyinteractive/wp-alleyvate"
+  },
+  {
+    "name": "Byline Manager",
+    "path": "alleyinteractive/byline-manager"
+  },
+  {
+    "name": "Elasticsearch Extensions",
+    "repo": "https://github.com/alleyinteractive/elasticsearch-extensions",
+    "path": "alleyinteractive/elasticsearch-extensions"
+  },
+  {
+    "name": "Meta Inspector",
+    "path": "alleyinteractive/meta-inspector"
+  },
+  {
+    "name": "MSM Sitemap",
+    "repo": "https://github.com/Automattic/msm-sitemap",
+    "path": "Automattic/msm-sitemap"
+  },
+  {
+    "name": "Safe Redirect Manager",
+    "path": "wpackagist-plugin/safe-redirect-manager"
+  },
+  {
+    "name": "WP Asset Manager",
+    "path": "alleyinteractive/wp-asset-manager"
+  },
+  {
+    "name": "WP Curate",
+    "repo": "https://github.com/alleyinteractive/wp-curate",
+    "path": "alleyinteractive/wp-curate"
+  },
+  {
+    "name": "WP New Relic Transactions",
+    "repo": "https://github.com/alleyinteractive/wp-new-relic-transactions",
+    "path": "alleyinteractive/wp-new-relic-transactions"
+  },
+  {
+    "name": "Yoast SEO",
+    "path": "wpackagist-plugin/wordpress-seo"
+  }
+]

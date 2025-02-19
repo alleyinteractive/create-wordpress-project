@@ -1,0 +1,23 @@
+/**
+ * Styles for the create-wordpress-plugin/theme-navigation block that get applied on both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-create-wordpress-plugin-theme-navigation {
+
+  // Normalize list styles.
+  ul {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-left: 0;
+  }
+
+  ul,
+  ul li {
+    list-style: none;
+
+    // Overrides generic ".entry-content li" styles on the front end.
+    padding: 0;
+  }
+}

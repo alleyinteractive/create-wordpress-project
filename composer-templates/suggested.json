@@ -1,0 +1,20 @@
+[
+  {
+    "name": "ES Admin",
+    "repo": "https://github.com/alleyinteractive/es-admin",
+    "path": "alleyinteractive/es-admin"
+  },
+  {
+    "name": "ES WP Query",
+    "repo": "https://github.com/alleyinteractive/es-wp-query",
+    "path": "alleyinteractive/es-wp-query"
+  },
+  {
+    "name": "Fieldmanager",
+    "path": "alleyinteractive/wordpress-fieldmanager"
+  },
+  {
+    "name": "Yoast Duplicate Post",
+    "path": "wpackagist-plugin/duplicate-post"
+  }
+]

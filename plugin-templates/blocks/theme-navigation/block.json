@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-wordpress-plugin/theme-navigation",
+  "version": "0.1.0",
+  "title": "Theme Navigation",
+  "category": "theme",
+  "icon": "menu",
+  "description": "Display theme navigation menus.",
+  "textdomain": "create-wordpress-plugin",
+  "editorScript": "file:index.ts",
+  "editorStyle": "file:index.css",
+  "style": [
+    "file:style-index.css"
+  ],
+  "render": "file:render.php",
+  "attributes": {
+    "menuLocation": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "align": [ "wide", "full" ]
+  }
+}

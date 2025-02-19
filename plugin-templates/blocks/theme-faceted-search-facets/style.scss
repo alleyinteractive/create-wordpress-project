@@ -1,0 +1,27 @@
+/**
+ * Styles for the create-wordpress-plugin/theme-faceted-search-facets block that get applied on both on the front of your site
+ * and in the editor.
+ */
+.wp-block-create-wordpress-plugin-theme-faceted-search-facets {
+  
+  fieldset {
+    border: unset;
+    margin-block: var(--wp--custom--spacing--block-gap, 1.5rem);
+    margin-inline: unset;
+    padding: unset;
+  }
+
+  legend {
+    display: block;
+    font-weight: 700;
+    margin-block-end: 0.5rem;
+  }
+
+  label {
+    display: block;
+  }
+}
+
+.wp-block-create-wordpress-plugin-theme-faceted-search-facets__heading {
+  margin-block-start: 0;
+}

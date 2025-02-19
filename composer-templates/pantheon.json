@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Pantheon Advanced Page Cache",
+    "path": "wpackagist-plugin/pantheon-advanced-page-cache"
+  },
+  {
+    "name": "Query Monitor",
+    "path": "wpackagist-plugin/query-monitor"
+  },
+  {
+    "name": "Rewrite Rules Inspector",
+    "path": "wpackagist-plugin/rewrite-rules-inspector"
+  },
+  {
+    "name": "SearchPress",
+    "repo": "https://github.com/alleyinteractive/searchpress",
+    "path": "alleyinteractive/searchpress"
+  },
+  {
+    "name": "SearchPress Debug Bar",
+    "repo": "https://github.com/alleyinteractive/debug-bar-searchpress",
+    "path": "alleyinteractive/debug-bar-searchpress"
+  },
+  {
+    "name": "Two Factor",
+    "path": "wpackagist-plugin/two-factor"
+  },
+  {
+    "name": "WP Mail SMTP",
+    "path": "wpackagist-plugin/wp-mail-smtp",
+    "activate": false
+  },
+  {
+    "name": "WP Native PHP Sessions",
+    "path": "wpackagist-plugin/wp-native-php-sessions"
+  }
+]

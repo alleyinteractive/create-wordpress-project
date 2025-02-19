@@ -32,4 +32,12 @@
 
   <!-- The version set here matches the minimum version tested in CI. -->
   <config name="minimum_supported_wp_version" value="6.2" />
+
+  <!-- Turn off some rules for scaffolded files. -->
+  <rule ref="WordPress.NamingConventions.ValidPostTypeSlug.NotStringLiteral">
+    <exclude-pattern>./plugins/create-wordpress-plugin/src/post-types/</exclude-pattern>
+  </rule>
+  <rule ref="WordPressVIPMinimum.Hooks.AlwaysReturnInFilter.AbstractMethod">
+    <exclude-pattern>./plugins/create-wordpress-plugin/src/post-types/</exclude-pattern>
+  </rule>
 </ruleset>

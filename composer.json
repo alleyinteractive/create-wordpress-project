@@ -1,10 +1,42 @@
 {
+  "name": "alleyinteractive/create-wordpress-project",
+  "description": "A skeleton WordPress project",
+  "license": "GPL-2.0-or-later",
+  "type": "project",
+  "keywords": [
+    "alleyinteractive",
+    "create-wordpress-project"
+  ],
   "authors": [
     {
       "name": "Alley",
       "email": "info@alley.com"
     }
   ],
+  "homepage": "https://github.com/alleyinteractive/create-wordpress-project",
+  "require": {
+    "php": "^8.2",
+    "alleyinteractive/composer-wordpress-autoloader": "^1.0",
+    "alleyinteractive/wp-plugin-loader": "^0.1.3",
+    "composer/installers": "^1.0",
+    "pantheon-systems/pantheon-mu-plugin": "^1.0"
+  },
+  "require-dev": {
+    "alleyinteractive/alley-coding-standards": "^2.0",
+    "mantle-framework/testkit": "^1.4",
+    "szepeviktor/phpstan-wordpress": "^2.0"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org",
+      "only": [
+        "wpackagist-plugin/*"
+      ]
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "config": {
     "allow-plugins": {
       "alleyinteractive/composer-wordpress-autoloader": true,
@@ -14,7 +46,6 @@
     },
     "sort-packages": true
   },
-  "description": "A skeleton WordPress project",
   "extra": {
     "installer-paths": {
       "mu-plugins/{$name}": [
@@ -33,35 +64,6 @@
       }
     }
   },
-  "homepage": "https://github.com/alleyinteractive/create-wordpress-project",
-  "keywords": [
-    "alleyinteractive",
-    "create-wordpress-project"
-  ],
-  "license": "GPL-2.0-or-later",
-  "minimum-stability": "dev",
-  "name": "alleyinteractive/create-wordpress-project",
-  "prefer-stable": true,
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://wpackagist.org",
-      "only": [
-        "wpackagist-plugin/*"
-      ]
-    }
-  ],
-  "require": {
-    "alleyinteractive/composer-wordpress-autoloader": "^1.0",
-    "composer/installers": "^1.0",
-    "pantheon-systems/pantheon-mu-plugin": "^1.0",
-    "php": "^8.0"
-  },
-  "require-dev": {
-    "alleyinteractive/alley-coding-standards": "^1.0",
-    "mantle-framework/testkit": "^0.11",
-    "szepeviktor/phpstan-wordpress": "^1.1"
-  },
   "scripts": {
     "phpcbf": [
       "@phpcbf:plugin",
@@ -75,13 +77,11 @@
     ],
     "phpcs:plugin": "cd plugins/create-wordpress-plugin && phpcs .",
     "phpcs:theme": "cd themes/create-wordpress-theme && phpcs .",
+    "phpstan": "phpstan --memory-limit=1G",
     "phpunit": [
-      "@phpunit:plugin",
-      "@phpunit:theme"
+      "@phpunit:plugin"
     ],
     "phpunit:plugin": "cd plugins/create-wordpress-plugin && phpunit",
-    "phpunit:theme": "cd themes/create-wordpress-theme && phpunit",
-    "phpstan": "phpstan --memory-limit=512M",
     "setup": [
       "composer install --quiet --no-interaction"
     ],
@@ -90,6 +90,5 @@
       "@phpstan",
       "@phpunit"
     ]
-  },
-  "type": "project"
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-wordpress-plugin/theme-faceted-search",
+  "version": "0.1.0",
+  "title": "Faceted Search",
+  "category": "theme",
+  "icon": "search",
+  "description": "Search results wrapper for use with search facets.",
+  "textdomain": "create-wordpress-plugin",
+  "editorScript": "file:index.tsx",
+  "editorStyle": "file:index.css",
+  "style": [
+    "file:style-index.css"
+  ],
+  "render": "file:render.php",
+  "supports": {
+    "layout": true,
+    "multiple": false
+  }
+}

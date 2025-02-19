@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "create-wordpress-plugin/theme-search-meta",
+  "version": "0.1.0",
+  "title": "Faceted Search Meta",
+  "category": "theme",
+  "icon": "info",
+  "description": "Displays search results post counts.",
+  "textdomain": "create-wordpress-plugin",
+  "editorScript": "file:index.ts",
+  "editorStyle": "file:index.css",
+  "style": [
+    "file:style-index.css"
+  ],
+  "render": "file:render.php"
+}
