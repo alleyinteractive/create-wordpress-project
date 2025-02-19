@@ -24,7 +24,8 @@
   "require-dev": {
     "alleyinteractive/alley-coding-standards": "^2.0",
     "mantle-framework/testkit": "^1.4",
-    "szepeviktor/phpstan-wordpress": "^2.0"
+    "szepeviktor/phpstan-wordpress": "^2.0",
+    "wpackagist-plugin/create-block-theme": "^2.6"
   },
   "repositories": [
     {
