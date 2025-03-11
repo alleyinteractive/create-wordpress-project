@@ -15,7 +15,7 @@
  * @package create-wordpress-plugin
  */
 
-$create_wordpress_plugin_post_id = $block->context['postId'];
+$create_wordpress_plugin_post_id = is_numeric( $block->context['postId'] ?? null ) ? (int) $block->context['postId'] : 0;
 if ( empty( $create_wordpress_plugin_post_id ) ) {
 	return;
 }

@@ -31,8 +31,8 @@ final class Featured_Image_Caption implements Feature {
 	 *
 	 * @phpstan-param array<string, mixed> $block
 	 *
-	 * @param string $block_content The existing block content.
-	 * @param array $block The full block, including name and attributes.
+	 * @param string   $block_content The existing block content.
+	 * @param array    $block The full block, including name and attributes.
 	 * @param WP_Block $instance The block instance.
 	 * @return string Modified block content.
 	 */
