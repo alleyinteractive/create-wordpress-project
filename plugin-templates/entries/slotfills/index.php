@@ -39,17 +39,28 @@ function register_slotfills_scripts(): void {
 	// Automatically load dependencies and version.
 	$asset_file = include __DIR__ . '/index.asset.php';
 
-	if ( ! isset( $asset_file['dependencies'], $asset_file['version'] ) ) {
-		return;
+	if ( ! is_array( $asset_file ) ) {
+		return; // Ensure $asset_file is an array
 	}
+
+	// Validate and sanitize dependencies
+	$dependencies = is_array( $asset_file['dependencies'] )
+	? array_map( fn( $item ) => is_scalar( $item ) ? (string) $item : '', $asset_file['dependencies'] )
+	: [];
+
+	// Validate and sanitize version
+	$version = is_string( $asset_file['version'] ) || is_numeric( $asset_file['version'] )
+		? (string) $asset_file['version']
+		: null;
 
 	wp_register_script(
 		'create-wordpress-plugin_slotfills',
 		plugins_url( 'index.js', __FILE__ ),
-		$asset_file['dependencies'],
-		$asset_file['version'],
+		$dependencies,
+		$version,
 		true
 	);
+
 	wp_set_script_translations( 'create-wordpress-plugin_slotfills', 'create-wordpress-plugin' );
 }
 
