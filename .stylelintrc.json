@@ -1,3 +1,13 @@
 {
-  "extends": "@alleyinteractive/stylelint-config"
+  "extends": "@alleyinteractive/stylelint-config",
+  "overrides": [
+    {
+      "files": [
+        "*.module.scss"
+      ],
+      "rules": {
+        "selector-class-pattern": "(^[a-z]|[A-Z0-9])[a-z]*"
+      }
+    }
+  ]
 }
