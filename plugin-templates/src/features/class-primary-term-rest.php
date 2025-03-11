@@ -95,7 +95,7 @@ final class Primary_Term_Rest implements Feature {
 				$primary_term_id = $terms[0]->term_id;
 			}
 		}
-		if ( ! empty( $primary_term_id ) ) {
+		if ( ! empty( $primary_term_id ) && is_int( $primary_term_id ) ) {
 			$primary_term = get_term( $primary_term_id, $taxonomy );
 			if ( $primary_term instanceof WP_Term ) {
 				$term_link = get_term_link( $primary_term );
