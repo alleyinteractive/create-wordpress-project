@@ -18,7 +18,7 @@
 global $wp_query; // @phpstan-ignore-line
 
 $search_query          = get_search_query( false );
-$found_posts           = $wp_query->found_posts;
+$found_posts           = $wp_query instanceof WP_Query ? $wp_query->found_posts : 0;
 $found_posts_formatted = 10000 === $found_posts ? '10,000+' : number_format( $found_posts );
 
 ?>
