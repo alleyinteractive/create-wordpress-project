@@ -48,7 +48,7 @@ function register_slotfills_scripts(): void {
 	? array_map( fn( $item ) => is_scalar( $item ) ? (string) $item : '', $asset_file['dependencies'] )
 	: [];
 
-	// Validate and sanitize version
+	// Validate and sanitize version.
 	$version = is_string( $asset_file['version'] ) || is_numeric( $asset_file['version'] )
 		? (string) $asset_file['version']
 		: null;
