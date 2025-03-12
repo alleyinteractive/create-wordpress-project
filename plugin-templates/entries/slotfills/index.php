@@ -43,7 +43,7 @@ function register_slotfills_scripts(): void {
 		return;
 	}
 
-	// Validate and sanitize dependencies
+	// Validate and sanitize dependencies.
 	$dependencies = is_array( $asset_file['dependencies'] )
 	? array_map( fn( $item ) => is_scalar( $item ) ? (string) $item : '', $asset_file['dependencies'] )
 	: [];
