@@ -40,7 +40,7 @@ function register_slotfills_scripts(): void {
 	$asset_file = include __DIR__ . '/index.asset.php';
 
 	if ( ! is_array( $asset_file ) ) {
-		return; // Ensure $asset_file is an array
+		return;
 	}
 
 	// Validate and sanitize dependencies
