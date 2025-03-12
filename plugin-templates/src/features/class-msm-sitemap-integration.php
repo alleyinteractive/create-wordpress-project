@@ -50,14 +50,16 @@ final class MSM_Sitemap_Integration implements Feature {
 		add_filter(
 			'jetpack_get_available_modules',
 			function ( $modules ) {
-				unset( $modules['sitemaps'] );
+				if ( is_array( $modules ) ) {
+					unset( $modules['sitemaps'] );
+				}
 
 				return $modules;
 			}
 		);
 		add_filter(
 			'jetpack_active_modules',
-			fn ( $active ) => array_values( array_diff( $active, [ 'sitemaps' ] ) )
+			fn ( $active ) => array_values( array_diff( (array) $active, [ 'sitemaps' ] ) )
 		);
 	}
 

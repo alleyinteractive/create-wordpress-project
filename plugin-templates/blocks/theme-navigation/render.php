@@ -11,20 +11,20 @@
  * @package create-wordpress-plugin
  */
 
-$create_wordpress_plugin_menu_location = isset( $attributes['menuLocation'] ) && is_string( $attributes['menuLocation'] )
+$menu_location = isset( $attributes['menuLocation'] ) && is_string( $attributes['menuLocation'] )
 	? $attributes['menuLocation']
 	: '';
 
-if ( empty( $create_wordpress_plugin_menu_location ) ) {
+if ( empty( $menu_location ) ) {
 	return;
 }
 
 ?>
-<nav <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?> data-location="<?php echo esc_attr( $create_wordpress_plugin_menu_location ); ?>">
+<nav <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?> data-location="<?php echo esc_attr( $menu_location ); ?>">
 	<?php
 	wp_nav_menu(
 		[
-			'theme_location' => $create_wordpress_plugin_menu_location,
+			'theme_location' => $menu_location,
 			'container'      => '',
 			'fallback_cb'    => false,
 		]

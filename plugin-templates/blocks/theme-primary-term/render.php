@@ -16,7 +16,8 @@
  * @package create-wordpress-plugin
  */
 
-$post_id           = isset( $block->context['postId'] ) ? $block->context['postId'] : get_the_ID();
+$post_id           = $block->context['postId'] ?? get_the_ID();
+$post_id           = is_numeric( $post_id ) ? (int) $post_id : 0;
 $primary_term_rest = new \Create_WordPress_Plugin\Features\Primary_Term_Rest();
 
 if ( ! isset( $attributes['taxonomy'] ) || ! is_string( $attributes['taxonomy'] ) ) {
