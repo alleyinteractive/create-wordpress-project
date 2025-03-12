@@ -2,7 +2,7 @@
   "workspaces": [
     "packages/*",
     "plugins/create-wordpress-plugin",
-    "plugins/create-wordpress-theme"
+    "themes/create-wordpress-theme"
   ],
   "dependencies": {
     "@alleyinteractive/block-editor-tools": "^0.11.0",
