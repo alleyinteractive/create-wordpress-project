@@ -711,6 +711,13 @@ foreach( $required_plugins as $plugin ) {
 write( 'Installing Suggested Plugins...' );
 $suggested_file_contents = file_get_contents( 'composer-templates/suggested.json' );
 $suggested_plugins       = json_decode( $suggested_file_contents, true );
+if ( $hosting_provider === 'vip' ) {
+	// Plugins already installed on VIP.
+	$suggested_plugins = array_filter(
+		$suggested_plugins,
+		fn ( $plugin ) => $plugin['path'] !== 'alleyinteractive/es-wp-query',
+	);
+}
 foreach( $suggested_plugins as $plugin ) {
 	install_plugin( $plugin, true, $installed_plugins );
 }
