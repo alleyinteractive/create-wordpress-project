@@ -615,8 +615,7 @@ if ( 'vip' === $hosting_provider ) {
 
 	delete_files(
 		[
-			'.github/workflows/deploy-to-pantheon-live.yml',
-			'.github/workflows/deploy-to-pantheon-multidev.yml',
+			'.github/workflows/deploy-to-pantheon.yml',
 			"plugins/$plugin_slug/$vendor_slug",
 		]
 	);
