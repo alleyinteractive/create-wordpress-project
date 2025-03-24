@@ -52,3 +52,6 @@ Thumbs.db
 # Ignore custom build directories
 /plugins/create-wordpress-plugin/build
 /themes/create-wordpress-theme/build
+
+Ignore known log files
+debug.log
