@@ -626,8 +626,8 @@ if ( 'vip' === $hosting_provider ) {
 
 	write( 'Ignoring mu-plugins with .gitignore/.deployignore...' );
 
-	file_put_contents( '.gitignore', "mu-plugins\n", FILE_APPEND );
-	file_put_contents( '.deployignore', "mu-plugins\n", FILE_APPEND );
+	file_put_contents( '.gitignore', 'vip' === $hosting_provider ? "client-mu-plugins\n" : "mu-plugins\n", FILE_APPEND );
+	file_put_contents( '.deployignore', 'vip' === $hosting_provider ? "client-mu-plugins\n" : "mu-plugins\n", FILE_APPEND );
 
 	write( 'Removing pantheon-systems/pantheon-mu-plugin from project\'s composer.json...' );
 
