@@ -1,0 +1,48 @@
+name: Deploy to Pantheon
+
+on:
+  push:
+    branches:
+      - production
+      - preprod
+      - develop
+
+jobs:
+  build-and-sync:
+    runs-on: ubuntu-latest
+    name: "Build and Deploy to Pantheon"
+    timeout-minutes: 10
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Perform any build steps here. You can leverage the actions provided by Alley.
+    # eg.  just installing dependencies here, not running tests.
+    # - name: Install composer dependencies
+    #   uses: alleyinteractive/action-test-php@develop
+    #   with:
+    #     php-version: '8.2'
+    #     audit-skip: true
+    #     install-command: composer update --no-interaction --no-progress && composer dump-autoload
+    #     test-skip: true
+    #     github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN }}
+
+    - name: Deploy to Pantheon
+      uses: alleyinteractive/action-deploy-to-pantheon@develop
+      with:
+        base_directory: './'
+        destination_directory: 'wp-content/'
+        exclude_list: '.git, .github, .gitmodules, .pantheon, node_modules'
+        pantheon_env_name: ${{ github.ref_name }}
+        pantheon_machine_token: ${{ secrets.PANTHEON_MACHINE_TOKEN }}
+        pantheon_site_id: ${{ secrets.PANTHEON_SITE_ID }}
+        pantheon_site: ${{ secrets.PANTHEON_SITE }}
+        ssh-key: ${{ secrets.REMOTE_REPO_SSH_KEY }}
+        autopromote: 'true'
+
+    - name: Notify Slack
+      if: always()
+      uses: alleyinteractive/action-notify-slack@develop
+      with:
+        status: ${{ job.status }}
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
