@@ -33,8 +33,8 @@ if ( 0 === strpos( strtoupper( PHP_OS ), 'WIN' ) ) {
 	echo "This script may not work in Windows. 🪟\n";
 }
 
-if ( version_compare( PHP_VERSION, '8.2.0', '<' ) ) {
-	die( 'PHP 8.2.0 or greater is required.' );
+if ( version_compare( PHP_VERSION, '8.3.0', '<' ) ) {
+	die( 'PHP 8.3.0 or greater is required.' );
 }
 
 // Parse the command line arguments from $argv.
