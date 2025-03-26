@@ -21,7 +21,7 @@ jobs:
     # - name: Install composer dependencies
     #   uses: alleyinteractive/action-test-php@develop
     #   with:
-    #     php-version: '8.2'
+    #     php-version: '8.3'
     #     audit-skip: true
     #     install-command: composer update --no-interaction --no-progress && composer dump-autoload
     #     test-skip: true
