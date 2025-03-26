@@ -149,6 +149,31 @@ function replace_in_file( string $file, array $replacements ): void {
 	);
 }
 
+/**
+ * Replace a section of a file, including the start and end delimeters and trailing whitespace.
+ *
+ * @param string $file    Filename.
+ * @param string $start   Start string included in replacement.
+ * @param string $end     End string included in replacement.
+ * @param string $replace String to replace content with.
+ */
+function replace_section_in_file( string $file, string $start, string $end, string $replace = '' ) {
+	$contents = file_get_contents( $file );
+
+	if ( empty( $contents ) ) {
+		return;
+	}
+
+	$start  = preg_quote( $start, '/' );
+	$end    = preg_quote( $end, '/' );
+	$regex  = '/' . $start . '.*?' . $end . '\s*/s';
+	$result = preg_replace( $regex, $replace, $contents );
+
+	if ( $result !== $contents ) {
+		file_put_contents( $file, $result );
+	}
+}
+
 function remove_readme_paragraphs( string $file ): void {
 	$contents = file_get_contents( $file );
 
@@ -794,6 +819,9 @@ delete_files(
 		"composer-templates",
 	]
 );
+
+// Clean up .gitignore.
+replace_section_in_file( '.gitignore', '# BEGIN DELETE AFTER INSTALL #', '# END DELETE AFTER INSTALL #' );
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
 	delete_files(
