@@ -97,9 +97,9 @@ export default function Edit({
           <ServerSideRender block="create-wordpress-plugin/theme-navigation" attributes={{ menuLocation }} />
         ) : (
           <Placeholder
-            icon={ menu }
-            label={ __('Theme Navigation', 'create-wordpress-plugin') }
-            instructions={ __('Please select a menu location.', 'create-wordpress-plugin') }
+            icon={menu}
+            label={__('Theme Navigation', 'create-wordpress-plugin')}
+            instructions={__('Please select a menu location.', 'create-wordpress-plugin')}
           />
         )
       }
