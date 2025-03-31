@@ -526,6 +526,12 @@ if ( ! empty( $plugin_slug ) ) {
 
 	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
 
+	// Create a .eslintignore file and ignore the "build/" directory.
+	file_put_contents(
+		"{$current_dir}/plugins/{$plugin_slug}/.eslintignore", 
+		"build/\n"
+	);
+
 	// Move the contents of each subfolder in plugin-templates to the plugin folder.
 	$templates = list_subfolders( 'plugin-templates' ) ?: [];
 	foreach( $templates as $template ) {
@@ -548,6 +554,13 @@ if ( ! empty( $theme_slug ) ) {
 		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug}",
 		$current_dir,
 	);
+
+	// Create a .eslintignore file and ignore the "build/" directory.
+	file_put_contents(
+		"{$current_dir}/themes/{$theme_slug}/.eslintignore", 
+		"build/\n"
+	);
+
 	run(
 		"wp theme activate {$theme_slug}",
 		$current_dir,
