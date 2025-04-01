@@ -1,5 +1,10 @@
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, Placeholder, SelectControl, Spinner } from '@wordpress/components';
+import {
+  PanelBody,
+  Placeholder,
+  SelectControl,
+  Spinner,
+} from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { menu } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
@@ -77,9 +82,9 @@ export default function Edit({
     return (
       <div {...blockProps}>
         <Placeholder
-          icon={ menu }
-          label={ __('Theme Navigation', 'create-wordpress-plugin') }
-          instructions={ __('Please register menu locations.', 'create-wordpress-plugin') }
+          icon={menu}
+          label={__('Theme Navigation', 'create-wordpress-plugin')}
+          instructions={__('Please register menu locations.', 'create-wordpress-plugin')}
         />
       </div>
     );
@@ -92,9 +97,9 @@ export default function Edit({
           <ServerSideRender block="create-wordpress-plugin/theme-navigation" attributes={{ menuLocation }} />
         ) : (
           <Placeholder
-            icon={ menu }
-            label={ __('Theme Navigation', 'create-wordpress-plugin') }
-            instructions={ __('Please select a menu location.', 'create-wordpress-plugin') }
+            icon={menu}
+            label={__('Theme Navigation', 'create-wordpress-plugin')}
+            instructions={__('Please select a menu location.', 'create-wordpress-plugin')}
           />
         )
       }
