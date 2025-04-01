@@ -544,6 +544,12 @@ if ( ! empty( $plugin_slug ) ) {
 	$features = file_get_contents( 'plugin-templates/features.txt' );
 	replace_in_file( "plugins/{$plugin_slug}/src/main.php", [ '	// Add features here.' => $features ] );
 
+	// Create a .eslintignore file and ignore the "build/" directory.
+	file_put_contents(
+		"{$current_dir}/plugins/{$plugin_slug}/.eslintignore",
+		"build/\n"
+	);
+
 	// Create a .stylelintignore file and ignore the "build/" directory.
 	file_put_contents(
 		"{$current_dir}/plugins/{$plugin_slug}/.stylelintignore", 
