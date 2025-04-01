@@ -649,8 +649,8 @@ if ( 'vip' === $hosting_provider ) {
 	);
 
 	write( 'Moving mu-plugins to client-mu-plugins...' );
-
 	run( 'mv mu-plugins client-mu-plugins' );
+	run( 'composer config vendor-dir client-mu-plugins/vendor' );
 
 	write( 'Ignoring mu-plugins with .gitignore/.deployignore...' );
 
@@ -661,9 +661,6 @@ if ( 'vip' === $hosting_provider ) {
 
 	run( 'composer remove pantheon-systems/pantheon-mu-plugin' );
 	delete_files( 'client-mu-plugins/pantheon-mu-plugin' );
-
-	write( 'Adding VIP composer configuration...' );
-	run( 'composer config vendor-dir client-mu-plugins/vendor' );
 
 	replace_in_file(
 		'phpstan.neon',
