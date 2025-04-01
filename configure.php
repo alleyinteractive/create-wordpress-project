@@ -520,7 +520,7 @@ if ( ! empty( $plugin_slug ) ) {
 	write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
 
 	run(
-		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug}",
+		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install",
 		$current_dir,
 	);
 
@@ -528,7 +528,7 @@ if ( ! empty( $plugin_slug ) ) {
 
 	// Create a .eslintignore file and ignore the "build/" directory.
 	file_put_contents(
-		"{$current_dir}/plugins/{$plugin_slug}/.eslintignore", 
+		"{$current_dir}/plugins/{$plugin_slug}/.eslintignore",
 		"build/\n"
 	);
 
@@ -552,7 +552,7 @@ if ( ! empty( $plugin_slug ) ) {
 
 	// Create a .stylelintignore file and ignore the "build/" directory.
 	file_put_contents(
-		"{$current_dir}/plugins/{$plugin_slug}/.stylelintignore", 
+		"{$current_dir}/plugins/{$plugin_slug}/.stylelintignore",
 		"build/\n"
 	);
 
@@ -563,7 +563,7 @@ if ( ! empty( $theme_slug ) ) {
 	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
 
 	run(
-		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug}",
+		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug} --no-install",
 		$current_dir,
 	);
 
@@ -622,27 +622,6 @@ delete_files(
 
 echo "Done!\n\n";
 
-if ( confirm( 'Will this project be using GitHub Actions?', true ) ) {
-	echo "Deleting Buddy CI files...\n";
-
-	delete_files(
-		[
-			'.buddy',
-			'buddy.yml',
-		]
-	);
-
-	echo "Done!\n\n";
-} elseif ( confirm( 'Will this project be using Buddy CI?', true ) ) {
-	echo "Deleting GitHub Actions workflows...\n";
-
-	delete_files( '.github/workflows' );
-
-	echo "Done!\n\n";
-} else {
-	write( 'Leaving GitHub Action workflows and Buddy CI files in place.' );
-}
-
 $hosting_provider = null;
 
 // Determine the hosting provider we'll be using.
@@ -658,13 +637,6 @@ if ( 'vip' === $hosting_provider ) {
 		question: 'VIP Repository Name?',
 		default: $project_name_slug,
 		allow_empty: false,
-	);
-
-	replace_in_file(
-		'.buddy/push-to-vip.yml',
-		[
-			'vip-repo-name' => $vip_repo_name,
-		],
 	);
 
 	write( 'Deleting Pantheon-specific GitHub Action workflows...' );
@@ -692,13 +664,6 @@ if ( 'vip' === $hosting_provider ) {
 
 	write( 'Adding VIP composer configuration...' );
 	run( 'composer config vendor-dir client-mu-plugins/vendor' );
-
-	replace_in_file(
-		'client-mu-plugins/001-composer.php',
-		[
-			'/vendor/autoload.php' => '/client-mu-plugins/vendor/autoload.php',
-		],
-	);
 
 	replace_in_file(
 		'phpstan.neon',
