@@ -9,7 +9,6 @@
   },
   {
     "name": "Elasticsearch Extensions",
-    "repo": "https://github.com/alleyinteractive/elasticsearch-extensions",
     "path": "alleyinteractive/elasticsearch-extensions"
   },
   {
@@ -18,7 +17,6 @@
   },
   {
     "name": "MSM Sitemap",
-    "repo": "https://github.com/Automattic/msm-sitemap",
     "path": "Automattic/msm-sitemap"
   },
   {
@@ -31,12 +29,10 @@
   },
   {
     "name": "WP Curate",
-    "repo": "https://github.com/alleyinteractive/wp-curate",
     "path": "alleyinteractive/wp-curate"
   },
   {
     "name": "WP New Relic Transactions",
-    "repo": "https://github.com/alleyinteractive/wp-new-relic-transactions",
     "path": "alleyinteractive/wp-new-relic-transactions"
   },
   {

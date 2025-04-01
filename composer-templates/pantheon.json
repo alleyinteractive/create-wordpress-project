@@ -13,12 +13,10 @@
   },
   {
     "name": "SearchPress",
-    "repo": "https://github.com/alleyinteractive/searchpress",
     "path": "alleyinteractive/searchpress"
   },
   {
     "name": "SearchPress Debug Bar",
-    "repo": "https://github.com/alleyinteractive/debug-bar-searchpress",
     "path": "alleyinteractive/debug-bar-searchpress"
   },
   {
