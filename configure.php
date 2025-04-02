@@ -295,6 +295,26 @@ function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins )
 	}
 }
 
+/**
+ * A helper function to remove certain keys from package.json files in the plugin and theme.
+ *
+ * @param string $file The absolute path to the package.json file to be modified.
+ */
+function truncate_package_json( string $file ): void {
+	$json = json_decode( file_get_contents( $file ), true );
+
+	unset( $json['dependencies'] );
+	unset( $json['devDependencies'] );
+	unset( $json['engines'] );
+	unset( $json['scripts']['check-types'] );
+	unset( $json['scripts']['packages-update'] );
+	unset( $json['scripts']['postinstall'] );
+	unset( $json['scripts']['release'] );
+	unset( $json['scripts']['test'] );
+
+	file_put_contents( $file, json_encode( $json, JSON_PRETTY_PRINT ) );
+}
+
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
 
 $current_dir = getcwd();
@@ -528,7 +548,7 @@ if ( ! empty( $plugin_slug ) ) {
 
 	// Create a .eslintignore file and ignore the "build/" directory.
 	file_put_contents(
-		"{$current_dir}/plugins/{$plugin_slug}/.eslintignore", 
+		"{$current_dir}/plugins/{$plugin_slug}/.eslintignore",
 		"build/\n"
 	);
 
@@ -552,9 +572,12 @@ if ( ! empty( $plugin_slug ) ) {
 
 	// Create a .stylelintignore file and ignore the "build/" directory.
 	file_put_contents(
-		"{$current_dir}/plugins/{$plugin_slug}/.stylelintignore", 
+		"{$current_dir}/plugins/{$plugin_slug}/.stylelintignore",
 		"build/\n"
 	);
+
+	// Make changes to the package.json that ships with the plugin.
+	truncate_package_json( "{$current_dir}/plugins/{$plugin_slug}/package.json" );
 
 	echo "Done!\n\n";
 }
@@ -578,6 +601,9 @@ if ( ! empty( $theme_slug ) ) {
 		"{$current_dir}/themes/{$theme_slug}/.stylelintignore",
 		"build/\n"
 	);
+
+	// Make changes to the package.json that ships with the theme.
+	truncate_package_json( "{$current_dir}/themes/{$theme_slug}/package.json" );
 
 	run(
 		"wp theme activate {$theme_slug}",
