@@ -10,7 +10,7 @@
  * @package create-wordpress-project
  */
 
-$composer_autoloader_path = dirname( __DIR__ ) . '/vendor/autoload.php';
+$composer_autoloader_path = __DIR__ . '/vendor/autoload.php';
 
 // Display a friendly error message if Composer is not installed locally.
 if ( 'local' === wp_get_environment_type() ) {
