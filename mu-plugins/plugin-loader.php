@@ -14,7 +14,7 @@ require_once __DIR__ . '/pantheon-mu-plugin/pantheon.php';
  * Returns a list of plugin main file paths (under the plugins directory) to
  * load via code in local environment only.
  *
- * @return array
+ * @return array<int, string>
  */
 function create_wordpress_project_local_plugins(): array {
 	if ( wp_get_environment_type() !== 'local' ) {
@@ -29,7 +29,7 @@ function create_wordpress_project_local_plugins(): array {
 /**
  * Returns a list of plugin main file paths (under the plugins directory) to load via code.
  *
- * @return string[]
+ * @return array<int, string>
  */
 function create_wordpress_project_core_plugins(): array {
 	return array_merge(

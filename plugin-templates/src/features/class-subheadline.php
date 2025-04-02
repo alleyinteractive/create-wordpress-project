@@ -9,7 +9,7 @@ namespace Create_WordPress_Plugin\Features;
 
 use Alley\WP\Types\Feature;
 
-use function Create_WordPress_Plugin\register_meta_helper; // @phpstan-ignore-line
+use function Create_WordPress_Plugin\register_meta_helper;
 
 /**
  * Feature: Adds support for subheadlines.
@@ -42,7 +42,7 @@ final class Subheadline implements Feature {
 			}
 		}
 
-		register_meta_helper( // @phpstan-ignore-line
+		register_meta_helper(
 			'post',
 			get_post_types_by_support( 'subheadline' ),
 			'create_wordpress_plugin_subheadline',
