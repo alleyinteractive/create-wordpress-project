@@ -666,14 +666,14 @@ if ( 'vip' === $hosting_provider ) {
 	);
 
 	replace_in_file(
-		'ci-templates/.github/workflows/copy-to-vip.yml',
+		'.github/workflows/copy-to-vip.yml',
 		[
 			'VIP_REPO_SLUG' => $vip_repo_name,
 		],
 	);
 
 	replace_in_file(
-		'ci-templates/.github/workflows/deploy-to-vip-built-branch.yml',
+		'.github/workflows/deploy-to-vip-built-branch.yml',
 		[
 			'VIP_REPO_SLUG' => $vip_repo_name,
 		],
