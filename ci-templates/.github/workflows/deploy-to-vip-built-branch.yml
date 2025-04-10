@@ -1,0 +1,51 @@
+name: Deploy to WordPress VIP -built Branch
+
+on:
+  push:
+    branches:
+      - production
+      - preprod
+      - develop
+
+jobs:
+  build-and-sync:
+    if: github.repository == 'wpcomvip/VIP_REPO_SLUG'
+    runs-on: ubuntu-latest
+    name: "Build and Deploy on VIP"
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install composer dependencies
+        uses: alleyinteractive/action-test-php@v1
+        with:
+          install-command: 'composer install --no-dev --prefer-dist --no-interaction --no-progress'
+          php-version: '8.3'
+          skip-audit: 'true'
+          skip-services: 'true'
+          skip-test: 'true'
+          skip-wordpress-install: 'true'
+
+      - name: Build
+        uses: alleyinteractive/action-test-node@v1
+        with:
+          node-version: '22'
+          skip-audit: 'true'
+          skip-test: 'true'
+
+      - name: Deploy to -built Branch
+        uses: alleyinteractive/action-deploy-to-remote-repository@v3
+        with:
+          remote_repo: 'git@github.com:wpcomvip/VIP_REPO_SLUG.git'
+          remote_branch: ${{ github.ref_name }}-built
+          remote_branch_is_orphan: 'true'
+          exclude_list: '.git, .turbo, node_modules'
+          ssh-key: ${{ secrets.REMOTE_REPO_SSH_KEY }}
+
+      - name: Notify Slack
+        if: always()
+        uses: alleyinteractive/action-notify-slack@develop
+        with:
+          status: ${{ job.status }}
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}

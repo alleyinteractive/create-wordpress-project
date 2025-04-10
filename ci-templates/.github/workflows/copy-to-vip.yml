@@ -1,0 +1,33 @@
+name: Copy Branch to VIP Repository
+
+on:
+  push:
+    branches:
+      - production
+      - preprod
+      - develop
+
+jobs:
+  build-and-sync:
+    if: github.repository == 'alleyinteractive/create-wordpress-project'
+    runs-on: ubuntu-latest
+    name: "Copy Branch to VIP Repository"
+    timeout-minutes: 1
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Sync to wpcomvip repo
+      uses: alleyinteractive/action-deploy-to-remote-repository@v3
+      with:
+        deployignore: 'false'
+        exclude_list: '.git, .gitmodules, node_modules, no-vip'
+        remote_repo: 'git@github.com:wpcomvip/VIP_REPO_SLUG.git'
+        ssh-key: ${{ secrets.REMOTE_REPO_SSH_KEY }}
+
+    - name: Notify Slack
+      if: always()
+      uses: alleyinteractive/action-notify-slack@develop
+      with:
+        status: ${{ job.status }}
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
