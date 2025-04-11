@@ -665,6 +665,20 @@ if ( 'vip' === $hosting_provider ) {
 		allow_empty: false,
 	);
 
+	replace_in_file(
+		'.github/workflows/copy-to-vip.yml',
+		[
+			'VIP_REPO_SLUG' => $vip_repo_name,
+		],
+	);
+
+	replace_in_file(
+		'.github/workflows/deploy-to-vip-built-branch.yml',
+		[
+			'VIP_REPO_SLUG' => $vip_repo_name,
+		],
+	);
+
 	write( 'Deleting Pantheon-specific GitHub Action workflows...' );
 
 	delete_files(
@@ -733,8 +747,8 @@ if ( 'vip' === $hosting_provider ) {
 
 	delete_files(
 		[
-			'.github/workflows/deploy-to-vip.yml',
-			'.circleci',
+			'.github/workflows/copy-to-vip.yml',
+			'.github/workflows/deploy-to-vip-built-branch.yml',
 		]
 	);
 

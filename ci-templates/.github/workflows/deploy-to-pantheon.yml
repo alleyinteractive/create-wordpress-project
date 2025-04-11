@@ -16,19 +16,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # Perform any build steps here. You can leverage the actions provided by Alley.
-    # eg.  just installing dependencies here, not running tests.
-    # - name: Install composer dependencies
-    #   uses: alleyinteractive/action-test-php@develop
-    #   with:
-    #     php-version: '8.3'
-    #     audit-skip: true
-    #     install-command: composer update --no-interaction --no-progress && composer dump-autoload
-    #     test-skip: true
-    #     github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN }}
+    - name: Install composer dependencies
+      uses: alleyinteractive/action-test-php@v1
+      with:
+        install-command: 'composer install --no-dev --prefer-dist --no-interaction --no-progress'
+        php-version: '8.3'
+        skip-audit: 'true'
+        skip-services: 'true'
+        skip-test: 'true'
+        skip-wordpress-install: 'true'
+
+    - name: Build
+      uses: alleyinteractive/action-test-node@v1
+      with:
+        node-version: '22'
+        skip-audit: 'true'
+        skip-test: 'true'
 
     - name: Deploy to Pantheon
-      uses: alleyinteractive/action-deploy-to-pantheon@develop
+      uses: alleyinteractive/action-deploy-to-pantheon@v2
       with:
         base_directory: './'
         destination_directory: 'wp-content/'
