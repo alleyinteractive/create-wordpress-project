@@ -397,6 +397,8 @@ if ( is_dir( "plugins/{$plugin_slug}" ) ) {
 	exit( 1 );
 }
 
+$mantle = confirm( 'Should this be a Mantle plugin?', false );
+
 $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
 $year			  = date( 'Y' );
 
@@ -445,9 +447,11 @@ if ( ! empty( $theme_slug ) ) {
 if ( ! empty( $slack_channel_id ) ) {
 	write( "Slack Channel ID : {$slack_channel_id}" );
 }
+
 if ( ! empty( $slack_channel_name ) ) {
 	write( "Slack Channel Name : {$slack_channel_name}" );
 }
+
 write( '------' );
 
 write( 'This script will replace the above values in all relevant files in the project directory.' );
@@ -537,14 +541,25 @@ run(
 );
 
 if ( ! empty( $plugin_slug ) ) {
-	write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
+	if ( $mantle ) {
+		write( "Scaffolding mantle to plugins/{$plugin_slug}..." );
 
-	run(
-		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
-		$current_dir,
-	);
+		run(
+			"composer create-project alleyinteractive/mantle plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
+			$current_dir,
+		);
 
-	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+		run( "mv plugins/{$plugin_slug}/mantle.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+	} else {
+		write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
+
+		run(
+			"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
+			$current_dir,
+		);
+
+		run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+	}
 
 	// Create a .eslintignore file and ignore the "build/" directory.
 	file_put_contents(
