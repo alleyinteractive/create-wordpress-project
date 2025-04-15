@@ -150,7 +150,7 @@ function replace_in_file( string $file, array $replacements ): void {
 }
 
 /**
- * Replace a section of a file, including the start and end delimeters and trailing whitespace.
+ * Replace a section of a file, including the start and end delimiters and trailing whitespace.
  *
  * @param string $file    Filename.
  * @param string $start   Start string included in replacement.
@@ -540,7 +540,7 @@ if ( ! empty( $plugin_slug ) ) {
 	write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
 
 	run(
-		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install",
+		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
 		$current_dir,
 	);
 
@@ -586,7 +586,7 @@ if ( ! empty( $theme_slug ) ) {
 	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
 
 	run(
-		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug} --no-install",
+		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug} --no-install --prefer-source --remove-vcs",
 		$current_dir,
 	);
 
