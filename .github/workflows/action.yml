@@ -4,7 +4,7 @@ on:
   # Check on PR to develop branch.
   pull_request:
     branches:
-      - develop
+      - production
     types: [opened, synchronize, reopened, ready_for_review]
   # Also check on weekly schedule to catch regressions early.
   schedule:
