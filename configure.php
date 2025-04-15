@@ -542,14 +542,32 @@ run(
 
 if ( ! empty( $plugin_slug ) ) {
 	if ( $mantle ) {
-		write( "Scaffolding mantle to plugins/{$plugin_slug}..." );
+		// Download the latest Mantle PHAR from the
+		// alleyinteractive/mantle-installer releases and use it.
+		$latest_release = json_decode(
+			run( 'curl -s https://api.github.com/repos/alleyinteractive/mantle-installer/releases/latest' ),
+			true,
+		);
+
+		if ( empty( $latest_release['assets'][0]['browser_download_url'] ) ) {
+			echo '🚨 No mantle-installer.phar found on latest release. Exiting...';
+			exit( 1 );
+		}
+
+		write( "Scaffolding mantle to plugins/{$plugin_slug} via alleyinteractive/mantle-installer..." );
+
+		run( "curl -sL {$latest_release['assets'][0]['browser_download_url']} -o mantle-installer.phar && chmod +x mantle-installer.phar" );
+		run( "php mantle-installer.phar new {$plugin_slug} && rm mantle-installer.phar" );
+
 
 		run(
 			"composer create-project alleyinteractive/mantle plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
 			$current_dir,
 		);
 
-		run( "mv plugins/{$plugin_slug}/mantle.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+		if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/mantle.php" ) ) {
+			run( "mv plugins/{$plugin_slug}/mantle.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+		}
 	} else {
 		write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
 
