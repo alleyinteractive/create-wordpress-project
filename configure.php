@@ -568,12 +568,13 @@ if ( ! empty( $plugin_slug ) ) {
 	);
 
 	// Move the contents of each subfolder in plugin-templates to the plugin folder.
-	$templates = list_subfolders( 'plugin-templates' ) ?: [];
-	foreach( $templates as $template ) {
-		$folder = explode( '/', $template )[1];
-		run( "mkdir -p plugins/{$plugin_slug}/{$folder}/" );
-		run( "cp -R {$template}/* plugins/{$plugin_slug}/{$folder}/" );
-	}
+	run( "rsync -a plugin-templates/ plugins/{$plugin_slug}/" );
+	// $templates = list_subfolders( 'plugin-templates' ) ?: [];
+	// foreach( $templates as $template ) {
+	// 	$folder = explode( '/', $template )[1];
+	// 	run( "mkdir -p plugins/{$plugin_slug}/{$folder}/" );
+	// 	run( "cp -R {$template}/* plugins/{$plugin_slug}/{$folder}/" );
+	// }
 
 	// Copy the initial features from features.txt into the plugin main file.
 	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/src/main.php" ) ) {
