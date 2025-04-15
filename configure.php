@@ -569,12 +569,6 @@ if ( ! empty( $plugin_slug ) ) {
 
 	// Move the contents of each subfolder in plugin-templates to the plugin folder.
 	run( "rsync -a plugin-templates/ plugins/{$plugin_slug}/" );
-	// $templates = list_subfolders( 'plugin-templates' ) ?: [];
-	// foreach( $templates as $template ) {
-	// 	$folder = explode( '/', $template )[1];
-	// 	run( "mkdir -p plugins/{$plugin_slug}/{$folder}/" );
-	// 	run( "cp -R {$template}/* plugins/{$plugin_slug}/{$folder}/" );
-	// }
 
 	// Copy the initial features from features.txt into the plugin main file.
 	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/src/main.php" ) ) {
@@ -866,22 +860,13 @@ replace_in_file(
 );
 
 // Delete the composer-templates directory.
-delete_files(
-	[
-		"composer-templates",
-	]
-);
+delete_files( [ 'composer-templates' ] );
 
 // Clean up .gitignore.
 replace_section_in_file( '.gitignore', '# BEGIN DELETE AFTER INSTALL #', '# END DELETE AFTER INSTALL #' );
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
-	delete_files(
-		[
-			'Makefile',
-			__FILE__,
-		]
-	);
+	delete_files( [ 'Makefile', __FILE__ ] );
 }
 
 echo "\n\nWe're done! 🎉\n\n";
