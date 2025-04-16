@@ -312,6 +312,82 @@ function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins )
 }
 
 /**
+ * Extract package.json dependencies and dev dependencies before truncating.
+ *
+ * @param string $file The absolute path to the package.json file to be modified.
+ * @return array Extracted dependencies.
+ */
+function extract_dependencies_from_package_json( string $file ): array {
+	$json = json_decode( file_get_contents( $file ), true );
+	
+	$extracted = [
+		'dependencies' => $json['dependencies'] ?? [],
+		'devDependencies' => $json['devDependencies'] ?? [],
+		'engines' => $json['engines'] ?? null,
+	];
+	
+	return $extracted;
+}
+
+/**
+ * Merge extracted dependencies into the root package.json
+ *
+ * @param array $all_dependencies Array of extracted dependencies to merge.
+ */
+function merge_dependencies_to_root_package_json( array $all_dependencies ): void {
+	$root_package_path = getcwd() . '/package.json';
+	$root_package = json_decode( file_get_contents( $root_package_path ), true );
+	
+	// Merge dependencies
+	$dependencies = [];
+	$devDependencies = [];
+	$engines = null;
+	
+	foreach ( $all_dependencies as $extracted ) {
+		// Merge regular dependencies
+		foreach ( $extracted['dependencies'] as $name => $version ) {
+			$dependencies[$name] = $version;
+		}
+		
+		// Merge dev dependencies
+		foreach ( $extracted['devDependencies'] as $name => $version ) {
+			$devDependencies[$name] = $version;
+		}
+		
+		// Use the latest engines specification if available
+		if ( $extracted['engines'] ) {
+			$engines = $extracted['engines'];
+		}
+	}
+	
+	// Remove duplicates between dependencies and devDependencies
+	foreach ( $dependencies as $name => $version ) {
+		if ( isset( $devDependencies[$name] ) ) {
+			// Keep the higher version
+			if ( version_compare( preg_replace('/[^0-9.]/', '', $version), preg_replace('/[^0-9.]/', '', $devDependencies[$name]), '>=' ) ) {
+				unset( $devDependencies[$name] );
+			} else {
+				unset( $dependencies[$name] );
+			}
+		}
+	}
+	
+	// Update the root package.json
+	$root_package['dependencies'] = array_merge( $root_package['dependencies'] ?? [], $dependencies );
+	$root_package['devDependencies'] = array_merge( $root_package['devDependencies'] ?? [], $devDependencies );
+	
+	if ( $engines ) {
+		$root_package['engines'] = $engines;
+	}
+	
+	// Sort dependencies alphabetically
+	ksort( $root_package['dependencies'] );
+	ksort( $root_package['devDependencies'] );
+	
+	file_put_contents( $root_package_path, json_encode( $root_package, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
+}
+
+/**
  * A helper function to remove certain keys from package.json files in the plugin and theme.
  *
  * @param string $file The absolute path to the package.json file to be modified.
@@ -613,6 +689,13 @@ if ( ! empty( $plugin_slug ) ) {
 		"build/\n"
 	);
 
+	// Extract dependencies from the plugin's package.json before truncating
+	$all_dependencies = $all_dependencies ?? [];
+	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/package.json" ) ) {
+		write( "Extracting dependencies from plugin's package.json..." );
+		$all_dependencies[] = extract_dependencies_from_package_json( "{$current_dir}/plugins/{$plugin_slug}/package.json" );
+	}
+
 	// Make changes to the package.json that ships with the plugin.
 	truncate_package_json( "{$current_dir}/plugins/{$plugin_slug}/package.json" );
 
@@ -640,6 +723,12 @@ if ( ! empty( $theme_slug ) ) {
 		"build/\n"
 	);
 
+	// Extract dependencies from the theme's package.json before truncating
+	if ( file_exists( "{$current_dir}/themes/{$theme_slug}/package.json" ) ) {
+		write( "Extracting dependencies from theme's package.json..." );
+		$all_dependencies[] = extract_dependencies_from_package_json( "{$current_dir}/themes/{$theme_slug}/package.json" );
+	}
+
 	// Make changes to the package.json that ships with the theme.
 	truncate_package_json( "{$current_dir}/themes/{$theme_slug}/package.json" );
 
@@ -647,6 +736,12 @@ if ( ! empty( $theme_slug ) ) {
 		"wp theme activate {$theme_slug}",
 		$current_dir,
 	);
+}
+
+// Merge all extracted dependencies into the root package.json
+if ( !empty( $all_dependencies ) ) {
+	write( "Merging extracted dependencies to root package.json..." );
+	merge_dependencies_to_root_package_json( $all_dependencies );
 }
 
 foreach ( list_all_files_for_replacement() as $path ) {
