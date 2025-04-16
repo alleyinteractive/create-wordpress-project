@@ -536,14 +536,13 @@ if ( ! empty( $slack_channel_name ) ) {
 run(
 	'composer config extra.wordpress-autoloader.autoload --json \'' . json_encode( [
 		$plugin_namespace => "plugins/{$plugin_slug}/src",
-		// $theme_namespace  => "themes/{$theme_slug}/src",
+		$theme_namespace  => "themes/{$theme_slug}/src",
 	] ) . '\'',
 );
 
 if ( ! empty( $plugin_slug ) ) {
 	if ( $mantle ) {
-		// Download the latest Mantle PHAR from the
-		// alleyinteractive/mantle-installer releases and use it.
+		// Download the latest Mantle PHAR from alleyinteractive/mantle-installer releases and use it.
 		$latest_release = json_decode(
 			run( 'curl -s https://api.github.com/repos/alleyinteractive/mantle-installer/releases/latest' ),
 			true,
@@ -663,7 +662,8 @@ delete_files(
 		"themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
-		"plugin-templates",
+		'plugin-templates',
+		'.github/workflows/action.yml',
 	]
 );
 
