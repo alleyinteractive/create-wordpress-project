@@ -100,18 +100,23 @@ function confirm( string $question, bool $default = false ): bool {
 	return in_array( strtolower( trim( $answer ) ), [ 'y', 'yes', 'true', '1' ], true );
 }
 
-function run( string $command, ?string $dir = null ): string {
+function run( string $command, ?string $dir = null, bool $exit_on_error = false ): string {
 	$command = $dir ? "cd {$dir} && {$command}" : $command;
 
 	$result_code = null;
 	$output      = [];
 
-	if ( ! exec( $command, $output, $result_code ) ) {
+	exec( $command, $output, $result_code );
+
+	if ( 0 !== $result_code ) {
 		echo "Command failed: {$command}\n";
 		echo "Exit code: {$result_code}\n";
 		echo "Output:\n";
 		echo implode( PHP_EOL, $output ) . PHP_EOL;
-		exit( 1 );
+
+		if ( $exit_on_error ) {
+			exit( 1 );
+		}
 	}
 
 	return trim( implode( PHP_EOL, $output ) );
@@ -574,6 +579,7 @@ if ( ! empty( $plugin_slug ) ) {
 		run(
 			"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
 			$current_dir,
+			true,
 		);
 
 		run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
@@ -619,6 +625,7 @@ if ( ! empty( $theme_slug ) ) {
 	run(
 		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug} --no-install --prefer-source --remove-vcs",
 		$current_dir,
+		true,
 	);
 
 	// Create a .eslintignore file and ignore the "build/" directory.
