@@ -103,7 +103,18 @@ function confirm( string $question, bool $default = false ): bool {
 function run( string $command, ?string $dir = null ): string {
 	$command = $dir ? "cd {$dir} && {$command}" : $command;
 
-	return trim( (string) shell_exec( $command ) );
+	$result_code = null;
+	$output      = [];
+
+	if ( ! exec( $command, $output, $result_code ) ) {
+		echo "Command failed: {$command}\n";
+		echo "Exit code: {$result_code}\n";
+		echo "Output:\n";
+		echo implode( PHP_EOL, $output ) . PHP_EOL;
+		exit( 1 );
+	}
+
+	return trim( implode( PHP_EOL, $output ) );
 }
 
 function str_after( string $subject, string $search ): string {
