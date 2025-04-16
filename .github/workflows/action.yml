@@ -1,5 +1,7 @@
 name: General Tests
 
+# Tests to be performed on the create-wordpress-project template repository.
+# This workflow will be deleted upon configuration.
 on:
   # Check on PR to develop branch.
   pull_request:
@@ -31,5 +33,3 @@ jobs:
           install-command: |
             composer install
             (yes '' || true) | php ./configure.php --project_name=Testing --author_name=Testing --author_email=testing@alley.com
-          test-command: |
-            composer test
