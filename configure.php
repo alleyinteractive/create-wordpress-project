@@ -100,10 +100,26 @@ function confirm( string $question, bool $default = false ): bool {
 	return in_array( strtolower( trim( $answer ) ), [ 'y', 'yes', 'true', '1' ], true );
 }
 
-function run( string $command, ?string $dir = null ): string {
+function run( string $command, ?string $dir = null, bool $exit_on_error = false ): string {
 	$command = $dir ? "cd {$dir} && {$command}" : $command;
 
-	return trim( (string) shell_exec( $command ) );
+	$result_code = null;
+	$output      = [];
+
+	exec( $command, $output, $result_code );
+
+	if ( 0 !== $result_code ) {
+		echo "Command failed: {$command}\n";
+		echo "Exit code: {$result_code}\n";
+		echo "Output:\n";
+		echo implode( PHP_EOL, $output ) . PHP_EOL;
+
+		if ( $exit_on_error ) {
+			exit( 1 );
+		}
+	}
+
+	return trim( implode( PHP_EOL, $output ) );
 }
 
 function str_after( string $subject, string $search ): string {
@@ -150,7 +166,7 @@ function replace_in_file( string $file, array $replacements ): void {
 }
 
 /**
- * Replace a section of a file, including the start and end delimeters and trailing whitespace.
+ * Replace a section of a file, including the start and end delimiters and trailing whitespace.
  *
  * @param string $file    Filename.
  * @param string $start   Start string included in replacement.
@@ -397,6 +413,8 @@ if ( is_dir( "plugins/{$plugin_slug}" ) ) {
 	exit( 1 );
 }
 
+$mantle = confirm( 'Should this be a Mantle plugin?', false );
+
 $plugin_namespace = title_case( $plugin_slug ) . '_Plugin';
 $year			  = date( 'Y' );
 
@@ -445,9 +463,11 @@ if ( ! empty( $theme_slug ) ) {
 if ( ! empty( $slack_channel_id ) ) {
 	write( "Slack Channel ID : {$slack_channel_id}" );
 }
+
 if ( ! empty( $slack_channel_name ) ) {
 	write( "Slack Channel Name : {$slack_channel_name}" );
 }
+
 write( '------' );
 
 write( 'This script will replace the above values in all relevant files in the project directory.' );
@@ -532,19 +552,38 @@ if ( ! empty( $slack_channel_name ) ) {
 run(
 	'composer config extra.wordpress-autoloader.autoload --json \'' . json_encode( [
 		$plugin_namespace => "plugins/{$plugin_slug}/src",
-		// $theme_namespace  => "themes/{$theme_slug}/src",
+		$theme_namespace  => "themes/{$theme_slug}/src",
 	] ) . '\'',
 );
 
 if ( ! empty( $plugin_slug ) ) {
-	write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
+	if ( $mantle ) {
+		// Download the latest Mantle PHAR from alleyinteractive/mantle-installer releases and use it.
+		$latest_release = json_decode(
+			run( 'curl -s https://api.github.com/repos/alleyinteractive/mantle-installer/releases/latest' ),
+			true,
+		);
 
-	run(
-		"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install",
-		$current_dir,
-	);
+		if ( empty( $latest_release['assets'][0]['browser_download_url'] ) ) {
+			echo '🚨 No mantle-installer.phar found on latest release. Exiting...';
+			exit( 1 );
+		}
 
-	run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+		write( "Scaffolding mantle to plugins/{$plugin_slug} via alleyinteractive/mantle-installer..." );
+
+		run( "curl -sL {$latest_release['assets'][0]['browser_download_url']} -o mantle-installer.phar && chmod +x mantle-installer.phar" );
+		run( "php mantle-installer.phar new {$plugin_slug} && rm mantle-installer.phar" );
+	} else {
+		write( "Scaffolding create-wordpress-plugin to plugins/{$plugin_slug}..." );
+
+		run(
+			"composer create-project alleyinteractive/create-wordpress-plugin plugins/{$plugin_slug} --no-install --prefer-source --remove-vcs",
+			$current_dir,
+			true,
+		);
+
+		run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+	}
 
 	// Create a .eslintignore file and ignore the "build/" directory.
 	file_put_contents(
@@ -553,16 +592,14 @@ if ( ! empty( $plugin_slug ) ) {
 	);
 
 	// Move the contents of each subfolder in plugin-templates to the plugin folder.
-	$templates = list_subfolders( 'plugin-templates' ) ?: [];
-	foreach( $templates as $template ) {
-		$folder = explode( '/', $template )[1];
-		run( "mkdir -p plugins/{$plugin_slug}/{$folder}/" );
-		run( "cp -R {$template}/* plugins/{$plugin_slug}/{$folder}/" );
-	}
+	run( "rsync -a plugin-templates/ plugins/{$plugin_slug}/" );
 
 	// Copy the initial features from features.txt into the plugin main file.
-	$features = file_get_contents( 'plugin-templates/features.txt' );
-	replace_in_file( "plugins/{$plugin_slug}/src/main.php", [ '	// Add features here.' => $features ] );
+	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/src/main.php" ) ) {
+		replace_in_file( "plugins/{$plugin_slug}/src/main.php", [
+			'	// Add features here.' => file_get_contents( 'plugin-templates/features.txt' ),
+		] );
+	}
 
 	// Create a .eslintignore file and ignore the "build/" directory.
 	file_put_contents(
@@ -586,8 +623,9 @@ if ( ! empty( $theme_slug ) ) {
 	write( "Scaffolding create-wordpress-theme to themes/{$theme_slug}..." );
 
 	run(
-		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug} --no-install",
+		"composer create-project alleyinteractive/create-wordpress-theme themes/{$theme_slug} --no-install --prefer-source --remove-vcs",
 		$current_dir,
+		true,
 	);
 
 	// Create a .eslintignore file and ignore the "build/" directory.
@@ -642,7 +680,8 @@ delete_files(
 		"themes/{$theme_slug}/Makefile",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
-		"plugin-templates",
+		'plugin-templates',
+		'.github/workflows/action.yml',
 	]
 );
 
@@ -847,22 +886,13 @@ replace_in_file(
 );
 
 // Delete the composer-templates directory.
-delete_files(
-	[
-		"composer-templates",
-	]
-);
+delete_files( [ 'composer-templates' ] );
 
 // Clean up .gitignore.
 replace_section_in_file( '.gitignore', '# BEGIN DELETE AFTER INSTALL #', '# END DELETE AFTER INSTALL #' );
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
-	delete_files(
-		[
-			'Makefile',
-			__FILE__,
-		]
-	);
+	delete_files( [ 'Makefile', __FILE__ ] );
 }
 
 echo "\n\nWe're done! 🎉\n\n";
