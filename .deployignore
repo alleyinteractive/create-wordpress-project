@@ -1,3 +1,51 @@
+# Root
+.github
+.editorconfig
+.eslintrc.js
+.npmrc
+.nvmrc
+.phpcs.xml
+.stylelintrc.json
+.turbo
+composer.json
+composer.lock
+custom.d.ts
+jest.config.ts
+package.json
+package-lock.json
+phpstan.neon
+README.md
+tsconfig.json
+turbo.json
+
+# Plugin
+.scaffolder
+blocks
+config/README.md
+entries
+scaffold
+tests
+.eslintignore
+.phpcs.xml
+.stylelintignore
+babel.config.js
+jsconfig.json
+package.json
+phpunit.xml
+
+# Theme
+assets
+entries
+tests
+.eslintignore
+.phpcs.xml
+.stylelintignore
+babel.config.js
+jsconfig.json
+package.json
+phpunit.xml
+webpack.config.js
+
 # Caches
 .npm
 .phpcs.cache.json
