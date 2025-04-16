@@ -33,4 +33,6 @@ jobs:
           install-command: |
             composer install
             (yes '' || true) | php ./configure.php --project_name=Testing --author_name=Testing --author_email=testing@alley.com
-          test-command: composer validate --strict
+          test-command: |
+            composer validate --strict
+            composer test
