@@ -321,9 +321,9 @@ function extract_dependencies_from_package_json( string $file ): array {
 	$json = json_decode( file_get_contents( $file ), true );
 	
 	$extracted = [
-		'dependencies' => $json['dependencies'] ?? [],
+		'dependencies'    => $json['dependencies'] ?? [],
 		'devDependencies' => $json['devDependencies'] ?? [],
-		'engines' => $json['engines'] ?? null,
+		'engines'         => $json['engines'] ?? null,
 	];
 	
 	return $extracted;
@@ -336,12 +336,12 @@ function extract_dependencies_from_package_json( string $file ): array {
  */
 function merge_dependencies_to_root_package_json( array $all_dependencies ): void {
 	$root_package_path = getcwd() . '/package.json';
-	$root_package = json_decode( file_get_contents( $root_package_path ), true );
+	$root_package      = json_decode( file_get_contents( $root_package_path ), true );
 	
 	// Merge dependencies
-	$dependencies = [];
+	$dependencies    = [];
 	$devDependencies = [];
-	$engines = null;
+	$engines         = null;
 	
 	foreach ( $all_dependencies as $extracted ) {
 		// Merge regular dependencies
