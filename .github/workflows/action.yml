@@ -25,7 +25,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run PHP Tests in src directory
+      - name: Run General Tests
+        # See https://github.com/alleyinteractive/action-test-general for more options
+        uses: alleyinteractive/action-test-general@develop
+
+      - name: Composer install and make
         uses: alleyinteractive/action-test-php@develop
         with:
           php-version: '8.3'
@@ -33,7 +37,20 @@ jobs:
           install-command: |
             composer install
             (yes '' || true) | php ./configure.php --project_name="Create WordPress Project" --author_name=Testing --author_email=testing@alley.com
+          skip-test: true
+
+      - name: Run Node Tests
+        uses: alleyinteractive/action-test-node@develop
+        with:
+          install-command: npm install
+
+      - name: Run PHP Tests
+        uses: alleyinteractive/action-test-php@develop
+        with:
+          php-version: '8.3'
+          github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
+          skip-install: true
           test-command: |
             composer validate --strict
-            # Disabled because phpcs is flagging Alley\WP as a namespace.
+            # Disabled because phpcs is flagging Alley\WP as a namespace and phpstan fails
             # composer test
