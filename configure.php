@@ -780,6 +780,61 @@ delete_files(
 	]
 );
 
+write( 'Removing extraneous files from root...' );
+
+delete_files(
+	[
+		'CONTRIBUTING.md',
+		'CONTRIBUTORS.md',
+	]
+);
+
+write( 'Removing extraneous files from plugin...' );
+
+if ( ! empty( $plugin_slug ) ) {
+	delete_files(
+		[
+			"plugins/{$plugin_slug}/.deployignore",
+			"plugins/{$plugin_slug}/.editorconfig",
+			"plugins/{$plugin_slug}/.eslintrc.json",
+			"plugins/{$plugin_slug}/.gitattributes",
+			"plugins/{$plugin_slug}/.gitignore",
+			"plugins/{$plugin_slug}/.nvmrc",
+			"plugins/{$plugin_slug}/.stylelintrc.json",
+			"plugins/{$plugin_slug}/CHANGELOG.md",
+			"plugins/{$plugin_slug}/src/class-example-plugin.php",
+			"plugins/{$plugin_slug}/composer.json",
+			"plugins/{$plugin_slug}/jest.config.js",
+			"plugins/{$plugin_slug}/package-lock.json",
+			"plugins/{$plugin_slug}/phpstan.neon",
+			"plugins/{$plugin_slug}/tsconfig.eslint.json",
+			"plugins/{$plugin_slug}/tsconfig.json",
+		]
+	);
+}
+
+write( 'Removing extraneous files from theme...' );
+
+if ( ! empty( $theme_slug ) ) {
+	delete_files(
+		[
+			"themes/{$theme_slug}/.editorconfig",
+			"themes/{$theme_slug}/.eslintrc.json",
+			"themes/{$theme_slug}/.gitignore",
+			"themes/{$theme_slug}/.nvmrc",
+			"themes/{$theme_slug}/.stylelintrc.json",
+			"themes/{$theme_slug}/.github",
+			"themes/{$theme_slug}/CHANGELOG.md",
+			"themes/{$theme_slug}/composer.json",
+			"themes/{$theme_slug}/jest.config.js",
+			"themes/{$theme_slug}/package-lock.json",
+			"themes/{$theme_slug}/phpstan.neon",
+			"themes/{$theme_slug}/tsconfig.eslint.json",
+			"themes/{$theme_slug}/tsconfig.json",
+		]
+	);
+}
+
 echo "Done!\n\n";
 
 $hosting_provider = null;
