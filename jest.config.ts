@@ -14,24 +14,6 @@ const config: Config = {
     '**/plugins/create-wordpress-plugin/**/?(*.)+(spec|test).ts?(x)',
     '**/themes/create-wordpress-theme/**/?(*.)+(spec|test).ts?(x)',
   ],
-  transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: {
-          jsx: 'react',
-          esModuleInterop: true,
-          allowSyntheticDefaultImports: true,
-        },
-      },
-    ],
-  },
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
-  },
 };
 
 export default config;
