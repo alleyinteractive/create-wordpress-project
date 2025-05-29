@@ -33,6 +33,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "stylelint-config-sass-guidelines": "^12.1.0",
     "ts-jest": "^29.3.4",
+    "ts-node": "^10.9.2",
     "turbo": "^2.5.3",
     "typescript": "^5.8.3",
     "webpack-cli": "^5.1.4",
