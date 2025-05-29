@@ -26,7 +26,6 @@
     "@types/wordpress__edit-post": "^8.4.2",
     "@wordpress/babel-preset-default": "^8.8.2",
     "@wordpress/scripts": "^30.0.6",
-    "babel-jest": "^29.7.0",
     "eslint-import-resolver-typescript": "^3.7.0",
     "eslint-plugin-import": "^2.31.0",
     "identity-obj-proxy": "^3.0.0",
