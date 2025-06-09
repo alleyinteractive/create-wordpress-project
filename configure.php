@@ -431,9 +431,6 @@ function hoist_composer_dependencies_to_root( string $file ): void {
 	$root_composer['require'] = array_merge( $root_composer['require'] ?? [], $plugin_composer['require'] ?? [] );
 	$root_composer['require-dev'] = array_merge( $root_composer['require-dev'] ?? [], $plugin_composer['require-dev'] ?? [] );
 
-	// If the merged Composer file now requires
-	// alleyinteractive/mantle-framework we can remove all mantle-framework/*
-	// dependencies from require-dev.
 	if ( isset( $root_composer['require']['alleyinteractive/mantle-framework'] ) ) {
 		$root_composer['require-dev'] = array_filter(
 			$root_composer['require-dev'] ?? [],
@@ -445,7 +442,6 @@ function hoist_composer_dependencies_to_root( string $file ): void {
 	ksort( $root_composer['require'] );
 	ksort( $root_composer['require-dev'] );
 
-	// Sort 'php' to the top of 'require'.
 	if ( isset( $root_composer['require']['php'] ) ) {
 		$php = $root_composer['require']['php'];
 		unset( $root_composer['require']['php'] );
@@ -786,6 +782,8 @@ if ( ! empty( $theme_slug ) ) {
 	// Make changes to the package.json that ships with the theme.
 	truncate_package_json( "{$current_dir}/themes/{$theme_slug}/package.json" );
 
+	hoist_composer_dependencies_to_root( "{$current_dir}/themes/{$theme_slug}/composer.json" );
+
 	run(
 		"wp theme activate {$theme_slug}",
 		$current_dir,
@@ -793,7 +791,7 @@ if ( ! empty( $theme_slug ) ) {
 }
 
 // Merge all extracted dependencies into the root package.json
-if ( !empty( $all_dependencies ) ) {
+if ( ! empty( $all_dependencies ) ) {
 	write( "Merging extracted dependencies to root package.json..." );
 	merge_dependencies_to_root_package_json( $all_dependencies );
 }
