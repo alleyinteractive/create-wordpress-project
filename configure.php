@@ -319,13 +319,13 @@ function install_plugin( array $plugin_data, bool $prompt, &$installed_plugins )
  */
 function extract_dependencies_from_package_json( string $file ): array {
 	$json = json_decode( file_get_contents( $file ), true );
-	
+
 	$extracted = [
 		'dependencies'    => $json['dependencies'] ?? [],
 		'devDependencies' => $json['devDependencies'] ?? [],
 		'engines'         => $json['engines'] ?? null,
 	];
-	
+
 	return $extracted;
 }
 
@@ -337,29 +337,29 @@ function extract_dependencies_from_package_json( string $file ): array {
 function merge_dependencies_to_root_package_json( array $all_dependencies ): void {
 	$root_package_path = getcwd() . '/package.json';
 	$root_package      = json_decode( file_get_contents( $root_package_path ), true );
-	
+
 	// Merge dependencies
 	$dependencies    = [];
 	$devDependencies = [];
 	$engines         = null;
-	
+
 	foreach ( $all_dependencies as $extracted ) {
 		// Merge regular dependencies
 		foreach ( $extracted['dependencies'] as $name => $version ) {
 			$dependencies[$name] = $version;
 		}
-		
+
 		// Merge dev dependencies
 		foreach ( $extracted['devDependencies'] as $name => $version ) {
 			$devDependencies[$name] = $version;
 		}
-		
+
 		// Use the latest engines specification if available
 		if ( $extracted['engines'] ) {
 			$engines = $extracted['engines'];
 		}
 	}
-	
+
 	// Remove duplicates between dependencies and devDependencies
 	foreach ( $dependencies as $name => $version ) {
 		if ( isset( $devDependencies[$name] ) ) {
@@ -371,19 +371,19 @@ function merge_dependencies_to_root_package_json( array $all_dependencies ): voi
 			}
 		}
 	}
-	
+
 	// Update the root package.json
 	$root_package['dependencies'] = array_merge( $root_package['dependencies'] ?? [], $dependencies );
 	$root_package['devDependencies'] = array_merge( $root_package['devDependencies'] ?? [], $devDependencies );
-	
+
 	if ( $engines ) {
 		$root_package['engines'] = $engines;
 	}
-	
+
 	// Sort dependencies alphabetically
 	ksort( $root_package['dependencies'] );
 	ksort( $root_package['devDependencies'] );
-	
+
 	file_put_contents( $root_package_path, json_encode( $root_package, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) );
 }
 
@@ -405,6 +405,53 @@ function truncate_package_json( string $file ): void {
 	unset( $json['scripts']['test'] );
 
 	file_put_contents( $file, json_encode( $json, JSON_PRETTY_PRINT ) );
+}
+
+/**
+ * Hoist dependencies from plugin/theme composer.json files to the root composer.json.
+ *
+ * @param string $file The path of the composer.json file to hoist dependencies from.
+ */
+function hoist_composer_dependencies_to_root( string $file ): void {
+	$root_composer_path = __DIR__ . '/composer.json';
+
+	if ( ! file_exists( $file ) ) {
+		echo "File does not exist to hoist dependencies from: {$file}\n";
+		return;
+	}
+
+	if ( ! file_exists( $root_composer_path ) ) {
+		echo "Root composer.json does not exist: {$root_composer_path}\n";
+		exit( 1 );
+	}
+
+	$plugin_composer = json_decode( file_get_contents( $file ), true );
+	$root_composer   = json_decode( file_get_contents( $root_composer_path ), true );
+
+	$root_composer['require'] = array_merge( $root_composer['require'] ?? [], $plugin_composer['require'] ?? [] );
+	$root_composer['require-dev'] = array_merge( $root_composer['require-dev'] ?? [], $plugin_composer['require-dev'] ?? [] );
+
+	if ( isset( $root_composer['require']['alleyinteractive/mantle-framework'] ) ) {
+		$root_composer['require-dev'] = array_filter(
+			$root_composer['require-dev'] ?? [],
+			fn ( $key ) => ! str_starts_with( $key, 'mantle-framework/' ),
+			ARRAY_FILTER_USE_KEY
+		);
+	}
+
+	ksort( $root_composer['require'] );
+	ksort( $root_composer['require-dev'] );
+
+	if ( isset( $root_composer['require']['php'] ) ) {
+		$php = $root_composer['require']['php'];
+		unset( $root_composer['require']['php'] );
+		$root_composer['require'] = [ 'php' => $php ] + $root_composer['require'];
+	}
+
+	$composer_json = json_encode( $root_composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+	$composer_json = str_replace( '    ', '  ', $composer_json );
+
+	file_put_contents( $root_composer_path, $composer_json );
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
@@ -699,6 +746,9 @@ if ( ! empty( $plugin_slug ) ) {
 	// Make changes to the package.json that ships with the plugin.
 	truncate_package_json( "{$current_dir}/plugins/{$plugin_slug}/package.json" );
 
+	// Hoist Composer dependencies to the root composer.json.
+	hoist_composer_dependencies_to_root( "{$current_dir}/plugins/{$plugin_slug}/composer.json" );
+
 	echo "Done!\n\n";
 }
 
@@ -732,6 +782,8 @@ if ( ! empty( $theme_slug ) ) {
 	// Make changes to the package.json that ships with the theme.
 	truncate_package_json( "{$current_dir}/themes/{$theme_slug}/package.json" );
 
+	hoist_composer_dependencies_to_root( "{$current_dir}/themes/{$theme_slug}/composer.json" );
+
 	run(
 		"wp theme activate {$theme_slug}",
 		$current_dir,
@@ -739,7 +791,7 @@ if ( ! empty( $theme_slug ) ) {
 }
 
 // Merge all extracted dependencies into the root package.json
-if ( !empty( $all_dependencies ) ) {
+if ( ! empty( $all_dependencies ) ) {
 	write( "Merging extracted dependencies to root package.json..." );
 	merge_dependencies_to_root_package_json( $all_dependencies );
 }
@@ -802,13 +854,14 @@ if ( ! empty( $plugin_slug ) ) {
 			"plugins/{$plugin_slug}/.nvmrc",
 			"plugins/{$plugin_slug}/.stylelintrc.json",
 			"plugins/{$plugin_slug}/CHANGELOG.md",
-			"plugins/{$plugin_slug}/src/class-example-plugin.php",
 			"plugins/{$plugin_slug}/composer.json",
 			"plugins/{$plugin_slug}/jest.config.js",
 			"plugins/{$plugin_slug}/package-lock.json",
 			"plugins/{$plugin_slug}/phpstan.neon",
+			"plugins/{$plugin_slug}/src/class-example-plugin.php",
 			"plugins/{$plugin_slug}/tsconfig.eslint.json",
 			"plugins/{$plugin_slug}/tsconfig.json",
+			"plugins/{$plugin_slug}/vendor",
 		]
 	);
 }
@@ -820,10 +873,10 @@ if ( ! empty( $theme_slug ) ) {
 		[
 			"themes/{$theme_slug}/.editorconfig",
 			"themes/{$theme_slug}/.eslintrc.json",
+			"themes/{$theme_slug}/.github",
 			"themes/{$theme_slug}/.gitignore",
 			"themes/{$theme_slug}/.nvmrc",
 			"themes/{$theme_slug}/.stylelintrc.json",
-			"themes/{$theme_slug}/.github",
 			"themes/{$theme_slug}/CHANGELOG.md",
 			"themes/{$theme_slug}/composer.json",
 			"themes/{$theme_slug}/jest.config.js",
@@ -831,6 +884,7 @@ if ( ! empty( $theme_slug ) ) {
 			"themes/{$theme_slug}/phpstan.neon",
 			"themes/{$theme_slug}/tsconfig.eslint.json",
 			"themes/{$theme_slug}/tsconfig.json",
+			"themes/{$theme_slug}/vendor",
 		]
 	);
 }
