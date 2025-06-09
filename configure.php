@@ -445,10 +445,17 @@ function hoist_composer_dependencies_to_root( string $file ): void {
 	ksort( $root_composer['require'] );
 	ksort( $root_composer['require-dev'] );
 
-	file_put_contents(
-		$root_composer_path,
-		json_encode( $root_composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE )
-	);
+	// Sort 'php' to the top of 'require'.
+	if ( isset( $root_composer['require']['php'] ) ) {
+		$php = $root_composer['require']['php'];
+		unset( $root_composer['require']['php'] );
+		$root_composer['require'] = [ 'php' => $php ] + $root_composer['require'];
+	}
+
+	$composer_json = json_encode( $root_composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+	$composer_json = str_replace( '    ', '  ', $composer_json );
+
+	file_put_contents( $root_composer_path, $composer_json );
 }
 
 echo "\nWelcome friend to alleyinteractive/create-wordpress-project! 😀\nLet's setup your WordPress Project 🚀\n\n";
