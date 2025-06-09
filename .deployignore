@@ -1,3 +1,50 @@
+# Root 
+.github
+/.editorconfig
+/.eslintrc.js
+/.npmrc
+/.nvmrc
+/.phpcs.xml
+/.stylelintrc.json
+/composer.json
+/composer.lock
+/custom.d.ts
+/jest.config.ts
+/package.json
+/package-lock.json
+/phpstan.neon
+/README.md
+/tsconfig.json
+/turbo.json
+
+# Plugin
+/plugins/create-wordpress-plugin/.scaffolder
+/plugins/create-wordpress-plugin/blocks
+/plugins/create-wordpress-plugin/config/README.md
+/plugins/create-wordpress-plugin/entries
+/plugins/create-wordpress-plugin/scaffold
+/plugins/create-wordpress-plugin/tests
+/plugins/create-wordpress-plugin/.eslintignore
+/plugins/create-wordpress-plugin/.phpcs.xml
+/plugins/create-wordpress-plugin/.stylelintignore
+/plugins/create-wordpress-plugin/babel.config.js
+/plugins/create-wordpress-plugin/jsconfig.json
+/plugins/create-wordpress-plugin/package.json
+/plugins/create-wordpress-plugin/phpunit.xml
+
+# Theme
+/themes/create-wordpress-theme/assets
+/themes/create-wordpress-theme/entries
+/themes/create-wordpress-theme/tests
+/themes/create-wordpress-theme/.eslintignore
+/themes/create-wordpress-theme/.phpcs.xml
+/themes/create-wordpress-theme/.stylelintignore
+/themes/create-wordpress-theme/babel.config.js
+/themes/create-wordpress-theme/jsconfig.json
+/themes/create-wordpress-theme/package.json
+/themes/create-wordpress-theme/phpunit.xml
+/themes/create-wordpress-theme/webpack.config.js
+
 # Caches
 .npm
 .phpcs.cache.json
