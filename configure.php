@@ -854,13 +854,14 @@ if ( ! empty( $plugin_slug ) ) {
 			"plugins/{$plugin_slug}/.nvmrc",
 			"plugins/{$plugin_slug}/.stylelintrc.json",
 			"plugins/{$plugin_slug}/CHANGELOG.md",
-			"plugins/{$plugin_slug}/src/class-example-plugin.php",
 			"plugins/{$plugin_slug}/composer.json",
 			"plugins/{$plugin_slug}/jest.config.js",
 			"plugins/{$plugin_slug}/package-lock.json",
 			"plugins/{$plugin_slug}/phpstan.neon",
+			"plugins/{$plugin_slug}/src/class-example-plugin.php",
 			"plugins/{$plugin_slug}/tsconfig.eslint.json",
 			"plugins/{$plugin_slug}/tsconfig.json",
+			"plugins/{$plugin_slug}/vendor",
 		]
 	);
 }
@@ -872,10 +873,10 @@ if ( ! empty( $theme_slug ) ) {
 		[
 			"themes/{$theme_slug}/.editorconfig",
 			"themes/{$theme_slug}/.eslintrc.json",
+			"themes/{$theme_slug}/.github",
 			"themes/{$theme_slug}/.gitignore",
 			"themes/{$theme_slug}/.nvmrc",
 			"themes/{$theme_slug}/.stylelintrc.json",
-			"themes/{$theme_slug}/.github",
 			"themes/{$theme_slug}/CHANGELOG.md",
 			"themes/{$theme_slug}/composer.json",
 			"themes/{$theme_slug}/jest.config.js",
@@ -883,6 +884,7 @@ if ( ! empty( $theme_slug ) ) {
 			"themes/{$theme_slug}/phpstan.neon",
 			"themes/{$theme_slug}/tsconfig.eslint.json",
 			"themes/{$theme_slug}/tsconfig.json",
+			"themes/{$theme_slug}/vendor",
 		]
 	);
 }
