@@ -609,6 +609,7 @@ $search_and_replace = [
 	'create-wordpress-project'     => $project_name_slug,
 	'Create WordPress Project'     => $project_name,
 	'CREATE_WORDPRESS_PROJECT'     => strtoupper( str_replace( '-', '_', $project_name_slug ) ),
+	'create_wordpress_project'     => strtolower( str_replace( '-', '_', $project_name_slug ) ),
 
 	'vendor_name'                  => $vendor_name,
 	'vendor_slug'                  => $vendor_slug,
@@ -1077,7 +1078,7 @@ $plugin_files = array_filter(
 		}
 		return null;
 	},
-	$installed_plugins )
+		$installed_plugins )
 );
 sort( $plugin_files );
 $plugin_files[] = "'{$plugin_slug}/{$plugin_slug}.php',";
