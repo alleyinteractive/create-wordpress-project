@@ -42,5 +42,6 @@
   </rule>
   <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
     <exclude-pattern>./plugin-templates/</exclude-pattern>
+    <exclude-pattern>./plugins/create-wordpress-plugin/blocks/</exclude-pattern>
   </rule>
 </ruleset>

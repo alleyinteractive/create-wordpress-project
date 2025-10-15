@@ -9,8 +9,6 @@ namespace Create_WordPress_Plugin\Features;
 
 use Alley\WP\Types\Feature;
 
-use function Create_WordPress_Plugin\register_meta_helper;
-
 /**
  * Feature: Adds support for subheadlines.
  *
@@ -42,16 +40,17 @@ final class Subheadline implements Feature {
 			}
 		}
 
-		register_meta_helper(
-			'post',
-			get_post_types_by_support( 'subheadline' ),
-			'create_wordpress_plugin_subheadline',
-			[
-				'sanitize_callback' => 'wp_kses_post',
-				'single'            => true,
-				'type'              => 'string',
-				'show_in_rest'      => true,
-			]
-		);
+		foreach ( get_post_types_by_support( 'subheadline' ) as $post_type ) {
+			register_post_meta(
+				$post_type,
+				'create_wordpress_plugin_subheadline',
+				[
+					'sanitize_callback' => 'wp_kses_post',
+					'single'            => true,
+					'type'              => 'string',
+					'show_in_rest'      => true,
+				]
+			);
+		}
 	}
 }
