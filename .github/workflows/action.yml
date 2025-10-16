@@ -30,7 +30,7 @@ jobs:
         uses: alleyinteractive/action-test-general@develop
 
       - name: Composer install and make
-        uses: alleyinteractive/action-test-php@develop
+        uses: alleyinteractive/action-test-php@v1
         with:
           php-version: '8.3'
           github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
@@ -40,12 +40,13 @@ jobs:
           skip-test: true
 
       - name: Run Node Tests
-        uses: alleyinteractive/action-test-node@develop
+        uses: alleyinteractive/action-test-node@v1
         with:
+          cache-dependency-path: 'package.json'
           install-command: npm install
 
       - name: Run PHP Tests
-        uses: alleyinteractive/action-test-php@develop
+        uses: alleyinteractive/action-test-php@v1
         with:
           php-version: '8.3'
           github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
