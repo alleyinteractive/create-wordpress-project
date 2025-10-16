@@ -44,6 +44,7 @@ jobs:
         with:
           cache-dependency-path: 'package.json'
           install-command: npm install
+          skip-audit: 'true'
 
       - name: Run PHP Tests
         uses: alleyinteractive/action-test-php@v1
