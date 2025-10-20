@@ -633,11 +633,12 @@ if ( ! empty( $theme_slug ) ) {
 	$search_and_replace = array_merge(
 		$search_and_replace,
 		[
-			'create-wordpress-theme' => $theme_slug,
-			'Create WordPress Theme' => str_replace( '_', ' ', title_case( $theme_slug ) ),
-			'CREATE_WORDPRESS_THEME' => strtoupper( str_replace( '-', '_', $theme_slug ) ),
-			'create_wordpress_theme' => str_replace( '-', '_', $theme_slug ),
-			'Create_WordPress_Theme' => $theme_namespace,
+			'create-wordpress-theme'            => $theme_slug,
+			'Create WordPress Theme'            => str_replace( '_', ' ', title_case( $theme_slug ) ),
+			'CREATE_WORDPRESS_THEME'            => strtoupper( str_replace( '-', '_', $theme_slug ) ),
+			'create_wordpress_theme'            => str_replace( '-', '_', $theme_slug ),
+			'Alley\\WP\\Create_WordPress_Theme' => $theme_namespace,
+			'Create_WordPress_Theme'            => $theme_namespace,
 		],
 	);
 }
@@ -646,11 +647,12 @@ if ( ! empty( $plugin_slug ) ) {
 	$search_and_replace = array_merge(
 		$search_and_replace,
 		[
-			'create-wordpress-plugin'      => $plugin_slug,
-			'Create WordPress Plugin'      => str_replace( '_', ' ', title_case( $plugin_slug ) ),
-			'CREATE_WORDPRESS_PLUGIN'      => strtoupper( str_replace( '-', '_', $plugin_slug ) ),
-			'create_wordpress_plugin'      => str_replace( '-', '_', $plugin_slug ),
-			'Create_WordPress_Plugin'      => $plugin_namespace,
+			'create-wordpress-plugin'            => $plugin_slug,
+			'Create WordPress Plugin'            => str_replace( '_', ' ', title_case( $plugin_slug ) ),
+			'CREATE_WORDPRESS_PLUGIN'            => strtoupper( str_replace( '-', '_', $plugin_slug ) ),
+			'create_wordpress_plugin'            => str_replace( '-', '_', $plugin_slug ),
+			'Alley\\WP\\Create_WordPress_Plugin' => $plugin_namespace,
+			'Create_WordPress_Plugin'            => $plugin_namespace,
 		]
 	);
 }

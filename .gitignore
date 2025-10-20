@@ -1,5 +1,6 @@
 # BEGIN DELETE AFTER INSTALL #
 composer.lock
+package-lock.json
 # END DELETE AFTER INSTALL #
 
 # Caches
