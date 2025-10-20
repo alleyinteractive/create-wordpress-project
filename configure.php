@@ -633,11 +633,12 @@ if ( ! empty( $theme_slug ) ) {
 	$search_and_replace = array_merge(
 		$search_and_replace,
 		[
-			'create-wordpress-theme' => $theme_slug,
-			'Create WordPress Theme' => str_replace( '_', ' ', title_case( $theme_slug ) ),
-			'CREATE_WORDPRESS_THEME' => strtoupper( str_replace( '-', '_', $theme_slug ) ),
-			'create_wordpress_theme' => str_replace( '-', '_', $theme_slug ),
-			'Create_WordPress_Theme' => $theme_namespace,
+			'create-wordpress-theme'            => $theme_slug,
+			'Create WordPress Theme'            => str_replace( '_', ' ', title_case( $theme_slug ) ),
+			'CREATE_WORDPRESS_THEME'            => strtoupper( str_replace( '-', '_', $theme_slug ) ),
+			'create_wordpress_theme'            => str_replace( '-', '_', $theme_slug ),
+			'Alley\\WP\\Create_WordPress_Theme' => $theme_namespace,
+			'Create_WordPress_Theme'            => $theme_namespace,
 		],
 	);
 }
@@ -646,11 +647,12 @@ if ( ! empty( $plugin_slug ) ) {
 	$search_and_replace = array_merge(
 		$search_and_replace,
 		[
-			'create-wordpress-plugin'      => $plugin_slug,
-			'Create WordPress Plugin'      => str_replace( '_', ' ', title_case( $plugin_slug ) ),
-			'CREATE_WORDPRESS_PLUGIN'      => strtoupper( str_replace( '-', '_', $plugin_slug ) ),
-			'create_wordpress_plugin'      => str_replace( '-', '_', $plugin_slug ),
-			'Create_WordPress_Plugin'      => $plugin_namespace,
+			'create-wordpress-plugin'            => $plugin_slug,
+			'Create WordPress Plugin'            => str_replace( '_', ' ', title_case( $plugin_slug ) ),
+			'CREATE_WORDPRESS_PLUGIN'            => strtoupper( str_replace( '-', '_', $plugin_slug ) ),
+			'create_wordpress_plugin'            => str_replace( '-', '_', $plugin_slug ),
+			'Alley\\WP\\Create_WordPress_Plugin' => $plugin_namespace,
+			'Create_WordPress_Plugin'            => $plugin_namespace,
 		]
 	);
 }
@@ -851,11 +853,15 @@ if ( ! empty( $plugin_slug ) ) {
 			"plugins/{$plugin_slug}/.editorconfig",
 			"plugins/{$plugin_slug}/.eslintrc.json",
 			"plugins/{$plugin_slug}/.gitattributes",
+			"plugins/{$plugin_slug}/.github",
 			"plugins/{$plugin_slug}/.gitignore",
 			"plugins/{$plugin_slug}/.nvmrc",
+			"plugins/{$plugin_slug}/.phpcs",
 			"plugins/{$plugin_slug}/.stylelintrc.json",
+			"plugins/{$plugin_slug}/.wp-env.json",
 			"plugins/{$plugin_slug}/CHANGELOG.md",
 			"plugins/{$plugin_slug}/composer.json",
+			"plugins/{$plugin_slug}/features.txt",
 			"plugins/{$plugin_slug}/jest.config.js",
 			"plugins/{$plugin_slug}/package-lock.json",
 			"plugins/{$plugin_slug}/phpstan.neon",

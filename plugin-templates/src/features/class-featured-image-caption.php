@@ -10,8 +10,6 @@ namespace Create_WordPress_Plugin\Features;
 use Alley\WP\Types\Feature;
 use WP_Block;
 
-use function Create_WordPress_Plugin\register_meta_helper;
-
 /**
  * Feature: Adds support for captions on featured images.
  *
@@ -58,16 +56,17 @@ final class Featured_Image_Caption implements Feature {
 	 * Registers the meta field only for post types that support featured images.
 	 */
 	public function add_meta_field(): void {
-		register_meta_helper(
-			'post',
-			get_post_types_by_support( 'thumbnail' ),
-			'create_wordpress_plugin_featured_image_caption',
-			[
-				'sanitize_callback' => 'sanitize_text_field',
-				'single'            => true,
-				'type'              => 'string',
-				'show_in_rest'      => true,
-			]
-		);
+		foreach ( get_post_types_by_support( 'thumbnail' ) as $post_type ) {
+			register_post_meta(
+				$post_type,
+				'create_wordpress_plugin_featured_image_caption',
+				[
+					'sanitize_callback' => 'sanitize_text_field',
+					'single'            => true,
+					'type'              => 'string',
+					'show_in_rest'      => true,
+				]
+			);
+		}
 	}
 }

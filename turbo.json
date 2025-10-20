@@ -9,9 +9,10 @@
         "build/**"
       ]
     },
-    "lint": {},
-    "lint:fix": {},
-    "packages-update": {},
+    "eslint": {},
+    "eslint:fix": {},
+    "jest": {},
+    "jest:watch": {},
     "start": {
       "cache": false,
       "persistent": true
@@ -21,8 +22,6 @@
       "persistent": true
     },
     "stylelint": {},
-    "stylelint:fix": {},
-    "test": {},
-    "test:watch": {}
+    "stylelint:fix": {}
   }
 }

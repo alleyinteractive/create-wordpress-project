@@ -48,6 +48,12 @@
     "sort-packages": true,
     "vendor-dir": "mu-plugins/vendor"
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Create_WordPress_Plugin\\Tests\\": "plugins/create-wordpress-plugin/tests",
+      "Create_WordPress_Theme\\Tests\\": "themes/create-wordpress-theme/tests"
+    }
+  },
   "extra": {
     "installer-paths": {
       "mu-plugins/{$name}": [
@@ -60,9 +66,6 @@
     "wordpress-autoloader": {
       "autoload": {
         "Create_WordPress_Plugin\\": "plugins/create-wordpress-plugin/src"
-      },
-      "autoload-dev": {
-        "Create_WordPress_Plugin\\Tests\\": "plugins/create-wordpress-plugin/tests"
       }
     }
   },
@@ -81,9 +84,11 @@
     "phpcs:theme": "cd themes/create-wordpress-theme && phpcs .",
     "phpstan": "phpstan --memory-limit=1G",
     "phpunit": [
-      "@phpunit:plugin"
+      "@phpunit:plugin",
+      "@phpunit:theme"
     ],
     "phpunit:plugin": "cd plugins/create-wordpress-plugin && phpunit",
+    "phpunit:theme": "cd themes/create-wordpress-theme && phpunit",
     "setup": [
       "composer install --quiet --no-interaction"
     ],
