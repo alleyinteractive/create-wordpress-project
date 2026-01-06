@@ -1,3 +1,6 @@
+# Documentation Files
+*.md
+
 # Caches
 .npm
 .phpcs.cache.json
