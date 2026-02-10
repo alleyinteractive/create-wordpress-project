@@ -54,5 +54,5 @@ Thumbs.db
 /plugins/create-wordpress-plugin/build
 /themes/create-wordpress-theme/build
 
-Ignore known log files
+# Ignore known log files
 debug.log
