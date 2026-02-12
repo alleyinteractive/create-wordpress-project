@@ -18,9 +18,10 @@ if ( function_exists( 'newrelic_set_appname' ) && ! empty( $_SERVER['HTTP_HOST']
 
 	// Sanitize the hostname to prevent potential security issues.
 	// Only allow alphanumeric characters, dots, and hyphens.
-	$host = preg_replace( '/[^a-zA-Z0-9.\-]/', '', $host );
+	$host = preg_replace( '/[^a-zA-Z0-9.-]/', '', $host );
 
-	if ( ! empty( $host ) ) {
+	// Validate basic hostname structure: must contain at least one character and valid domain format.
+	if ( ! empty( $host ) && preg_match( '/^[a-zA-Z0-9]([a-zA-Z0-9.-]*[a-zA-Z0-9])?$/', $host ) ) {
 		newrelic_set_appname( $host );
 	}
 }
