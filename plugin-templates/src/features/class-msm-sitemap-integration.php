@@ -13,14 +13,14 @@ use WP_Sitemaps;
 /**
  * Feature: Integrates with MSM Sitemap as the site's one true sitemap provider.
  */
-final class MSM_Sitemap_Integration implements Feature {
+final readonly class MSM_Sitemap_Integration implements Feature {
 	/**
 	 * Set up.
 	 *
 	 * @param string[] $post_types A list of post types to include in sitemaps.
 	 */
 	public function __construct(
-		private readonly array $post_types,
+		private array $post_types,
 	) {}
 
 	/**
@@ -28,13 +28,13 @@ final class MSM_Sitemap_Integration implements Feature {
 	 */
 	public function boot(): void {
 		// Include provided post types in sitemaps.
-		add_filter( 'msm_sitemap_entry_post_type', fn () => $this->post_types );
+		add_filter( 'msm_sitemap_entry_post_type', fn (): array => $this->post_types );
 
 		// Turn off other sitemap providers...
 
 		// Core.
 		add_filter( 'wp_sitemaps_enabled', '__return_false' );
-		add_action( 'wp_sitemaps_init', [ $this, 'action_wp_sitemaps_init' ] );
+		add_action( 'wp_sitemaps_init', $this->action_wp_sitemaps_init( ... ) );
 		// WordPress SEO, by forcing the option to be false.
 		add_filter(
 			'option_wpseo',
@@ -59,7 +59,9 @@ final class MSM_Sitemap_Integration implements Feature {
 		);
 		add_filter(
 			'jetpack_active_modules',
-			fn ( $active ) => array_values( array_diff( (array) $active, [ 'sitemaps' ] ) )
+			fn ( $active ) => is_array( $active )
+				? array_values( array_diff( array_filter( $active, is_string( ... ) ), [ 'sitemaps' ] ) )
+				: $active,
 		);
 	}
 
@@ -80,7 +82,7 @@ final class MSM_Sitemap_Integration implements Feature {
 		 */
 		add_action(
 			'template_redirect',
-			function () use ( $wp_sitemaps ) {
+			function () use ( $wp_sitemaps ): void {
 				$qv = get_query_var( 'sitemap' );
 
 				if ( 'true' === $qv ) {
