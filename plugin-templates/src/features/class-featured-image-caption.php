@@ -15,13 +15,13 @@ use WP_Block;
  *
  * @package create-wordpress-plugin
  */
-final class Featured_Image_Caption implements Feature {
+final readonly class Featured_Image_Caption implements Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'render_block_core/post-featured-image', [ $this, 'add_caption_to_featured_image' ], 10, 3 );
-		add_action( 'init', [ $this, 'add_meta_field' ] );
+		add_filter( 'render_block_core/post-featured-image', $this->add_caption_to_featured_image( ... ), 10, 3 );
+		add_action( 'init', $this->add_meta_field( ... ) );
 	}
 
 	/**
@@ -36,7 +36,7 @@ final class Featured_Image_Caption implements Feature {
 	 */
 	public function add_caption_to_featured_image( string $block_content, array $block, WP_Block $instance ): string {
 		$post_id = is_numeric( $instance->context['postId'] ?? null ) ? (int) $instance->context['postId'] : 0;
-		if ( empty( $post_id ) ) {
+		if ( $post_id === 0 ) {
 			return $block_content;
 		}
 		$featured_image_caption = get_post_meta( $post_id, 'create_wordpress_plugin_featured_image_caption', true );

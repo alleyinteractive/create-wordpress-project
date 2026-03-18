@@ -15,7 +15,7 @@ use Elasticsearch_Extensions\Controller;
  *
  * @package create-wordpress-plugin
  */
-final class Search_Customizations implements Feature {
+final readonly class Search_Customizations implements Feature {
 	/**
 	 * Set up.
 	 *
@@ -23,15 +23,15 @@ final class Search_Customizations implements Feature {
 	 * @param string[] $taxonomies A list of the taxonomies to enable aggregation for.
 	 */
 	public function __construct(
-		private readonly array $post_types = [ 'post', 'page' ],
-		private readonly array $taxonomies = [ 'category' ],
+		private array $post_types = [ 'post', 'page' ],
+		private array $taxonomies = [ 'category' ],
 	) {}
 
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'elasticsearch_extensions_config', [ $this, 'elasticsearch_extensions_config' ] );
+		add_action( 'elasticsearch_extensions_config', $this->elasticsearch_extensions_config( ... ) );
 	}
 
 	/**

@@ -15,21 +15,21 @@ use WP_Term;
  *
  * @package create-wordpress-plugin
  */
-final class Primary_Term_Rest implements Feature {
+final readonly class Primary_Term_Rest implements Feature {
 	/**
 	 * Set up.
 	 *
 	 * @param string[] $taxonomies The taxonomies to support primary term for.
 	 */
 	public function __construct(
-		private readonly array $taxonomies = [ 'category' ],
+		private array $taxonomies = [ 'category' ],
 	) {}
 
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'init', [ $this, 'register_rest_field' ] );
+		add_action( 'init', $this->register_rest_field( ... ) );
 	}
 
 	/**
@@ -40,7 +40,7 @@ final class Primary_Term_Rest implements Feature {
 			'post',
 			'create_wordpress_plugin_primary_term',
 			[
-				'get_callback'    => [ $this, 'rest_callback' ],
+				'get_callback'    => $this->rest_callback( ... ),
 				'update_callback' => null,
 				'schema'          => [
 					'description' => __( 'The primary term for the post.', 'create-wordpress-plugin' ),
@@ -102,7 +102,7 @@ final class Primary_Term_Rest implements Feature {
 				$term      = [
 					'term_name' => $primary_term->name,
 					'term_id'   => $primary_term->term_id,
-					'term_link' => ! is_wp_error( $term_link ) ? $term_link : '',
+					'term_link' => is_wp_error( $term_link ) ? '' : $term_link,
 				];
 			}
 		}
