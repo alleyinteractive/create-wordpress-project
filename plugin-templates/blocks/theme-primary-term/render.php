@@ -22,7 +22,7 @@ if ( ! isset( $attributes['taxonomy'] ) || ! is_string( $attributes['taxonomy'] 
 }
 
 $primary_term = $primary_term_rest->get_primary_term( $post_id, $attributes['taxonomy'] );
-if ( ! $primary_term ) {
+if ( ! isset( $primary_term['term_link'], $primary_term['term_name'] ) ) {
 	return;
 }
 ?>

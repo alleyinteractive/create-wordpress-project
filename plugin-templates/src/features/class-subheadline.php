@@ -19,7 +19,7 @@ final class Subheadline implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'init', [ $this, 'add_meta_field' ] );
+		add_action( 'init', $this->add_meta_field( ... ) );
 	}
 
 	/**
