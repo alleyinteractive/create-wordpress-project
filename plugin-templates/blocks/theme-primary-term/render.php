@@ -4,9 +4,6 @@
  *
  * All of the parameters passed to the function where this file is being required are accessible in this scope:
  *
- * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- File doesn't load in global scope, just appears to to PHPCS.
- * @phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited -- File doesn't load in global scope, just appears to to PHPCS.
- *
  * @phpstan-var array<string, mixed> $attributes
  *
  * @var array    $attributes The array of attributes for this block.
