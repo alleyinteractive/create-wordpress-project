@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 1
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Sync to wpcomvip repo
       uses: alleyinteractive/action-deploy-to-remote-repository@v3

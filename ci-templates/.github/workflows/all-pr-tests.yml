@@ -21,7 +21,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Run General Tests
         # See https://github.com/alleyinteractive/action-test-general for more options
