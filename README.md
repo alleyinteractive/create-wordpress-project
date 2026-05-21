@@ -24,7 +24,17 @@ Follow these steps to get started:
 2. Run `make` (or `php ./configure.php`) to run the configuration script that
    will replace all placeholders throughout all the files.
 3. Have fun creating your WordPress site! 🎊
+## Dependencies
 
+### npm Security
+
+This project enforces a minimum release age of 7 days for npm dependencies via `.npmrc` to guard against supply chain attacks. Most attacks are identified and resolved within this window.
+
+If you urgently need a package newer than 7 days, you can temporarily override this with:
+
+```bash
+npm install --min-release-age=0
+```
 <!--/delete-->
 
 # create-wordpress-project
