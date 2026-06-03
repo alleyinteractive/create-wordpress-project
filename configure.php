@@ -605,6 +605,7 @@ $search_and_replace = [
 	'email@domain.com'             => $author_email,
 
 	'A skeleton WordPress project' => $description,
+	'A skeleton WordPress plugin'  => "The core plugin for the {$project_name} project.",
 
 	'create-wordpress-project'     => $project_name_slug,
 	'Create WordPress Project'     => $project_name,
@@ -720,11 +721,16 @@ if ( ! empty( $plugin_slug ) ) {
 	// Move the contents of each subfolder in plugin-templates to the plugin folder.
 	run( "rsync -a plugin-templates/ plugins/{$plugin_slug}/" );
 
-	// Copy the initial features from features.txt into the plugin main file.
+	// Copy the plugin main file.
+	// Previously, this tried to insert a PHP snippet into the plugin's default main file, but this was fragile.
+	// So, currently, a wholesale main file is maintained here and copied over, which has its own risk since
+	// the file here could fall behind the standards of the starter plugin.
+	// See https://github.com/alleyinteractive/create-wordpress-project/issues/206.
 	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/src/main.php" ) ) {
-		replace_in_file( "plugins/{$plugin_slug}/src/main.php", [
-			'	// Add features here.' => file_get_contents( 'plugin-templates/features.txt' ),
-		] );
+		file_put_contents(
+			"{$current_dir}/plugins/{$plugin_slug}/src/main.php",
+			file_get_contents( 'plugin-templates/src/main.php' ),
+		);
 	}
 
 	// Create a .eslintignore file and ignore the "build/" directory.
@@ -861,7 +867,6 @@ if ( ! empty( $plugin_slug ) ) {
 			"plugins/{$plugin_slug}/.wp-env.json",
 			"plugins/{$plugin_slug}/CHANGELOG.md",
 			"plugins/{$plugin_slug}/composer.json",
-			"plugins/{$plugin_slug}/features.txt",
 			"plugins/{$plugin_slug}/jest.config.js",
 			"plugins/{$plugin_slug}/package-lock.json",
 			"plugins/{$plugin_slug}/phpstan.neon",
@@ -1057,44 +1062,6 @@ if ( 'pantheon' === $hosting_provider ) {
 		);
 	}
 }
-
-// Automatically activate the installed plugins.
-$plugin_files = array_filter(
-	array_map( function( $plugin_dir ) {
-		$file_names = [
-			$plugin_dir.'php',
-			strtolower($plugin_dir).'.php',
-			'plugin.php',
-			'index.php',
-		];
-		// Include some one-off exceptions.
-		if ( strpos( $plugin_dir, 'wp-' ) === 0) {
-			$file_names[] = substr( $plugin_dir, 3 ).'.php';
-			$file_names[] = 'wordpress-'.substr( $plugin_dir, 3 ).'.php';
-		} elseif ( strpos( $plugin_dir, 'wordpress-' ) === 0) {
-			$file_names[] = substr( $plugin_dir, 10 ).'.php';
-			$file_names[] = 'wp-'.substr( $plugin_dir, 10 ).'.php';
-		}
-
-		foreach ( $file_names as $file ) {
-			// Check if the file exists and is not (virtually) empty.
-			if ( file_exists( "plugins/{$plugin_dir}/{$file}" ) && 50 < filesize( "plugins/{$plugin_dir}/{$file}" ) ) {
-				return "'{$plugin_dir}/{$file}',";
-			}
-		}
-		return null;
-	},
-		$installed_plugins )
-);
-sort( $plugin_files );
-$plugin_files[] = "'{$plugin_slug}/{$plugin_slug}.php',";
-
-replace_in_file(
-	'vip' === $hosting_provider ? 'client-mu-plugins/plugin-loader.php' : 'mu-plugins/plugin-loader.php',
-	[
-		"'{$plugin_slug}/{$plugin_slug}.php'," => implode( "\n\t\t", $plugin_files ),
-	]
-);
 
 // Delete the composer-templates directory.
 delete_files( [ 'composer-templates' ] );

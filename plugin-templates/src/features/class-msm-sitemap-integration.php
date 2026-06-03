@@ -34,7 +34,8 @@ final readonly class MSM_Sitemap_Integration implements Feature {
 
 		// Core.
 		add_filter( 'wp_sitemaps_enabled', '__return_false' );
-		add_action( 'wp_sitemaps_init', $this->action_wp_sitemaps_init( ... ) );
+		add_action( 'wp_sitemaps_init', $this->on_wp_sitemaps_init( ... ) );
+
 		// WordPress SEO, by forcing the option to be false.
 		add_filter(
 			'option_wpseo',
@@ -46,6 +47,7 @@ final readonly class MSM_Sitemap_Integration implements Feature {
 				return $value;
 			}
 		);
+
 		// Jetpack, by removing sitemaps as an available module and removing it from active modules.
 		add_filter(
 			'jetpack_get_available_modules',
@@ -60,8 +62,28 @@ final readonly class MSM_Sitemap_Integration implements Feature {
 		add_filter(
 			'jetpack_active_modules',
 			fn ( $active ) => is_array( $active )
-				? array_values( array_diff( array_filter( $active, is_string( ... ) ), [ 'sitemaps' ] ) )
+				? array_values(
+					array_diff(
+						array_filter(
+							$active,
+							is_string( ... )
+						),
+						[ 'sitemaps' ],
+					),
+				)
 				: $active,
+		);
+
+		// Rank Math, by removing sitemaps as an available module.
+		add_filter(
+			'rank_math/modules',
+			function ( $modules ): mixed {
+				if ( is_array( $modules ) ) {
+					unset( $modules['sitemap'] );
+				}
+
+				return $modules;
+			},
 		);
 	}
 
@@ -70,7 +92,7 @@ final readonly class MSM_Sitemap_Integration implements Feature {
 	 *
 	 * @param WP_Sitemaps $wp_sitemaps Sitemaps object.
 	 */
-	public function action_wp_sitemaps_init( $wp_sitemaps ): void {
+	public function on_wp_sitemaps_init( $wp_sitemaps ): void {
 		/*
 		 * By default, core will continue to register its rewrite rules for sitemaps even when core
 		 * sitemaps are disabled so that it can send a 404 response when attempting to access
