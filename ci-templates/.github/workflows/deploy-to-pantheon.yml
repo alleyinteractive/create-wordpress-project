@@ -20,7 +20,7 @@ jobs:
       uses: alleyinteractive/action-test-php@v1
       with:
         install-command: 'composer install --no-dev --prefer-dist --no-interaction --no-progress'
-        php-version: '8.3'
+        php-version: '8.4'
         skip-audit: 'true'
         skip-services: 'true'
         skip-test: 'true'
