@@ -38,6 +38,9 @@ function main(): void {
 		$request_uri = new Uri( '/' );
 	}
 
+	// Consistent definition of "now".
+	$clock = new NativeClock();
+
 	// Home URI.
 	$home_uri = new Uri( home_url() );
 
@@ -49,9 +52,6 @@ function main(): void {
 
 	// Custom endpoints.
 	$path_dispatch = Path_Dispatch::instance();
-
-	// Clock.
-	$clock = new NativeClock();
 
 	// Site settings.
 	$site_settings = get_option( 'create_wordpress_plugin_site_settings', [] );
