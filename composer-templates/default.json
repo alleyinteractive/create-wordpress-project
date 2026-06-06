@@ -12,6 +12,10 @@
     "path": "alleyinteractive/elasticsearch-extensions"
   },
   {
+    "name": "Fieldmanager",
+    "path": "alleyinteractive/wordpress-fieldmanager"
+  },
+  {
     "name": "Meta Inspector",
     "path": "alleyinteractive/meta-inspector"
   },
@@ -36,7 +40,31 @@
     "path": "alleyinteractive/wp-new-relic-transactions"
   },
   {
+    "name": "WP Path Dispatch",
+    "path": "alleyinteractive/wp-path-dispatch"
+  },
+  {
     "name": "Yoast SEO",
     "path": "wpackagist-plugin/wordpress-seo"
+  },
+  {
+    "name": "nyholm/psr7",
+    "path": "nyholm/psr7"
+  },
+  {
+    "name": "php",
+    "path": "php:^8.4"
+  },
+  {
+    "name": "symfony/clock",
+    "path": "symfony/clock"
+  },
+  {
+    "name": "symfony/http-foundation",
+    "path": "symfony/http-foundation"
+  },
+  {
+    "name": "traverse/reshape",
+    "path": "alleyinteractive/traverse-reshape"
   }
 ]

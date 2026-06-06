@@ -20,21 +20,21 @@ final readonly class Featured_Image_Caption implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_filter( 'render_block_core/post-featured-image', $this->add_caption_to_featured_image( ... ), 10, 3 );
-		add_action( 'init', $this->add_meta_field( ... ) );
+		add_filter( 'render_block_core/post-featured-image', $this->filter_render_block_core_post_featured_image( ... ), 10, 3 );
+		add_action( 'init', $this->on_init( ... ) );
 	}
 
 	/**
-	 * Adds the featured image caption to the featured image block.
+	 * Filters the content of a single block.
 	 *
-	 * @phpstan-param array<string, mixed> $block
+	 * Appends the featured image caption to the featured image block markup.
 	 *
-	 * @param string   $block_content The existing block content.
-	 * @param array    $block The full block, including name and attributes.
-	 * @param WP_Block $instance The block instance.
-	 * @return string Modified block content.
+	 * @param string   $block_content The block content.
+	 * @param mixed[]  $block         The full block, including name and attributes.
+	 * @param WP_Block $instance      The block instance.
+	 * @return string The filtered block content.
 	 */
-	public function add_caption_to_featured_image( string $block_content, array $block, WP_Block $instance ): string {
+	public function filter_render_block_core_post_featured_image( $block_content, $block, $instance ) {
 		$post_id = is_numeric( $instance->context['postId'] ?? null ) ? (int) $instance->context['postId'] : 0;
 		if ( $post_id === 0 ) {
 			return $block_content;
@@ -53,9 +53,11 @@ final readonly class Featured_Image_Caption implements Feature {
 	}
 
 	/**
-	 * Registers the meta field only for post types that support featured images.
+	 * Fires after WordPress has finished loading but before any headers are sent.
+	 *
+	 * Registers the featured image caption meta for post types that support featured images.
 	 */
-	public function add_meta_field(): void {
+	public function on_init(): void {
 		foreach ( get_post_types_by_support( 'thumbnail' ) as $post_type ) {
 			register_post_meta(
 				$post_type,

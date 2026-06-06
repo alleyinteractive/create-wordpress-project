@@ -31,15 +31,15 @@ final readonly class Search_Customizations implements Feature {
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'elasticsearch_extensions_config', $this->elasticsearch_extensions_config( ... ) );
+		add_action( 'elasticsearch_extensions_config', $this->on_elasticsearch_extensions_config( ... ) );
 	}
 
 	/**
-	 * Configure Elasticsearch Extensions.
+	 * Fires when Elasticsearch Extensions is being configured.
 	 *
 	 * @param Controller $es_config The Elasticsearch Extensions configuration object.
 	 */
-	public function elasticsearch_extensions_config( Controller $es_config ): void {
+	public function on_elasticsearch_extensions_config( $es_config ): void {
 		$es_config->enable_empty_search()
 			->enable_post_type_aggregation()
 			->restrict_post_types( $this->post_types );

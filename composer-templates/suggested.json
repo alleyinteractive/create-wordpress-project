@@ -1,15 +1,15 @@
 [
   {
+    "name": "Create Block Theme",
+    "path": "wpackagist-plugin/create-block-theme"
+  },
+  {
     "name": "ES Admin",
     "path": "alleyinteractive/es-admin"
   },
   {
     "name": "ES WP Query",
     "path": "alleyinteractive/es-wp-query"
-  },
-  {
-    "name": "Fieldmanager",
-    "path": "alleyinteractive/wordpress-fieldmanager"
   },
   {
     "name": "Yoast Duplicate Post",

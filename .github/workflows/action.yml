@@ -32,7 +32,7 @@ jobs:
       - name: Composer install and make
         uses: alleyinteractive/action-test-php@v1
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
           install-command: |
             composer install
@@ -49,7 +49,7 @@ jobs:
       - name: Run PHP Tests
         uses: alleyinteractive/action-test-php@v1
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
           skip-install: true
           test-command: |
