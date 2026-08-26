@@ -1092,7 +1092,7 @@ $plugin_files[] = "'{$plugin_slug}/{$plugin_slug}.php',";
 replace_in_file(
 	'vip' === $hosting_provider ? 'client-mu-plugins/plugin-loader.php' : 'mu-plugins/plugin-loader.php',
 	[
-		"'{$plugin_slug}/{$plugin_slug}.php'," => implode( "\n\t\t", $plugin_files ),
+		"'{$plugin_slug}/{$plugin_slug}.php'," => implode( "\n\t\t\t", $plugin_files ),
 	]
 );
 

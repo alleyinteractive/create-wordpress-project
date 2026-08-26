@@ -34,7 +34,7 @@ function create_wordpress_project_local_plugins(): array {
 function create_wordpress_project_core_plugins(): array {
 	return array_merge(
 		[
-		'create-wordpress-plugin/create-wordpress-plugin.php',
+			'create-wordpress-plugin/create-wordpress-plugin.php',
 		],
 		create_wordpress_project_local_plugins()
 	);
