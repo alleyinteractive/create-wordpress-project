@@ -55,5 +55,3 @@ with us](https://alley.com/careers/).
 ## License
 
 The GNU General Public License (GPL) license. Please see [License File](LICENSE) for more information.
-
-Remove me!
