@@ -1,4 +1,3 @@
-	$plugin = new Group(
 		new Features\Featured_Image_Caption(),
 		new Features\Subheadline(),
 		new Features\Search_Customizations(
@@ -11,4 +10,3 @@
 		new Features\Primary_Term_Rest(
 			taxonomies: [ 'category', 'post_tag' ],
 		),
-	);
