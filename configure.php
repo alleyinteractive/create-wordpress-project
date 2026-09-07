@@ -709,6 +709,12 @@ if ( ! empty( $plugin_slug ) ) {
 		);
 
 		run( "mv plugins/{$plugin_slug}/plugin.php plugins/{$plugin_slug}/{$plugin_slug}.php" );
+
+		if ( file_exists( "plugins/{$plugin_slug}/tests/bootstrap.php" ) ) {
+			replace_in_file( "plugins/{$plugin_slug}/tests/bootstrap.php", [
+				"/../plugin.php" => "/../{$plugin_slug}.php",
+			] );
+		}
 	}
 
 	// Create a .eslintignore file and ignore the "build/" directory.
