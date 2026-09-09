@@ -8,6 +8,11 @@ Currently the subfolders are
 * entries
 * features
 
+Everything here is copied except this README and `features.txt`, which only
+apply to this repository: `features.txt` is read directly by the configure
+script and written into the plugin's main function. READMEs inside the
+subfolders are copied along with them.
+
 Use the following placeholders in your files, and they will automatically get updated to the correct values to match the destination plugin.
 
 * `create-wordpress-plugin`

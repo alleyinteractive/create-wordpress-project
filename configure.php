@@ -208,6 +208,19 @@ function normalize_path_separator( string $path ): string {
 }
 
 /**
+ * Append text to a file, making sure it starts on a line of its own.
+ *
+ * @param string $file Filename.
+ * @param string $text Text to append.
+ */
+function append_to_file( string $file, string $text ): void {
+	$contents = file_exists( $file ) ? (string) file_get_contents( $file ) : '';
+	$prefix   = ( '' === $contents || str_ends_with( $contents, PHP_EOL ) ) ? '' : PHP_EOL;
+
+	file_put_contents( $file, $prefix . $text . PHP_EOL, FILE_APPEND );
+}
+
+/**
  * Remove the tests for this script, which only apply to the skeleton.
  */
 function remove_configure_test(): void {
@@ -369,6 +382,59 @@ function extract_dependencies_from_package_json( string $file ): array {
 }
 
 /**
+ * Reduce a version constraint to the version number it names.
+ *
+ * Compound constraints ('^1.0 || ^2.0', '>=1.0 <2.0') can't be reduced this
+ * way and come back empty, which keeps them out of any comparison.
+ *
+ * @param string $version A version constraint.
+ */
+function comparable_version( string $version ): string {
+	if ( preg_match( '/[|,\s]/', trim( $version ) ) ) {
+		return '';
+	}
+
+	return (string) preg_replace( '/[^0-9.]/', '', $version );
+}
+
+/**
+ * Whether one version constraint names a higher version than another.
+ *
+ * Constraints that can't be compared are never treated as higher, so the
+ * existing one is kept.
+ *
+ * @param string $version     The version constraint to test.
+ * @param string $compared_to The version constraint to test it against.
+ */
+function is_higher_version( string $version, string $compared_to ): bool {
+	$version     = comparable_version( $version );
+	$compared_to = comparable_version( $compared_to );
+
+	if ( '' === $version || '' === $compared_to ) {
+		return false;
+	}
+
+	return version_compare( $version, $compared_to, '>' );
+}
+
+/**
+ * Merge two sets of version constraints, keeping the higher of each.
+ *
+ * @param array<string, string> $constraints The constraints to merge into.
+ * @param array<string, string> $incoming    The constraints to merge in.
+ * @return array<string, string>
+ */
+function merge_version_constraints( array $constraints, array $incoming ): array {
+	foreach ( $incoming as $name => $version ) {
+		if ( ! isset( $constraints[ $name ] ) || is_higher_version( $version, $constraints[ $name ] ) ) {
+			$constraints[ $name ] = $version;
+		}
+	}
+
+	return $constraints;
+}
+
+/**
  * Merge extracted dependencies into the root package.json
  *
  * @param array $all_dependencies Array of extracted dependencies to merge.
@@ -377,46 +443,37 @@ function merge_dependencies_to_root_package_json( array $all_dependencies ): voi
 	$root_package_path = getcwd() . '/package.json';
 	$root_package      = json_decode( file_get_contents( $root_package_path ), true );
 
-	// Merge dependencies
 	$dependencies    = [];
 	$devDependencies = [];
-	$engines         = null;
+	$engines         = [];
 
 	foreach ( $all_dependencies as $extracted ) {
-		// Merge regular dependencies
-		foreach ( $extracted['dependencies'] as $name => $version ) {
-			$dependencies[$name] = $version;
-		}
-
-		// Merge dev dependencies
-		foreach ( $extracted['devDependencies'] as $name => $version ) {
-			$devDependencies[$name] = $version;
-		}
-
-		// Use the latest engines specification if available
-		if ( $extracted['engines'] ) {
-			$engines = $extracted['engines'];
-		}
+		$dependencies    = merge_version_constraints( $dependencies, $extracted['dependencies'] );
+		$devDependencies = merge_version_constraints( $devDependencies, $extracted['devDependencies'] );
+		$engines         = merge_version_constraints( $engines, $extracted['engines'] ?? [] );
 	}
 
-	// Remove duplicates between dependencies and devDependencies
+	// Remove duplicates between dependencies and devDependencies, keeping the
+	// higher version. Ties stay a dependency.
 	foreach ( $dependencies as $name => $version ) {
-		if ( isset( $devDependencies[$name] ) ) {
-			// Keep the higher version
-			if ( version_compare( preg_replace('/[^0-9.]/', '', $version), preg_replace('/[^0-9.]/', '', $devDependencies[$name]), '>=' ) ) {
-				unset( $devDependencies[$name] );
-			} else {
-				unset( $dependencies[$name] );
-			}
+		if ( ! isset( $devDependencies[ $name ] ) ) {
+			continue;
+		}
+
+		if ( is_higher_version( $devDependencies[ $name ], $version ) ) {
+			unset( $dependencies[ $name ] );
+		} else {
+			unset( $devDependencies[ $name ] );
 		}
 	}
 
-	// Update the root package.json
-	$root_package['dependencies'] = array_merge( $root_package['dependencies'] ?? [], $dependencies );
-	$root_package['devDependencies'] = array_merge( $root_package['devDependencies'] ?? [], $devDependencies );
+	// Update the root package.json, without downgrading anything it already
+	// asks for.
+	$root_package['dependencies']    = merge_version_constraints( $root_package['dependencies'] ?? [], $dependencies );
+	$root_package['devDependencies'] = merge_version_constraints( $root_package['devDependencies'] ?? [], $devDependencies );
 
-	if ( $engines ) {
-		$root_package['engines'] = $engines;
+	if ( ! empty( $engines ) ) {
+		$root_package['engines'] = merge_version_constraints( $root_package['engines'] ?? [], $engines );
 	}
 
 	// Sort dependencies alphabetically
@@ -467,8 +524,9 @@ function hoist_composer_dependencies_to_root( string $file ): void {
 	$plugin_composer = json_decode( file_get_contents( $file ), true );
 	$root_composer   = json_decode( file_get_contents( $root_composer_path ), true );
 
-	$root_composer['require'] = array_merge( $root_composer['require'] ?? [], $plugin_composer['require'] ?? [] );
-	$root_composer['require-dev'] = array_merge( $root_composer['require-dev'] ?? [], $plugin_composer['require-dev'] ?? [] );
+	// Merge without downgrading anything the project already asks for.
+	$root_composer['require']     = merge_version_constraints( $root_composer['require'] ?? [], $plugin_composer['require'] ?? [] );
+	$root_composer['require-dev'] = merge_version_constraints( $root_composer['require-dev'] ?? [], $plugin_composer['require-dev'] ?? [] );
 
 	if ( isset( $root_composer['require']['alleyinteractive/mantle-framework'] ) ) {
 		$root_composer['require-dev'] = array_filter(
@@ -595,16 +653,6 @@ if ( is_dir( "themes/{$theme_slug}" ) ) {
 
 $theme_namespace = title_case( $theme_slug ) . '_Theme';
 
-$slack_channel_id = ask(
-	question: 'Slack Channel ID? (for deploy notifications)',
-	allow_empty: true,
-);
-
-$slack_channel_name = ask(
-	question: 'Slack Channel Name? (for deploy notifications)',
-	allow_empty: true,
-);
-
 write( '------' );
 write( "Project          : {$project_name} <{$project_name_slug}>" );
 write( "Description      : {$description}" );
@@ -622,14 +670,6 @@ if ( ! empty( $theme_slug ) ) {
 	write( "Theme Namespace  : {$theme_namespace}" );
 }
 
-if ( ! empty( $slack_channel_id ) ) {
-	write( "Slack Channel ID : {$slack_channel_id}" );
-}
-
-if ( ! empty( $slack_channel_name ) ) {
-	write( "Slack Channel Name : {$slack_channel_name}" );
-}
-
 write( '------' );
 
 write( 'This script will replace the above values in all relevant files in the project directory.' );
@@ -643,7 +683,10 @@ $search_and_replace = [
 	'author_username'              => $author_username,
 	'email@domain.com'             => $author_email,
 
+	// The scaffolded plugin and theme describe themselves as skeletons, too.
 	'A skeleton WordPress project' => $description,
+	'A skeleton WordPress plugin'  => $description,
+	'A skeleton WordPress theme'   => $description,
 
 	'create-wordpress-project'     => $project_name_slug,
 	'Create WordPress Project'     => $project_name,
@@ -661,6 +704,14 @@ $search_and_replace = [
 $hardcoded_strings = [
 	// Replace the composer project name.
 	'alleyinteractive/create-wordpress-project' => $vendor_slug . '/' . $project_name_slug,
+
+	/*
+	 * The plugin and theme are checked in to this repository rather than
+	 * released on their own, so their package names and the repository URLs in
+	 * their headers point at this project.
+	 */
+	'alleyinteractive/create-wordpress-plugin'  => $vendor_slug . '/' . $project_name_slug,
+	'alleyinteractive/create-wordpress-theme'   => $vendor_slug . '/' . $project_name_slug,
 ];
 
 $search_and_replace = array_merge(
@@ -692,24 +743,6 @@ if ( ! empty( $plugin_slug ) ) {
 			'create_wordpress_plugin'            => str_replace( '-', '_', $plugin_slug ),
 			'Alley\\WP\\Create_WordPress_Plugin' => $plugin_namespace,
 			'Create_WordPress_Plugin'            => $plugin_namespace,
-		]
-	);
-}
-
-if ( ! empty( $slack_channel_id ) ) {
-	$search_and_replace = array_merge(
-		$search_and_replace,
-		[
-			'slack_channel_id' => $slack_channel_id,
-		]
-	);
-}
-
-if ( ! empty( $slack_channel_name ) ) {
-	$search_and_replace = array_merge(
-		$search_and_replace,
-		[
-			'slack_channel_name' => $slack_channel_name,
 		]
 	);
 }
@@ -762,8 +795,13 @@ if ( ! empty( $plugin_slug ) ) {
 		"build/\n"
 	);
 
-	// Move the contents of each subfolder in plugin-templates to the plugin folder.
-	run( "rsync -a plugin-templates/ plugins/{$plugin_slug}/" );
+	/*
+	 * Move the contents of plugin-templates to the plugin folder, less the two
+	 * files that only belong to this repository: the README that documents the
+	 * templates, and the features list, which is read from here directly. The
+	 * patterns are anchored so that the READMEs inside the templates are kept.
+	 */
+	run( "rsync -a --exclude '/README.md' --exclude '/features.txt' plugin-templates/ plugins/{$plugin_slug}/" );
 
 	// Copy the initial features from features.txt into the plugin main file.
 	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/src/main.php" ) ) {
@@ -908,7 +946,6 @@ if ( ! empty( $plugin_slug ) ) {
 			"plugins/{$plugin_slug}/.wp-env.json",
 			"plugins/{$plugin_slug}/CHANGELOG.md",
 			"plugins/{$plugin_slug}/composer.json",
-			"plugins/{$plugin_slug}/features.txt",
 			"plugins/{$plugin_slug}/jest.config.js",
 			"plugins/{$plugin_slug}/package-lock.json",
 			"plugins/{$plugin_slug}/phpstan.neon",
@@ -991,8 +1028,24 @@ if ( 'vip' === $hosting_provider ) {
 
 	write( 'Ignoring mu-plugins with .gitignore/.deployignore...' );
 
-	file_put_contents( '.gitignore', 'vip' === $hosting_provider ? 'client-mu-plugins\n' : 'mu-plugins\n', FILE_APPEND );
-	file_put_contents( '.deployignore', 'vip' === $hosting_provider ? 'client-mu-plugins\n' : 'mu-plugins\n', FILE_APPEND );
+	/*
+	 * Our must-use plugins live in client-mu-plugins now, so the rules that
+	 * ignore everything in mu-plugins but them have to follow. VIP's own
+	 * must-use plugins are cloned into mu-plugins below and never committed.
+	 */
+	replace_in_file(
+		'.gitignore',
+		[
+			'/mu-plugins/' => '/client-mu-plugins/',
+		],
+	);
+
+	foreach ( [ '.gitignore', '.deployignore' ] as $ignore_file ) {
+		append_to_file(
+			$ignore_file,
+			PHP_EOL . "# Ignore VIP's must-use plugins, which are cloned into this directory." . PHP_EOL . '/mu-plugins',
+		);
+	}
 
 	write( 'Removing pantheon-systems/pantheon-mu-plugin from project\'s composer.json...' );
 
