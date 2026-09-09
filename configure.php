@@ -625,8 +625,8 @@ $hardcoded_strings = [
 ];
 
 $search_and_replace = array_merge(
-	$search_and_replace,
 	$hardcoded_strings,
+	$search_and_replace,
 );
 
 if ( ! empty( $theme_slug ) ) {
