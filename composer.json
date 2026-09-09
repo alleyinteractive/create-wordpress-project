@@ -95,7 +95,9 @@
     "test": [
       "@phpcs",
       "@phpstan",
+      "@test:configure",
       "@phpunit"
-    ]
+    ],
+    "test:configure": "phpunit --no-configuration tests/ConfigureTest.php"
   }
 }
