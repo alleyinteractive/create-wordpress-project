@@ -50,7 +50,9 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 	 * @var array<int, string>
 	 */
 	private const PLACEHOLDERS = [
+		'A skeleton WordPress plugin',
 		'A skeleton WordPress project',
+		'A skeleton WordPress theme',
 		'CREATE_WORDPRESS_PLUGIN',
 		'CREATE_WORDPRESS_PROJECT',
 		'CREATE_WORDPRESS_THEME',
@@ -288,21 +290,16 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 		$main = $this->read( $plugin . '/cool-features.php' );
 
 		$this->assertStringContainsString( 'Plugin Name: Cool Features', $main );
+		$this->assertStringContainsString( 'Description: A very cool site.', $main );
 		$this->assertStringContainsString( 'Author: Test Author', $main );
 		$this->assertStringContainsString( 'Text Domain: cool-features', $main );
 		$this->assertStringContainsString( '@package cool-features', $main );
 		$this->assertStringContainsString( 'namespace Cool_Features_Plugin;', $main );
 		$this->assertStringContainsString( "define( 'COOL_FEATURES_DIR', __DIR__ );", $main );
 
-		/*
-		 * Known issues: the description the script replaces is the project's
-		 * ("A skeleton WordPress project"), so the plugin keeps the plugin
-		 * skeleton's own, and only the composer package name is rewritten with
-		 * the new vendor, so the plugin header still points at Alley's
-		 * repository. Update these when the script handles them.
-		 */
-		$this->assertStringContainsString( 'Description: A skeleton WordPress plugin', $main );
-		$this->assertStringContainsString( 'Plugin URI: https://github.com/alleyinteractive/cool-features', $main );
+		// The plugin ships inside this repository, so its header points here.
+		$this->assertStringContainsString( 'Plugin URI: https://github.com/test-vendor/my-cool-site', $main );
+		$this->assertStringContainsString( 'Author URI: https://github.com/test-vendor/my-cool-site', $main );
 
 		// The test bootstrap follows the renamed main file.
 		$this->assertStringContainsString(
@@ -324,8 +321,10 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 		$style = $this->read( $theme . '/style.css' );
 
 		$this->assertStringContainsString( 'Theme Name: Cool Theme', $style );
+		$this->assertStringContainsString( 'Description: A very cool site.', $style );
 		$this->assertStringContainsString( 'Author: Test Author', $style );
 		$this->assertStringContainsString( 'Text Domain: cool-theme', $style );
+		$this->assertStringContainsString( 'Theme URI: https://github.com/test-vendor/my-cool-site', $style );
 
 		$functions = $this->read( $theme . '/functions.php' );
 
@@ -364,13 +363,19 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 		$this->assertStringContainsString( '<property name="text_domain" type="array" value="cool-features" />', $phpcs );
 		$this->assertStringContainsString( '<property name="prefixes" type="array" value="cool_features" />', $phpcs );
 
-		// The features list is consumed by the script, not shipped.
+		// The features list is read from this repository, not shipped.
 		$this->assertFileDoesNotExist( $plugin . '/features.txt' );
 	}
 
 	/**
 	 * The templated features should be written into the plugin's main function
 	 * when the skeleton still carries the marker comment.
+	 *
+	 * The fixture has to carry the marker exactly as the script writes it, so
+	 * it moves with the script: #214 re-indents the marker one level and turns
+	 * `features.txt` into the arguments of the existing `new Group()` call
+	 * rather than a whole statement. Update `plugin_main_with_features_marker()`
+	 * and these expectations along with it.
 	 */
 	public function test_adds_the_templated_features_to_the_plugin(): void {
 		$project = $this->configure(
@@ -391,10 +396,11 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 	 * The templated features are dropped when the plugin skeleton has no marker
 	 * comment to replace.
 	 *
-	 * This documents the current behavior rather than endorsing it: the plugin
-	 * skeleton no longer carries the `// Add features here.` comment that the
-	 * script looks for, so `plugin-templates/features.txt` is read and thrown
-	 * away. Update this test when the script stops relying on the comment.
+	 * The plugin skeleton had dropped the `// Add features here.` comment the
+	 * script looks for, so `plugin-templates/features.txt` was read and thrown
+	 * away. alleyinteractive/create-wordpress-plugin#543 restores it; once that
+	 * has released, move the marker into `plugin_fixture()` so the default
+	 * fixture matches the skeleton again, and keep this test on an override.
 	 */
 	public function test_drops_the_templated_features_without_the_marker(): void {
 		$project = $this->configure( $this->pantheon_answers() );
@@ -406,20 +412,27 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 	}
 
 	/**
-	 * The plugin's README is replaced by the one that documents the templates.
-	 *
-	 * This documents the current behavior rather than endorsing it: the whole
-	 * `plugin-templates` directory is copied over the plugin, so its README
-	 * lands on top of the plugin's own. Update this test when the script copies
-	 * only the template subdirectories.
+	 * The plugin keeps its own README: the one that documents the templates
+	 * only applies to this repository and is not copied over it.
 	 */
-	public function test_overwrites_the_plugin_readme_with_the_templates_readme(): void {
-		$readme = $this->read(
-			$this->configure( $this->pantheon_answers() ) . '/plugins/cool-features/README.md',
-		);
+	public function test_keeps_the_plugin_readme(): void {
+		$plugin = $this->configure( $this->pantheon_answers() ) . '/plugins/cool-features';
+		$readme = $this->read( $plugin . '/README.md' );
 
-		$this->assertStringContainsString( '# Plugin Templates', $readme );
-		$this->assertStringNotContainsString( 'A very cool site.', $readme );
+		$this->assertStringNotContainsString( '# Plugin Templates', $readme );
+		$this->assertStringContainsString( '# cool-features', $readme );
+		$this->assertStringContainsString( 'A very cool site.', $readme );
+		$this->assertStringContainsString( '[Test Author](https://github.com/test-user)', $readme );
+
+		// The paragraphs about the plugin skeleton are removed from it, too.
+		$this->assertStringNotContainsString( '<!--delete-->', $readme );
+		$this->assertStringNotContainsString( 'Press the "Use template" button', $readme );
+
+		// The READMEs inside the templates are still copied.
+		$this->assertFileExists( $plugin . '/blocks/README.md' );
+		$this->assertFileExists( $plugin . '/config/README.md' );
+		$this->assertFileExists( $plugin . '/entries/README.md' );
+		$this->assertFileExists( $plugin . '/src/features/README.md' );
 	}
 
 	/**
@@ -452,18 +465,17 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 		$this->assertSame( '^2.5.1', $package['dependencies']['classnames'] );
 		$this->assertArrayNotHasKey( 'classnames', $package['devDependencies'] );
 
-		// The last `engines` block wins, which is the theme's.
+		// The highest `engines` wins, not the last one: the plugin asks for
+		// Node 22 and the theme for Node 20.
 		$this->assertSame( '22', $package['engines']['node'] );
 
 		$this->assertSame( $this->sorted( array_keys( $package['dependencies'] ) ), array_keys( $package['dependencies'] ) );
 		$this->assertSame( $this->sorted( array_keys( $package['devDependencies'] ) ), array_keys( $package['devDependencies'] ) );
 
-		/*
-		 * Known issue: the hoisted versions overwrite the project's own, so a
-		 * plugin or theme pinned to an older release downgrades the root.
-		 * Update this when the script keeps the higher version.
-		 */
-		$this->assertSame( '^30.0.0', $package['devDependencies']['jest'] );
+		// A plugin or theme pinned to an older release does not downgrade the
+		// project, which asks for jest ^30.2.0 and @wordpress/scripts ^30.25.0.
+		$this->assertSame( '^30.2.0', $package['devDependencies']['jest'] );
+		$this->assertSame( '^30.25.0', $package['devDependencies']['@wordpress/scripts'] );
 	}
 
 	/**
@@ -506,12 +518,8 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 		);
 		$this->assertSame( $this->sorted( array_keys( $composer['require-dev'] ) ), array_keys( $composer['require-dev'] ) );
 
-		/*
-		 * Known issue: the hoisted requirements overwrite the project's own, so
-		 * the plugin's PHP constraint replaces the project's. Update this when
-		 * the script merges the constraints instead.
-		 */
-		$this->assertSame( '^8.2', $composer['require']['php'] );
+		// The plugin's looser PHP constraint does not replace the project's.
+		$this->assertSame( '^8.3', $composer['require']['php'] );
 	}
 
 	/**
@@ -628,23 +636,38 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 	}
 
 	/**
-	 * The VIP ignore rules are appended with a literal `\n` instead of a
-	 * newline.
-	 *
-	 * This documents the current behavior rather than endorsing it: the escape
-	 * is written inside single quotes, so both files gain the text `\n` and the
-	 * rule is appended to whatever line came before it. Update this test when
-	 * the script is fixed.
+	 * The VIP ignore rules should follow the must-use plugins to their new
+	 * home, and ignore the ones VIP clones in.
 	 */
-	public function test_appends_a_literal_escape_to_the_vip_ignore_files(): void {
-		$project = $this->configure( $this->vip_answers() );
+	public function test_points_the_vip_ignore_rules_at_client_mu_plugins(): void {
+		$project   = $this->configure( $this->vip_answers() );
+		$gitignore = $this->read( $project . '/.gitignore' );
 
+		// Nothing is appended with a literal escape.
 		foreach ( [ '.gitignore', '.deployignore' ] as $file ) {
-			$contents = $this->read( $project . '/' . $file );
-
-			$this->assertStringContainsString( 'client-mu-plugins\\n', $contents );
-			$this->assertStringEndsNotWith( "client-mu-plugins\n", $contents );
+			$this->assertStringNotContainsString( '\\n', $this->read( $project . '/' . $file ) );
 		}
+
+		// Our own must-use plugins are ignored, less the ones we wrote.
+		$this->assertStringContainsString( "\n/client-mu-plugins/*\n", $gitignore );
+		$this->assertStringContainsString( "\n!/client-mu-plugins/plugin-loader.php\n", $gitignore );
+		$this->assertStringContainsString( "\n!/client-mu-plugins/001-composer.php\n", $gitignore );
+		$this->assertStringNotContainsString( '/mu-plugins/*', $gitignore );
+
+		// VIP's must-use plugins are cloned in and never committed.
+		foreach ( [ '.gitignore', '.deployignore' ] as $file ) {
+			$this->assertStringContainsString( "\n/mu-plugins\n", $this->read( $project . '/' . $file ) );
+		}
+	}
+
+	/**
+	 * A Pantheon project should keep its ignore rules as they are.
+	 */
+	public function test_leaves_the_ignore_rules_alone_for_a_pantheon_project(): void {
+		$gitignore = $this->read( $this->configure( $this->pantheon_answers() ) . '/.gitignore' );
+
+		$this->assertStringContainsString( "\n/mu-plugins/*\n", $gitignore );
+		$this->assertStringNotContainsString( 'client-mu-plugins', $gitignore );
 	}
 
 	/**
@@ -836,8 +859,6 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 				'plugin_slug'           => 'cool-features',
 				'mantle'                => 'no',
 				'theme_slug'            => 'cool-theme',
-				'slack_channel_id'      => '',
-				'slack_channel_name'    => '',
 				'modify_files'          => 'no',
 			],
 			$this->install_skeleton(),
@@ -905,21 +926,19 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 	}
 
 	/**
-	 * The Slack answers are collected but never used.
+	 * The script should not ask for a Slack channel.
 	 *
-	 * This documents the current behavior rather than endorsing it: the script
-	 * prompts for a Slack channel and adds `slack_channel_id` and
-	 * `slack_channel_name` to the search and replace, but neither placeholder
-	 * appears anywhere in the skeleton, so the answers are discarded. Update
-	 * this test when the deploy workflows use them.
+	 * The deploy workflows notify Slack through an incoming webhook, which
+	 * carries its own channel, so there is nowhere for a channel ID or name to
+	 * go. Remove this test if a workflow ever takes one.
 	 */
-	public function test_collects_the_slack_channel_but_never_uses_it(): void {
-		$project = $this->configure( $this->pantheon_answers() );
-
-		$this->assertSame(
-			[],
-			$this->find_placeholders( $project, [ 'C012ABCDEF', 'my-cool-site-deploys' ] ),
+	public function test_does_not_ask_for_a_slack_channel(): void {
+		$result = $this->run_configure(
+			$this->base_answers( [ 'modify_files' => 'no' ] ),
+			$this->install_skeleton(),
 		);
+
+		$this->assertStringNotContainsString( 'Slack Channel', $result['stdout'] );
 	}
 
 	/**
@@ -935,19 +954,17 @@ final class ConfigureTest extends PHPUnit_Test_Case {
 	private function base_answers( array $overrides = [] ): array {
 		return array_merge(
 			[
-				'project_name'       => 'My Cool Site',
-				'project_slug'       => 'my-cool-site',
-				'description'        => 'A very cool site.',
-				'vendor_name'        => 'Test Vendor',
-				'author_email'       => 'test@example.com',
-				'author_username'    => 'test-user',
-				'author_name'        => 'Test Author',
-				'plugin_slug'        => 'cool-features',
-				'mantle'             => 'no',
-				'theme_slug'         => 'cool-theme',
-				'slack_channel_id'   => 'C012ABCDEF',
-				'slack_channel_name' => 'my-cool-site-deploys',
-				'modify_files'       => 'yes',
+				'project_name'    => 'My Cool Site',
+				'project_slug'    => 'my-cool-site',
+				'description'     => 'A very cool site.',
+				'vendor_name'     => 'Test Vendor',
+				'author_email'    => 'test@example.com',
+				'author_username' => 'test-user',
+				'author_name'     => 'Test Author',
+				'plugin_slug'     => 'cool-features',
+				'mantle'          => 'no',
+				'theme_slug'      => 'cool-theme',
+				'modify_files'    => 'yes',
 			],
 			$overrides,
 		);
@@ -1668,7 +1685,7 @@ FILE,
   "version": "0.0.0",
   "license": "GPL-2.0-or-later",
   "engines": {
-    "node": "20",
+    "node": "22",
     "npm": "10"
   },
   "dependencies": {
@@ -1865,7 +1882,7 @@ FILE,
   "version": "0.0.0",
   "license": "GPL-2.0-or-later",
   "engines": {
-    "node": "22",
+    "node": "20",
     "npm": "10"
   },
   "devDependencies": {
