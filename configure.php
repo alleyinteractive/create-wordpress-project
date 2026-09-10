@@ -729,7 +729,7 @@ if ( ! empty( $plugin_slug ) ) {
 	// Copy the initial features from features.txt into the plugin main file.
 	if ( file_exists( "{$current_dir}/plugins/{$plugin_slug}/src/main.php" ) ) {
 		replace_in_file( "plugins/{$plugin_slug}/src/main.php", [
-			'	// Add features here.' => file_get_contents( 'plugin-templates/features.txt' ),
+			'		// Add features here.' => file_get_contents( 'plugin-templates/features.txt' ),
 		] );
 	}
 
