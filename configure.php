@@ -208,12 +208,51 @@ function normalize_path_separator( string $path ): string {
 }
 
 /**
+ * Remove the tests for this script, which only apply to the skeleton.
+ */
+function remove_configure_test(): void {
+	delete_files( 'tests/ConfigureTest.php' );
+
+	// Only remove the directory if this script's test was all it held.
+	@rmdir( 'tests' );
+
+	if ( ! file_exists( 'composer.json' ) ) {
+		return;
+	}
+
+	$composer_json = (array) json_decode( (string) file_get_contents( 'composer.json' ), true );
+
+	if ( ! isset( $composer_json['scripts']['test:configure'] ) ) {
+		return;
+	}
+
+	unset( $composer_json['scripts']['test:configure'] );
+
+	$composer_json['scripts']['test'] = array_values(
+		array_filter(
+			$composer_json['scripts']['test'] ?? [],
+			fn ( string $script ) => '@test:configure' !== $script,
+		)
+	);
+
+	file_put_contents(
+		'composer.json',
+		str_replace(
+			'    ',
+			'  ',
+			(string) json_encode( $composer_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ),
+		),
+	);
+}
+
+/**
  * @return array<int, string>
  */
 function list_all_files_for_replacement(): array {
 	$exclude = [
 		'LICENSE',
 		'configure.php',
+		'ConfigureTest.php',
 		'.phpunit.result.cache',
 		'.phpcs',
 		'composer.lock',
@@ -834,8 +873,10 @@ delete_files(
 	[
 		"themes/{$theme_slug}/configure.php",
 		"themes/{$theme_slug}/Makefile",
+		"themes/{$theme_slug}/tests/ConfigureTest.php",
 		"plugins/{$plugin_slug}/configure.php",
 		"plugins/{$plugin_slug}/Makefile",
+		"plugins/{$plugin_slug}/tests/ConfigureTest.php",
 		'plugin-templates',
 		'.github/workflows/action.yml',
 	]
@@ -1109,6 +1150,8 @@ delete_files( [ 'composer-templates' ] );
 replace_section_in_file( '.gitignore', '# BEGIN DELETE AFTER INSTALL #', '# END DELETE AFTER INSTALL #' );
 
 if ( confirm( 'Let this script delete itself?', true ) ) {
+	remove_configure_test();
+
 	delete_files( [ 'Makefile', __FILE__ ] );
 }
 
