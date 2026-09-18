@@ -143,6 +143,7 @@ function main(): void {
 					option_name: 'create_wordpress_plugin_site_settings',
 					capability: 'manage_options',
 				),
+				new Features\Patterns_Menu_Page(),
 				new Features\Alley_Change_Modified(),
 				new Features\Term_Dates(
 					clock: $clock,
