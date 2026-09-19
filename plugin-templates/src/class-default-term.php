@@ -7,10 +7,12 @@
 
 namespace Create_WordPress_Plugin;
 
+use Alley\WP\Types\Term;
+
 /**
  * A taxonomy's default term.
  */
-final readonly class Default_Term {
+final readonly class Default_Term implements Term {
 	/**
 	 * Constructor.
 	 *

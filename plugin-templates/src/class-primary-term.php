@@ -7,12 +7,13 @@
 
 namespace Create_WordPress_Plugin;
 
+use Alley\WP\Types\Term;
 use WPSEO_Primary_Term;
 
 /**
  * A post's primary term in a taxonomy.
  */
-final readonly class Primary_Term {
+final readonly class Primary_Term implements Term {
 	/**
 	 * Constructor.
 	 *
