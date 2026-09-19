@@ -1,20 +1,21 @@
 # The project plugin's `main()`
 
-The project plugin boots from a single function, `main()`, in `src/main.php`. It
-does two things: it defines a block of shared bootstrap variables, and it composes
-every active feature into one nested `Feature` tree that it then `boot()`s. This
-doc explains how that function is shaped and — importantly — why some of it is
-deliberately unused at the start.
+The project plugin boots from one function, `main()`, in `src/main.php`.
+`main()` does two things. It defines a set of shared bootstrap variables. It
+composes every active feature into one nested `Feature` tree and calls
+`boot()` on it. This doc explains how `main()` is structured and why some of
+it is unused at the start on purpose.
 
-> See also: [ADR-0002](./adr/0002-declarative-plugin-loading.md) (why plugins load
-> from inside the tree) and [ADR-0001](./adr/0001-opinionated-default-features.md)
-> (why unused code ships on purpose).
+> [ADR-0002](./adr/0002-declarative-plugin-loading.md) explains why plugins
+> load from inside the tree. [ADR-0001](./adr/0001-opinionated-default-features.md)
+> explains why unused code ships on purpose.
 
 ## Where it lives
 
-- `src/main.php` — the `main()` function. The plugin's bootstrap file calls it.
-- `src/features/` — the feature classes that `main()` instantiates (see
-  [default-features.md](./default-features.md)).
+- `src/main.php` — the `main()` function. The plugin's bootstrap file calls
+  it.
+- `src/features/` — the feature classes that `main()` instantiates. See
+  [default-features.md](./default-features.md).
 - The `Feature`, `Group`, `Ordered`, `Effect`, `Quick_Feature`, and
   `WP_CLI_Feature` decorators come from `alleyinteractive/wp-type-extensions`.
 
@@ -22,8 +23,8 @@ deliberately unused at the start.
 
 ### The bootstrap variables
 
-`main()` opens by deriving a handful of shared values once, up front, so that any
-feature wired below can be handed the same instance instead of re-deriving it:
+`main()` derives a set of shared values once, at the top of the function. Any
+feature wired below receives the same instance, instead of deriving its own:
 
 ```php
 $environment_type    = wp_get_environment_type();
@@ -37,16 +38,17 @@ $clock               = new NativeClock();
 $site_settings       = get_option( '…_site_settings', [] );
 ```
 
-These are written with fully-qualified class names (imported via `use` at the top
-of the file) rather than helper wrappers, so the dependency of each value is
-explicit and greppable. The packages behind them — `symfony/http-foundation`,
-`nyholm/psr7`, `symfony/clock`, `wp-path-dispatch`, and the `Global_Post_Query`
-from `wp-type-extensions` — are all runtime requires.
+The code uses fully-qualified class names, imported through `use` at the top
+of the file, instead of helper wrappers. This makes the dependency of each
+value explicit and searchable. The packages behind them are runtime
+requires: `symfony/http-foundation`, `nyholm/psr7`, `symfony/clock`,
+`wp-path-dispatch`, and the `Global_Post_Query` class from
+`wp-type-extensions`.
 
-Not all of these are consumed yet. That is intentional (see
-[ADR-0001](./adr/0001-opinionated-default-features.md)): the common values are
-present and ready so the next developer reaches for the shared instance instead of
-constructing their own. Current status:
+Not all of these variables are consumed yet. This is intentional. See
+[ADR-0001](./adr/0001-opinionated-default-features.md). The common values
+are ready so a developer can use the shared instance instead of building a
+new one. Current status:
 
 | Variable | Status | What consumes it / when to reach for it |
 |---|---|---|
@@ -61,63 +63,72 @@ constructing their own. Current status:
 
 ### The feature tree
 
-After the variables, `main()` builds one expression: features wrapped in
-decorators that control grouping and order, assigned to `$plugin` and booted with
-`$plugin->boot()`. The decorator vocabulary:
+After the variables, `main()` builds one expression. Decorators wrap the
+features to control grouping and order. `main()` assigns the expression to
+`$plugin` and calls `$plugin->boot()`. The decorators are:
 
-- **`Group`** — boot a set of features together; order within is not significant.
-- **`Ordered`** (`first:` / `then:`) — boot `first` before `then`. Used when a
-  feature depends on something the prior step set up (most often: load a plugin,
-  then run the feature that integrates with it).
-- **`Effect`** (`when:` / `then:`) — boot `then` only if the `when:` predicate is
-  true. Used for environment gating (e.g. `create-block-theme` only in `local`).
-- **`Quick_Feature`** — wrap a bare closure as a one-off feature.
-- **`WP_CLI_Feature`** — boot a feature only in a WP-CLI context.
+- **`Group`** — boots a set of features together. Order within the group
+  does not matter.
+- **`Ordered`** — takes `first:` and `then:`. Boots `first` before `then`.
+  Use it when a feature depends on something the prior step set up. The
+  most common case: load a plugin, then run the feature that integrates
+  with it.
+- **`Effect`** — takes `when:` and `then:`. Boots `then` only if the
+  `when:` predicate is true. Use it for environment gating, for example
+  loading `create-block-theme` only in `local`.
+- **`Quick_Feature`** — wraps a bare closure as a one-off feature.
+- **`WP_CLI_Feature`** — boots a feature only in a WP-CLI context.
 
-`boot()` walks the tree depth-first; each leaf feature's own `boot()` runs its
-`add_action`/`add_filter` registrations. There is no separate registry — the tree
-is the manifest of what the plugin does.
+`boot()` walks the tree depth-first. Each leaf feature's own `boot()` runs
+its `add_action` and `add_filter` registrations. There is no separate
+registry. The tree is the manifest of what the plugin does.
 
 ### Plugin loading lives inside the tree
 
-Dependency plugins (Fieldmanager, Yoast, byline-manager, Elasticsearch, MSM
-Sitemap, …) are loaded by `Plugin_Loader` features inside this tree, not through
-wp-admin. That is what lets a plugin be colocated with its integration feature via
-`Ordered` (load Elasticsearch, then `Search_Customizations`) and gated by
-environment via `Effect`. The full rationale and trade-offs are in
-[ADR-0002](./adr/0002-declarative-plugin-loading.md). Note this is distinct from —
-and sits above — the mu-plugin loader that loads the project plugin itself.
+`Plugin_Loader` features inside this tree load dependency plugins, such as
+Fieldmanager, Yoast, byline-manager, Elasticsearch, and MSM Sitemap.
+wp-admin does not load them. This lets a plugin sit next to its integration
+feature through `Ordered`, for example loading Elasticsearch and then
+`Search_Customizations`. It also lets loading depend on environment through
+`Effect`. [ADR-0002](./adr/0002-declarative-plugin-loading.md) gives the
+full rationale and trade-offs. This loading is separate from the mu-plugin
+loader that loads the project plugin itself.
 
 ## A note on the unused code
 
-The inert variables above, and the library (unwired) feature classes in
+The inert variables above, and the library feature classes in
 `src/features/`, are present on purpose. Do not remove them as part of an
-unrelated cleanup or "remove dead code" pass — they are the project's ready-to-use
-toolkit, and stripping them defeats the reason they ship (see
-[ADR-0001](./adr/0001-opinionated-default-features.md)).
+unrelated cleanup or a "remove dead code" pass. They are ready to use.
+Removing them defeats the reason they ship. See
+[ADR-0001](./adr/0001-opinionated-default-features.md).
 
-They are not sacred, either: if you have a deliberate reason to drop one — the
-project will never use it, you're trimming the dependency surface — that is a
-legitimate prune. The rule is don't delete reflexively, not never delete.
+You may still remove one for a deliberate reason, for example the project
+will never use it, or you are reducing the number of dependencies. That is a
+legitimate prune. The rule is: do not delete without a reason. It is not:
+never delete.
 
 ## Assumptions
 
-- **The packages behind the bootstrap variables are installed.** They are runtime
-  requires; removing one without removing its variable breaks `main()`.
-- **Features are order-independent unless wrapped in `Ordered`.** Anything with a
-  real ordering dependency must say so with `Ordered`/`Group` nesting; a flat
-  `Group` makes no ordering promise.
-- **`wp_get_environment_type()` returns the expected value per environment.**
-  Environment gating (`Effect`) is only as correct as that return value.
+- **The packages behind the bootstrap variables are installed.** They are
+  runtime requires. Removing a package without removing its variable breaks
+  `main()`.
+- **Features are order-independent unless wrapped in `Ordered`.** A feature
+  with a real ordering dependency must say so through `Ordered` or `Group`
+  nesting. A flat `Group` makes no ordering promise.
+- **`wp_get_environment_type()` returns the expected value for each
+  environment.** Environment gating through `Effect` depends on that return
+  value.
 
 ## Failure modes
 
-- **A malformed request URI** is caught: `$request_uri` falls back to `new Uri(
-  '/' )` rather than throwing. Features reading it get root, not an exception.
-- **Removing a consumed variable** (e.g. `$clock`, `$block_type_registry`) without
-  updating its consumer is a fatal error, not dead-code removal — check the table
-  above before deleting.
-- **A plugin loaded by `Plugin_Loader` is absent** from the filesystem: the loader
-  silently skips it, so an integration feature wrapped after it via `Ordered` may
-  run against a plugin that never loaded. Confirm the plugin is installed in the
-  target environment.
+- **A malformed request URI does not throw.** `$request_uri` falls back to
+  `new Uri( '/' )`. Features that read it get the root path, not an
+  exception.
+- **Removing a consumed variable causes a fatal error, not a clean
+  removal.** Check the table above before deleting a variable such as
+  `$clock` or `$block_type_registry`. Update its consumer first.
+- **A plugin loaded by `Plugin_Loader` may be missing from the
+  filesystem.** The loader skips a missing plugin silently. An integration
+  feature wrapped after it through `Ordered` may then run against a plugin
+  that never loaded. Confirm the plugin is installed in the target
+  environment.
