@@ -1,9 +1,5 @@
 [
   {
-    "name": "Create Block Theme",
-    "path": "wpackagist-plugin/create-block-theme"
-  },
-  {
     "name": "ES Admin",
     "path": "alleyinteractive/es-admin"
   },
