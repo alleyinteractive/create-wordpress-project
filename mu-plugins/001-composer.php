@@ -20,6 +20,8 @@ if ( 'local' === wp_get_environment_type() ) {
 		);
 	}
 
+	$composer_json_path = dirname( __DIR__ ) . '/composer.json';
+
 	/**
 	 * Composer Configuration
 	 *
@@ -31,7 +33,7 @@ if ( 'local' === wp_get_environment_type() ) {
 	 *   }
 	 * } $composer Composer configuration from composer.json, which may specify the platform PHP version.
 	 */
-	$composer         = json_decode( file_get_contents( dirname( __DIR__ ) . '/composer.json' ) ?: '', true );
+	$composer         = file_exists( $composer_json_path ) ? json_decode( file_get_contents( $composer_json_path ) ?: '', true ) : null;
 	$required_version = $composer['config']['platform']['php'] ?? '8.0.0';
 
 	// Display a friendly error message if the wrong PHP version is used locally.

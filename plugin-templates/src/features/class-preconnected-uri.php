@@ -10,8 +10,6 @@ namespace Create_WordPress_Plugin\Features;
 use Alley\WP\Types\Feature;
 use Psr\Http\Message\UriInterface;
 
-use function Astro_Plugin\Features\add_filter;
-
 /**
  * Feature: Adds a `preconnect` resource hint for a single URI.
  */

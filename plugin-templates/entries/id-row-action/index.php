@@ -30,7 +30,7 @@ function enqueue_id_row_action_assets( string $hook_suffix ): void {
 
 	// Validate and sanitize dependencies.
 	$dependencies = is_array( $asset_file['dependencies'] )
-		? array_map( fn( $item ) => is_scalar( $item ) ? (string) $item : '', $asset_file['dependencies'] )
+		? array_filter( $asset_file['dependencies'], fn ( $item ): bool => is_string( $item ) && $item !== '' )
 		: [];
 
 	// Validate and sanitize version.
