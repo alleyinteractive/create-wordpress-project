@@ -37,7 +37,7 @@ jobs:
         # See https://github.com/alleyinteractive/action-test-php for more options
         uses: alleyinteractive/action-test-php@v1
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           skip-wordpress-install: 'true'
 
   # This required job ensures that all PR checks have passed before merging.
