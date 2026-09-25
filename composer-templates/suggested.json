@@ -8,10 +8,6 @@
     "path": "alleyinteractive/es-wp-query"
   },
   {
-    "name": "Fieldmanager",
-    "path": "alleyinteractive/wordpress-fieldmanager"
-  },
-  {
     "name": "Yoast Duplicate Post",
     "path": "wpackagist-plugin/duplicate-post"
   }

@@ -14,18 +14,21 @@ use Alley\WP\Types\Feature;
  *
  * @package create-wordpress-plugin
  */
-final class Subheadline implements Feature {
+final readonly class Subheadline implements Feature {
 	/**
 	 * Boot the feature.
 	 */
 	public function boot(): void {
-		add_action( 'init', $this->add_meta_field( ... ) );
+		add_action( 'init', $this->on_init( ... ) );
 	}
 
 	/**
-	 * Adds support for subheadlines to any posts that support them (default post, but filterable).
+	 * Fires after WordPress has finished loading but before any headers are sent.
+	 *
+	 * Adds subheadline support and registers the subheadline meta for any post types
+	 * that support it (default `post`, but filterable).
 	 */
-	public function add_meta_field(): void {
+	public function on_init(): void {
 		/**
 		 * Filter the post types that support subheadline.
 		 * Defaults to `post`.

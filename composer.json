@@ -15,7 +15,7 @@
   ],
   "homepage": "https://github.com/alleyinteractive/create-wordpress-project",
   "require": {
-    "php": "^8.3",
+    "php": "^8.4",
     "alleyinteractive/composer-wordpress-autoloader": "^1.0",
     "alleyinteractive/wp-plugin-loader": "^1.0",
     "composer/installers": "^1.0",
