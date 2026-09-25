@@ -59,7 +59,7 @@
     "start:hot": "turbo run start:hot",
     "stylelint": "turbo run stylelint",
     "stylelint:fix": "turbo run stylelint:fix",
-    "test": "npm run check-types && turbo run eslint && turbo run stylelint && turbo run jest"
+    "test": "npm run check-types && turbo run eslint stylelint jest"
   },
   "version": "1.0.0",
   "packageManager": "npm@10.9.2"
