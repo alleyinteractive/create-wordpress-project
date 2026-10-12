@@ -41,8 +41,8 @@
     "wp-types": "^4.68.1"
   },
   "engines": {
-    "node": "22",
-    "npm": "10"
+    "node": "24",
+    "npm": "11"
   },
   "license": "GPL-2.0-or-later",
   "name": "create-wordpress-project",
