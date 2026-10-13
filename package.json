@@ -25,6 +25,7 @@
     "@wordpress/blocks": "15.13.1",
     "@wordpress/components": "32.2.1",
     "@wordpress/data": "10.40.1",
+    "@wordpress/editor": "14.40.2",
     "@wordpress/i18n": "6.13.1",
     "@wordpress/plugins": "7.40.1",
     "identity-obj-proxy": "^3.0.0",
