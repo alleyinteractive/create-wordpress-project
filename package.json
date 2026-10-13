@@ -21,7 +21,7 @@
     "@types/wordpress__block-editor": "^15.0.6",
     "@types/wordpress__blocks": "^15.10.2",
     "@wordpress/babel-preset-default": "8.40.1",
-    "@wordpress/block-editor": "15.3.2",
+    "@wordpress/block-editor": "15.13.2",
     "@wordpress/blocks": "15.13.1",
     "@wordpress/components": "32.2.1",
     "@wordpress/data": "10.40.1",
