@@ -20,14 +20,14 @@ jobs:
   general-tests:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Run General Tests
         # See https://github.com/alleyinteractive/action-test-general for more options
-        uses: alleyinteractive/action-test-general@develop
+        uses: alleyinteractive/action-test-general@v1
 
       - name: Composer install and make
         uses: alleyinteractive/action-test-php@v1
@@ -42,6 +42,7 @@ jobs:
       - name: Run Node Tests
         uses: alleyinteractive/action-test-node@v1
         with:
+          node-version: '24'
           cache-dependency-path: 'package.json'
           install-command: npm install
           skip-audit: 'true'
