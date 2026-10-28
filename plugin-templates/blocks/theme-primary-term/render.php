@@ -15,7 +15,6 @@
  * @package create-wordpress-plugin
  */
 
-
 if ( ! isset( $block->context['postId'] ) || ! is_numeric( $block->context['postId'] ) || ! $block->context['postId'] > 0 ) {
 	return;
 }
