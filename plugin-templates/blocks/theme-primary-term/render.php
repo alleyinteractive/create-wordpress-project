@@ -38,7 +38,7 @@ if ( ! is_string( $term_link ) ) {
 }
 
 ?>
-<span <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<span <?php echo get_block_wrapper_attributes(); ?>>
 	<?php if ( $attributes['isLink'] && $term_link !== '' ) : ?>
 		<a href="<?php echo esc_url( $term_link ); ?>">
 			<?php echo esc_html( $term_name ); ?>

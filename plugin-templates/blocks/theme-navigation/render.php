@@ -20,7 +20,7 @@ if ( empty( $menu_location ) ) {
 }
 
 ?>
-<nav <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?> data-location="<?php echo esc_attr( $menu_location ); ?>">
+<nav <?php echo get_block_wrapper_attributes(); ?> data-location="<?php echo esc_attr( $menu_location ); ?>">
 	<?php
 	wp_nav_menu(
 		[

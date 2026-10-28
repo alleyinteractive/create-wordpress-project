@@ -33,7 +33,7 @@ $is_facet_set = (
 );
 
 ?>
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<div <?php echo get_block_wrapper_attributes(); ?>>
 	<h2 class="wp-block-create-wordpress-plugin-theme-faceted-search-facets__heading">
 		<?php esc_html_e( 'Filter By', 'create-wordpress-plugin' ); ?>
 	</h2>
