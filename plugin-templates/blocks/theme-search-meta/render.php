@@ -20,7 +20,7 @@ $found_posts           = $wp_query instanceof WP_Query ? $wp_query->found_posts 
 $found_posts_formatted = 10000 === $found_posts ? '10,000+' : number_format( $found_posts );
 
 ?>
-<div <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<div <?php echo get_block_wrapper_attributes(); ?>>
 	<?php if ( ! empty( $search_query ) && empty( $found_posts ) ) : ?>
 		<span class="wp-block-create-wordpress-plugin-theme-search-meta__no-results">
 			<?php

@@ -33,7 +33,7 @@ if ( 'local' === wp_get_environment_type() ) {
 	 *   }
 	 * } $composer Composer configuration from composer.json, which may specify the platform PHP version.
 	 */
-	$composer         = file_exists( $composer_json_path ) ? json_decode( file_get_contents( $composer_json_path ) ?: '', true ) : null;
+	$composer         = file_exists( $composer_json_path ) ? json_decode( file_get_contents( $composer_json_path ) ?: '', true ) : null; // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown -- Reading a local file.
 	$required_version = $composer['config']['platform']['php'] ?? '8.0.0';
 
 	// Display a friendly error message if the wrong PHP version is used locally.

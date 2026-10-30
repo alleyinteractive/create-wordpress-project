@@ -23,6 +23,6 @@ if ( ! is_string( $subheadline ) || empty( $subheadline ) ) {
 	return;
 }
 ?>
-<p <?php echo wp_kses_data( get_block_wrapper_attributes() ); ?>>
+<p <?php echo get_block_wrapper_attributes(); ?>>
 	<?php echo wp_kses_post( $subheadline ); ?>
 </p>
