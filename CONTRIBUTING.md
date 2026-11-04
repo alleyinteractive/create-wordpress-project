@@ -38,6 +38,29 @@ If you would like to help solve an existing issue navigate to the [list of open 
 
 If you are a member of Alley, you can create a new feature branch in this repo according to our branch naming conventions. If you are not a member of Alley, you should first fork this repository, then make your changes in a branch on your fork. In either case, once you have completed your changes, create a pull request against the `develop` branch of this repository.
 
+#### Test the Configure Script
+
+`tests/ConfigureTest.php` covers `configure.php` end to end: each test copies
+the skeleton into a temporary directory, runs the script there with a scripted
+set of answers, and asserts on the files it leaves behind. Composer, WP-CLI,
+git and curl are replaced with test doubles, so the suite needs no network and
+no WordPress install:
+
+```sh
+composer test:configure
+```
+
+Any change to `configure.php`, or to a skeleton file the script rewrites,
+renames or deletes, belongs in that test. New prompts have to be added to the
+answer lists in `base_answers()`, `pantheon_answers()` and `vip_answers()`, or
+the run will block on an unanswered question. The plugin and theme fixtures
+near the bottom of the file stand in for the `create-wordpress-plugin` and
+`create-wordpress-theme` skeletons and need refreshing when those change.
+
+Both the test and the script's entry in `composer.json` are removed when the
+configure script deletes itself, so this file is excluded from the search and
+replace and its expectations can keep naming the skeleton's placeholders.
+
 #### Commit Your Update
 
 Commit the changes once you are happy with them. Once your changes are ready, don't forget to self-review to speed up the review process. The self-review should ensure that all automated tests and linting checks pass. See the [GitHub Workflows directory](.github/workflows) for a list of all automated tests that are executed when a PR is created and ensure that they pass locally before creating your PR.

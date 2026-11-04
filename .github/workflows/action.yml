@@ -36,6 +36,9 @@ jobs:
           github-token: ${{ secrets.COMPOSER_ACCESS_TOKEN}}
           install-command: |
             composer install
+            # Test the configure script against the intact skeleton, before the
+            # run below rewrites it.
+            composer test:configure
             (yes '' || true) | php ./configure.php --project_name="Create WordPress Project" --author_name=Testing --author_email=testing@alley.com
           skip-test: true
 
