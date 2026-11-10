@@ -21,3 +21,8 @@ words specific to this scaffold.
   `main()`. It is dormant. A project can wire it up when needed. Its
   configuration is project-specific, so the scaffold leaves the wiring to
   the project. Do not call it "dead feature" or "disabled feature".
+- **Preset** — A named `theme.json` value (color, size, spacing) that code
+  references instead of a raw value.
+- **Mirror** — A path or name that copies the name of the block it belongs
+  to, for example `core/image` → `core/image.scss`.
+- **Entry** — A directory under `entries/` that builds to `build/<name>/`.
