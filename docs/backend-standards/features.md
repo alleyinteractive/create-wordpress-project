@@ -15,8 +15,7 @@ In this order, and say in the PR when none fit:
 3. Mantle or another Alley package already in `composer.json`.
 4. A helper already in this repo.
 
-Change a block's markup with `WP_HTML_Tag_Processor`, not `str_replace` or a
-regex ([blocks.md](../frontend-standards/blocks.md#renderphp)).
+Block markup edits: see [blocks.md](../frontend-standards/blocks.md#renderphp).
 
 ## Shape
 
@@ -46,9 +45,9 @@ final readonly class Term_Dates implements Feature {
 
 `main()` creates the clock, request, main query, block registry, and settings
 once. A Feature takes what it needs through its constructor, as `Term_Dates`
-takes a `ClockInterface`. Do not call `new` on a collaborator inside a Feature,
-and do not read globals (`$wp_query`, `$post`) or hard-code an option name. A
-Feature that takes its inputs is the one you can test without WordPress state.
+takes a `ClockInterface`: collaborators, the injected main query in place of
+`$wp_query`, and option names all arrive as arguments. A Feature that takes its
+inputs is the one you can test without WordPress state.
 
 Make a Feature conditional with `Effect`, not an `if` inside `boot()`:
 
@@ -61,9 +60,8 @@ new Effect(
 
 ## Keep it small
 
-- No speculative abstraction. Build for the case in front of you.
-- Remove code a change makes unnecessary: unused parameters, dead branches,
-  debug output, commented-out code.
+[CLAUDE.md](../../CLAUDE.md) sets the bar. In PHP:
+
 - Extract on the second repeat. A repeated block becomes a method or a small
   class.
 - A literal that carries meaning becomes a class constant, a setting, or a value
@@ -72,7 +70,7 @@ new Effect(
 
 ## Naming
 
-Follow the naming already nearby. Class files are `class-<slug>.php` and classes
-are `Snake_Case`. Meta keys, option names, and handles carry the plugin prefix
-(`create_wordpress_plugin_featured_image_caption`). Do not introduce a second
-style for the same kind of name.
+Follow the naming already nearby. Classes are `Snake_Case`. Meta keys, option
+names, and handles carry the plugin prefix
+(`create_wordpress_plugin_featured_image_caption`). File names are in
+[repo-layout.md](../repo-layout.md#naming).

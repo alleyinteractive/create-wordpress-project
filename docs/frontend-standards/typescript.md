@@ -16,6 +16,6 @@ enforce the mechanics. These are the conventions on top.
   React, so the bundle stays free of them.
 - **Tests sit next to the code** as `*.test.ts(x)` or in a sibling
   `__tests__/`.
-- **Tests assert behavior.** Check a specific outcome, not that code ran. Do not
-  repeat cases that exercise the same path, and share setup through a helper.
+- **Tests follow [testing.md](../backend-standards/testing.md)** for what to
+  assert, which cases to cover, and how to share setup.
 - **Components get an explicit props `type`** declared above the component.

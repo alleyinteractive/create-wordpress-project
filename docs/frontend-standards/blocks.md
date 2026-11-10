@@ -39,10 +39,11 @@ the plugin's text domain, the same value as `textdomain` in `block.json`.
 
 ## render.php
 
-- Validate attributes and context first; `return` early on bad input.
+- Validate attributes and context first, and `return` early on bad input
+  ([data-safety.md](../backend-standards/data-safety.md)).
 - Escape every value (`esc_html`, `esc_url`, `esc_attr`).
-- Move logic beyond about 20 lines into a class in `src/`, as `Primary_Term`
-  does.
+- Logic beyond about 20 lines lives in a class in `src/`, as `Primary_Term`
+  does ([features.md](../backend-standards/features.md#keep-it-small)).
 
 Change a block's markup with `WP_HTML_Tag_Processor`, not `str_replace` or a
 regex. String edits break on attribute order, whitespace, and nested tags.

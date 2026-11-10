@@ -7,7 +7,7 @@ these are the conventions it cannot.
   presets ([theme.md](theme.md)).
 - **`@use`** for partials (`@use '…/normalize' as *`).
 - **Logical properties** for anything directional: `margin-inline-start`,
-  `padding-block`, `inset-inline-start`. Not `margin-left` or `right`.
+  `padding-block`, `inset-inline-start`.
 - **Reuse before hard-coding.** Reach for an existing variable or preset before
   writing a literal, and turn a value you repeat into a variable. A hard-coded
   `px` for type or spacing is a review flag; use a preset or `rem`.
@@ -19,11 +19,10 @@ these are the conventions it cannot.
   definition per project (a `theme.json` `custom.breakpoints` value and an SCSS
   partial), not inline numbers.
 - **BEM-style elements** inside a block: `.wp-block-<ns>-<name>__element`.
-- **Nest selectors; do not build them with `&`.** Write the full class name
-  and nest it inside its parent, so a selector can be searched for and read as
-  written. Do not use `&__element` or `&--modifier` to assemble a class name.
-  Group every rule for a parent under one block instead of repeating the parent
-  selector in separate top-level rules:
+- **Nest full class names.** Write the full class name and nest it inside its
+  parent, so a selector can be searched for and read as written. Group every
+  rule for a parent under one block instead of repeating the parent selector in
+  separate top-level rules:
 
   ```scss
   .wp-block-ns-name {
@@ -37,8 +36,8 @@ these are the conventions it cannot.
   }
   ```
 
-  `&` is still right for the parent's own state or pseudo-class, such as
-  `&:hover` or `&.is-active`.
+  `&` is for the parent's own state or pseudo-class, such as `&:hover` or
+  `&.is-active`; it never assembles `&__element` or `&--modifier`.
 - **Nesting stops at three levels.**
 - **Comments say why** ([comments.md](../comments.md)).
 

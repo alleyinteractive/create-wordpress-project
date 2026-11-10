@@ -15,4 +15,5 @@ A test earns its place by failing when behavior breaks.
   ([features.md](features.md#pass-dependencies-in)) is tested by passing a
   controlled one, such as a fixed clock.
 
-Frontend tests: [typescript.md](../frontend-standards/typescript.md).
+These rules apply to Jest tests too. Where frontend tests live:
+[typescript.md](../frontend-standards/typescript.md).

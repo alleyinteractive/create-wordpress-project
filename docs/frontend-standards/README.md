@@ -19,15 +19,6 @@ Each file covers one branch of work. Load only the one the task needs.
 Where the code lives (plugin vs theme, directories, naming) is in
 [../repo-layout.md](../repo-layout.md); read it before adding any file. For the
 project's vocabulary, including preset, mirror, and entry, see
-[../CONTEXT.md](../CONTEXT.md).
-
-## Comments
-
-Say why, never what. See [../comments.md](../comments.md).
-
-## Maintaining these files
-
-A rule belongs here when it is a convention, is not enforced by tooling, and
-would surprise a newcomer. When tooling can enforce a rule, enforce it and
-delete the prose. Keep each fact in one file. When you change a convention,
-update the file in the same PR.
+[../CONTEXT.md](../CONTEXT.md). For comments, see
+[../comments.md](../comments.md). To add or change a rule, see Conventions in
+[../README.md](../README.md).

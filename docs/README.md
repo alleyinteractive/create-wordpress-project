@@ -48,3 +48,7 @@ To maintain these files, you can use the
 - An ADR records the decision and the reason for it. Link to a reference doc
   when the mechanics need more room.
 - When you change behavior these docs describe, update them in the same PR.
+- A rule belongs in `frontend-standards/` or `backend-standards/` when it is a
+  convention, tooling does not enforce it, and it would surprise a newcomer.
+  When tooling can enforce a rule, enforce it and delete the prose. Keep each
+  fact in one file and link to it from elsewhere.
