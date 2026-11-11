@@ -35,6 +35,9 @@ Anything that changes data checks both who and why:
 - **Capability.** `current_user_can()` with the narrowest capability that fits.
   Admin pages and settings pass a `capability` (as `Site_Settings_Page` does).
 - **Nonce.** Verify one on every request that changes state.
+- **POST for side effects.** Requests that change or delete data go through
+  POST, sent from a form or from JavaScript, so crawlers, prefetching, and link
+  previews cannot trigger them.
 - **Trust boundary.** Check the request on the server. A client-side check is
   not authorization.
 

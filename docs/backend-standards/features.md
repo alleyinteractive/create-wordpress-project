@@ -9,8 +9,10 @@ is structured and [CONTEXT.md](../CONTEXT.md) for wired vs library features.
 
 In this order, and say in the PR when none fit:
 
-1. [default-features.md](../default-features.md): the scaffold may already ship
-   it, wired or as a library feature to wire up.
+1. The Features already in this plugin. Read `main()` and `src/features/`, and
+   check the request for overlap, especially with site-specific Features built
+   long ago and forgotten. [default-features.md](../default-features.md) lists
+   what the scaffold ships; the code is the source of truth.
 2. WordPress core: an API, a block, a filter, or the WP HTML API.
 3. Mantle or another Alley package already in `composer.json`.
 4. A helper already in this repo.
@@ -43,13 +45,16 @@ final readonly class Term_Dates implements Feature {
 
 ## Pass dependencies in
 
-`main()` creates the clock, request, main query, block registry, and settings
-once. A Feature takes what it needs through its constructor, as `Term_Dates`
-takes a `ClockInterface`: collaborators, the injected main query in place of
-`$wp_query`, and option names all arrive as arguments. A Feature that takes its
-inputs is the one you can test without WordPress state.
+Features use dependency injection. `main()` creates the clock, request, main
+query, block registry, and settings once. A Feature takes what it needs through
+its constructor, as `Term_Dates` takes a `ClockInterface`: collaborators, the
+injected main query in place of `$wp_query`, and option names all arrive as
+arguments. A Feature that takes its inputs can be tested without WordPress state
+and moved between projects, because it is generic.
 
-Make a Feature conditional with `Effect`, not an `if` inside `boot()`:
+Make a Feature conditional with `Effect` from
+[`alleyinteractive/wp-type-extensions`](https://github.com/alleyinteractive/wp-type-extensions),
+not an `if` inside `boot()`:
 
 ```php
 new Effect(

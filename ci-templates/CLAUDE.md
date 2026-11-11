@@ -39,5 +39,7 @@ below hold only the conventions they cannot. Load only the file the task needs.
 2. Review your own diff and run an AI review of it. Every finding is fixed, or
    dismissed with a reason in the PR description, before you ask a human, so
    reviewers do not relay the same findings.
-3. Fill in the PR template: what and why, how to verify, and screenshots for UI
-   changes. Put design rationale in the description, not in comments.
+3. A human writes the PR description, in the PR template: what and why, how to
+   verify, screenshots for UI changes, and design rationale (which lives in the
+   description, not in comments). Hand the human your notes for it, including
+   each finding you dismissed and why.
