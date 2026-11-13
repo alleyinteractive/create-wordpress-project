@@ -29,4 +29,4 @@
 
 ## Ticket(s)
 
-- <!-- Link to Jira ticket, etc. -->
+- <!-- Link to the ticket or issue -->

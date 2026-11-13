@@ -2,12 +2,15 @@
 
 Applies to blocks, theme templates, and styles. `eslint-plugin-jsx-a11y` checks
 React markup only. Templates in PHP, block markup, and CSS are covered by
-review, so check these yourself before opening a PR.
+review, so check these yourself before opening a PR. All code must meet WCAG
+2.2 Level AA success criteria.
 
 - **Semantic elements first.** Use `button`, `nav`, `ul`, and real headings
   before a `div` with a role. Add ARIA only where no element fits.
-- **Every control has an accessible name.** A visible label, or `aria-label`
-  when the control is icon-only. Placeholder text is not a label.
+- **Every control has an accessible name.** A visible label, or for an
+  icon-only control, text in `<span class="screen-reader-text">` inside it.
+  Prefer on-page text to `aria-label`, which assistive tech announces less
+  consistently. Placeholder text is not a label.
 - **Headings keep their order.** One `h1` per page, no skipped levels. Choose
   the level by document structure, not by size; size comes from styles.
 - **Focus stays visible and predictable.** Never remove an outline without
