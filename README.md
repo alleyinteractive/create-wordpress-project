@@ -39,8 +39,42 @@ npm install --min-release-age=0
 
 # create-wordpress-project
 
-A skeleton for WordPress projects rooted at `wp-content` using Alley's best
-practices for WordPress development.
+A WordPress project rooted at `wp-content`. Custom functionality lives in one
+project plugin under `plugins/`, and presentation lives in one theme under
+`themes/`.
+
+## Setup
+
+Requires PHP 8.4, Node 24, npm 11, and [Composer](https://getcomposer.org/).
+`.nvmrc` pins the Node version.
+
+```bash
+composer install
+npm install
+npm run build
+```
+
+Composer installs into `mu-plugins/vendor`. Use `npm start` to watch and
+rebuild frontend assets while you work, or `npm run start:hot` for hot reload.
+
+## Testing
+
+```bash
+composer test   # PHPCS, PHPStan, and PHPUnit
+npm test        # type check, ESLint, Stylelint, and Jest
+```
+
+Fix what the linters can with `composer phpcbf`, `npm run eslint:fix`, and
+`npm run stylelint:fix`.
+
+## Working in this repo
+
+- [`CLAUDE.md`](CLAUDE.md) holds the rules for developers and agents. Read it
+  before your first change.
+- [`docs/README.md`](docs/README.md) explains what the project starts with and
+  where the standards live.
+- Pull requests use the template in `.github/PULL_REQUEST_TEMPLATE.md`.
+  Deployment and test workflows live in `.github/workflows/`.
 
 ## Credits
 
