@@ -38,6 +38,9 @@ function main(): void {
 		$request_uri = new Uri( '/' );
 	}
 
+	// Whether the current request is for the site editor.
+	$is_site_editor = $request->getScriptName() === new Uri( admin_url( 'site-editor.php' ) )->getPath();
+
 	// Consistent definition of "now".
 	$clock = new NativeClock();
 
@@ -201,6 +204,22 @@ function main(): void {
 					taxonomy: 'category',
 				),
 				new Features\ID_Row_Action(),
+				new Effect(
+					when: fn (): bool => ! in_array( $environment_type, [ 'local', 'development' ], true ),
+					then: new Group(
+						new Features\Hidden_Site_Editor_Links(),
+						new Effect(
+							when: fn (): bool => $is_site_editor,
+							then: new Features\Redirect(
+								location: new Uri( admin_url() ),
+								status: 302,
+								by: 'create-wordpress-plugin',
+							),
+						),
+						new Features\Denied_Template_Capabilities(),
+						new Features\Removed_Apply_Globally_Control(),
+					),
+				),
 			),
 		),
 	);
