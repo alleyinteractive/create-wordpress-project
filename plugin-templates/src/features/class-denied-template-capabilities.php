@@ -73,15 +73,32 @@ final readonly class Denied_Template_Capabilities implements Feature {
 	 * Meta capabilities such as `edit_post` are left out because they resolve to
 	 * these primitives, and `read` because every post type shares it.
 	 *
+	 * Cached for the request once every post type is registered, since
+	 * `map_meta_cap` runs on every capability check.
+	 *
 	 * @return string[]
 	 */
 	private function denied_caps(): array {
-		$denied = [];
+		/**
+		 * Static because the class is readonly.
+		 *
+		 * @var string[]|null $cache
+		 */
+		static $cache = null;
+
+		if ( null !== $cache ) {
+			return $cache;
+		}
+
+		$denied   = [];
+		$complete = true;
 
 		foreach ( self::POST_TYPES as $post_type ) {
 			$object = get_post_type_object( $post_type );
 
 			if ( ! $object instanceof \WP_Post_Type ) {
+				$complete = false;
+
 				continue;
 			}
 
@@ -92,11 +109,18 @@ final readonly class Denied_Template_Capabilities implements Feature {
 			}
 		}
 
+		if ( $complete ) {
+			$cache = $denied;
+		}
+
 		return $denied;
 	}
 
 	/**
-	 * Filters the arguments for registering a specific post type.
+	 * Gives each denied post type its own capabilities.
+	 *
+	 * Core maps them all to `edit_theme_options`, and denying that would also
+	 * lock everyone out of menus, widgets, and the Customizer.
 	 *
 	 * @param mixed[] $args      Array of arguments for registering a post type.
 	 * @param string  $post_type Post type key.
