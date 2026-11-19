@@ -138,6 +138,37 @@ behavior.
   registered. To wire: `(string $post_type, string $feature)`.
   `src/features/class-post-type-support.php`
 
+## Site editor and global styles lockdown
+
+Outside the `local` and `development` environments, `main()` denies
+everyone, administrators and super admins included, access to the site
+editor and global styles. Design changes belong in the theme's code, not in
+the database. No capability lets anyone bypass the lockdown. In `local` and
+`development`, none of these features boot.
+
+- **`Hidden_Site_Editor_Links`** — active outside `local`/`development`.
+  Removes the Appearance → Editor and Appearance → Fonts menu items and the
+  front-end admin bar's "Edit Site" item. No args.
+  `src/features/class-hidden-site-editor-links.php`
+- **`Redirect`** — active outside `local`/`development`, and only on
+  requests for `site-editor.php`. Redirects to the dashboard with a 302.
+  Args: `(UriInterface $location, int $status, string $by)`.
+  `src/features/class-redirect.php`
+- **`Denied_Template_Capabilities`** — active outside `local`/`development`.
+  Denies every write capability for `wp_template`, `wp_template_part`, and
+  `wp_global_styles` by mapping them to `do_not_allow`, the one answer a
+  multisite super admin cannot override. Reads stay allowed so that the
+  front end and the editor can render. This also removes the post editor's
+  Styles sidebar in "Show template" view, which WordPress 7.0 shows to
+  anyone who can update global styles. No args.
+  `src/features/class-denied-template-capabilities.php`
+- **`Removed_Apply_Globally_Control`** — active outside
+  `local`/`development`. Removes the "Apply globally" control from the
+  block Advanced panel in the post editor. That control checks only for a
+  block theme, so denying the capabilities alone leaves a control that
+  fails. No args.
+  `src/features/class-removed-apply-globally-control.php`
+
 ## Integrations, plugin loading & analytics
 
 - **`Plugin_Loader`** — active, several instances. A `Feature` wrapper
